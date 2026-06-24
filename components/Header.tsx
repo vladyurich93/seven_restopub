@@ -29,16 +29,15 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 border-b transition duration-500 ${scrolled || open ? "border-white/10 bg-seven-background/90 shadow-2xl shadow-black/30 backdrop-blur-xl" : "border-transparent bg-transparent"}`}>
-      <div className="container-shell flex h-24 items-center justify-between gap-5 md:h-32 md:gap-6">
-        <Link href="/" className="flex items-center gap-3" aria-label={siteConfig.brandName}>
-          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} className="h-auto w-40 md:w-56 lg:w-64" priority />
-          <span className="hidden font-display text-2xl font-black uppercase tracking-[0.16em] text-seven-cream xl:block">{siteConfig.brandName}</span>
+    <header className={`fixed inset-x-0 top-0 z-50 border-b transition duration-500 ${scrolled || open ? "border-white/10 bg-seven-background/90 shadow-2xl shadow-black/30 backdrop-blur-xl" : "border-transparent bg-gradient-to-b from-black/55 to-transparent"}`}>
+      <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-24 lg:h-28">
+        <Link href="/" className="flex shrink-0 items-center" aria-label={siteConfig.brandName}>
+          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} className="h-auto w-36 md:w-48 lg:w-56 xl:w-60" priority />
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 lg:flex xl:gap-5">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="text-sm font-semibold text-seven-muted transition hover:text-seven-cream">
+            <Link key={item.href} href={item.href} className="whitespace-nowrap text-xs font-semibold text-seven-muted transition hover:text-seven-cream xl:text-sm">
               {item.label}
             </Link>
           ))}
