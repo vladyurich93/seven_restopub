@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BrandWord } from "@/components/BrandWord";
 import { ImageFrame } from "@/components/ImageFrame";
 import { SectionTitle } from "@/components/SectionTitle";
 import { siteConfig } from "@/data/siteConfig";
@@ -21,7 +22,7 @@ export default function AboutPage() {
   return (
     <section className="wood-grain bg-seven-background pb-20 pt-36">
       <div className="container-shell">
-        <SectionTitle eyebrow="About" title="Історія Seven" description="Мережа сучасних українських restopub: крафт, їжа, футбол, тераси, музика і теплі зустрічі." />
+        <SectionTitle eyebrow="About" title={<>Історія <BrandWord tone="cream" /></>} description="Мережа сучасних українських restopub: крафт, їжа, футбол, тераси, музика і теплі зустрічі." />
         <div className="mt-12 grid gap-7">
           {about.notes.map((text, index) => (
             <article key={text} className="grid overflow-hidden rounded-[8px] bg-seven-card premium-border lg:grid-cols-[0.9fr_1.1fr]">

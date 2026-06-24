@@ -1,6 +1,7 @@
 import { MapPinned, Phone } from "lucide-react";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
+import { BrandWord } from "./BrandWord";
 import { Button } from "./Button";
 import { InstagramPicker } from "./InstagramPicker";
 import { PhoneBookingButton } from "./PhoneBookingButton";
@@ -11,7 +12,7 @@ export function ContactSection() {
       <div className="container-shell">
         <div className="mb-10 max-w-3xl">
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.32em] text-seven-terracotta">Contacts</p>
-          <h2 className="font-display text-4xl font-black leading-tight md:text-6xl">Оберіть свій Seven.</h2>
+          <h2 className="font-display text-[clamp(2.55rem,8.5vw,4.65rem)] font-black leading-[0.92] text-white">Оберіть свій <BrandWord tone="cream" />.</h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {siteConfig.locations.map((location) => (

@@ -31,7 +31,7 @@ export function ImageFrame({ src, alt, className = "", sizes = "(min-width: 1024
           sizes={sizes}
           priority={priority}
           onError={() => setFailed(true)}
-          className="object-cover transition duration-700 group-hover:scale-105"
+          className="object-cover transition duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
         />
       )}
     </div>

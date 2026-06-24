@@ -50,7 +50,7 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
     <>
       <button
         type="button"
-        className={`inline-flex items-center gap-2 text-left transition hover:text-white ${className}`}
+        className={`inline-flex items-center gap-2 text-left transition duration-500 hover:text-white ${className}`}
         onClick={() => setOpen(true)}
       >
         <Instagram size={18} className="shrink-0 text-seven-oak" />
@@ -59,7 +59,7 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
 
       {open ? (
         <div
-          className="fixed inset-0 z-[90] flex items-end justify-center bg-black/75 p-3 backdrop-blur-sm sm:items-center sm:p-4"
+          className="fixed inset-0 z-[120] flex items-end justify-center bg-black/75 p-3 backdrop-blur-sm sm:items-center sm:p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="instagram-picker-title"
@@ -75,7 +75,7 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
               </h2>
               <button
                 type="button"
-                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition hover:bg-seven-cream hover:text-seven-background"
+                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition duration-500 hover:bg-seven-cream hover:text-seven-background active:scale-95"
                 onClick={() => setOpen(false)}
                 aria-label="Закрити"
               >
@@ -89,7 +89,7 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
                   href={location.instagram}
                   target="_blank"
                   rel="noreferrer"
-                  className="group rounded-[8px] bg-seven-card p-5 premium-border transition hover:-translate-y-0.5 hover:border-seven-terracotta/70 hover:shadow-glow"
+                  className="group rounded-[8px] bg-seven-card p-5 premium-border premium-lift hover:border-seven-terracotta/70 hover:shadow-glow"
                 >
                   <span className="mb-3 inline-flex rounded-full bg-seven-green/15 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-seven-green">
                     Instagram

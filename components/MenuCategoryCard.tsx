@@ -8,7 +8,7 @@ type MenuCategoryCardProps = {
 
 export function MenuCategoryCard({ category, index }: MenuCategoryCardProps) {
   return (
-    <article className="group overflow-hidden rounded-[8px] bg-seven-card premium-border transition duration-500 hover:-translate-y-1 hover:border-seven-terracotta/70 hover:shadow-glow">
+    <article className="group overflow-hidden rounded-[8px] bg-seven-card premium-border premium-lift hover:border-seven-terracotta/70 hover:shadow-glow">
       <ImageFrame src={category.image} alt={category.title} className="aspect-[16/10] transition duration-700 group-hover:scale-[1.04]" />
       <div className="p-6 md:p-7">
         <p className="mb-4 font-display text-5xl font-black text-seven-terracotta">0{index + 1}</p>

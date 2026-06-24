@@ -30,7 +30,7 @@ export function Header() {
 
   return (
     <header className={`fixed inset-x-0 top-0 z-50 border-b transition duration-500 ${scrolled || open ? "border-white/10 bg-seven-background/90 shadow-2xl shadow-black/30 backdrop-blur-xl" : "border-transparent bg-transparent"}`}>
-      <div className="container-shell flex h-32 items-center justify-between gap-6">
+      <div className="container-shell flex h-24 items-center justify-between gap-5 md:h-32 md:gap-6">
         <Link href="/" className="flex items-center gap-3" aria-label={siteConfig.brandName}>
           <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} className="h-auto w-40 md:w-56 lg:w-64" priority />
           <span className="hidden font-display text-2xl font-black uppercase tracking-[0.16em] text-seven-cream xl:block">{siteConfig.brandName}</span>

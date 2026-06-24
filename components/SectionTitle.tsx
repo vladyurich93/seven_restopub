@@ -1,6 +1,8 @@
+import type { ReactNode } from "react";
+
 type SectionTitleProps = {
   eyebrow?: string;
-  title: string;
+  title: ReactNode;
   description?: string;
   align?: "left" | "center";
 };
@@ -11,7 +13,7 @@ export function SectionTitle({ eyebrow, title, description, align = "left" }: Se
       {eyebrow ? (
         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.32em] text-seven-accent">{eyebrow}</p>
       ) : null}
-      <h2 className="font-display text-4xl font-black leading-[0.95] text-white md:text-6xl">{title}</h2>
+      <h2 className="font-display text-[clamp(2.55rem,8.5vw,4.65rem)] font-black leading-[0.92] text-white md:leading-[0.9]">{title}</h2>
       {description ? <p className="mt-5 text-lg leading-8 text-seven-muted">{description}</p> : null}
     </div>
   );

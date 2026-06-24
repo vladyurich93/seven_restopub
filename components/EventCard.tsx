@@ -9,7 +9,7 @@ type EventCardProps = {
 
 export function EventCard({ event, featured = false }: EventCardProps) {
   return (
-    <article className={`group overflow-hidden rounded-[8px] bg-seven-card premium-border transition duration-300 hover:-translate-y-1 hover:shadow-glow ${featured ? "md:grid md:grid-cols-[1.2fr_0.8fr] md:items-stretch" : ""}`}>
+    <article className={`group overflow-hidden rounded-[8px] bg-seven-card premium-border premium-lift hover:shadow-glow ${featured ? "md:grid md:grid-cols-[1.2fr_0.8fr] md:items-stretch" : ""}`}>
       <ImageFrame src={event.image} alt={event.title} className={featured ? "min-h-[360px] md:h-full" : "aspect-[16/11]"} />
       <div className={featured ? "flex flex-col justify-end p-7 md:p-10" : "p-6"}>
         <p className="text-sm font-black uppercase tracking-[0.24em] text-seven-green">{event.category}</p>

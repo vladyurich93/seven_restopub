@@ -22,7 +22,7 @@ export default function MenuPage() {
         <SectionTitle eyebrow="Menu" title="Меню настрою" description="Крафт, закуски, бургери, піца, коктейлі, кальян і ланчі для вечора в Seven." />
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
           {siteConfig.locations.map((location) => (
-            <article key={location.id} className="flex h-full min-h-[344px] flex-col rounded-[8px] bg-seven-card p-6 premium-border md:min-h-[262px] lg:min-h-0">
+            <article key={location.id} className="flex h-full min-h-[344px] flex-col rounded-[8px] bg-seven-card p-6 premium-border premium-lift hover:shadow-glow md:min-h-[262px] lg:min-h-0">
               <p className="text-sm font-black uppercase tracking-[0.18em] text-seven-green">{location.city}</p>
               <h2 className="mt-3 font-display text-4xl font-black uppercase leading-none text-white lg:min-h-20">{location.name.replace("Seven Restopub ", "Seven ")}</h2>
               <p className="mt-4 min-h-12 text-sm leading-6 text-seven-muted">{location.address}</p>

@@ -89,7 +89,7 @@ export const siteConfig = {
       menuLink: "https://mytsi.choiceqr.com/",
       workingHours: "Щодня з 12:00 до 23:00",
       image: "/images/locations/location-rynok-01.jpg",
-      features: ["Центр Львова", "Кальян", "Коктейлі", "Туристична локація"],
+      features: ["Центр Львова", "Кальян", "Коктейлі", "Дитяча кімната", "Туристична локація"],
     },
     {
       id: "zaporizhzhia",

@@ -13,7 +13,7 @@ export function PhoneBookingButton({ location, label = "Подзвонити", c
     <a
       href={phoneHref(location.phone)}
       aria-label={`${label}: ${location.name}`}
-      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-seven-cream px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-seven-background transition duration-300 hover:-translate-y-0.5 hover:bg-seven-terracotta hover:text-white ${className}`}
+      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-seven-cream px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-seven-background shadow-[0_14px_36px_rgba(246,236,221,0.08)] premium-lift hover:bg-seven-terracotta hover:text-white active:translate-y-0 ${className}`}
     >
       <Phone size={18} />
       <span>{label}</span>
