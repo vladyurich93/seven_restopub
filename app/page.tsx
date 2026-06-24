@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { AtmosphereCarousel } from "@/components/AtmosphereCarousel";
-import { BrandWord } from "@/components/BrandWord";
 import { Button } from "@/components/Button";
 import { ContactSection } from "@/components/ContactSection";
 import { EventCard } from "@/components/EventCard";
@@ -25,7 +24,7 @@ export default function HomePage() {
       <section className="bg-black py-24">
         <AnimatedSection className="container-shell">
           <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <SectionTitle eyebrow="Locations" title={<>Три <BrandWord tone="terracotta" /> — три настрої</>} description="Тераса, центр Львова або перший Seven у Запоріжжі — оберіть простір під свій вечір." />
+            <SectionTitle eyebrow="Locations" title="Три Seven — три настрої" description="Тераса, центр Львова або перший Seven у Запоріжжі — оберіть простір під свій вечір." />
             <Link href="/locations" className="inline-flex items-center gap-2 font-semibold text-seven-accent transition hover:text-white">
               Всі локації <ArrowRight size={18} />
             </Link>
@@ -50,7 +49,7 @@ export default function HomePage() {
                   {upcomingLocation.badge}
                 </p>
                 <h2 className="max-w-3xl font-display text-[clamp(3rem,12vw,5.2rem)] font-black leading-[0.9] text-white md:leading-[0.86]">
-                  Готуємо найбільший <BrandWord tone="cream" /> у Львові
+                  Готуємо найбільший Seven у Львові
                 </h2>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-seven-muted md:text-xl">
                   {upcomingLocation.text}
@@ -71,7 +70,7 @@ export default function HomePage() {
               <div className="flex flex-col justify-end">
                 <div className="grid gap-3 sm:grid-cols-2">
                   {upcomingLocation.features.map((feature) => (
-                    <article key={feature.title} className="rounded-[8px] bg-seven-card/85 p-5 premium-border backdrop-blur-sm">
+                    <article key={feature.title} className="rounded-[8px] bg-seven-card/85 p-5 premium-border premium-lift backdrop-blur-sm hover:shadow-glow">
                       <span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-seven-terracotta/20 text-2xl">{feature.icon}</span>
                       <h3 className="font-display text-3xl font-black leading-none text-white">{feature.title}</h3>
                     </article>
@@ -112,7 +111,7 @@ export default function HomePage() {
       <section className="bg-seven-background py-20">
         <AnimatedSection className="container-shell">
           <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <SectionTitle eyebrow="Menu" title={<>Що знайдеться в <BrandWord tone="cream" /></>} description="Крафт, закуски, бургери, піца, коктейлі, кальян і ланчі — усе для вечора без зайвих планів." />
+            <SectionTitle eyebrow="Menu" title="Що знайдеться у нас" description="Крафт, закуски, бургери, піца, коктейлі, кальян і ланчі — усе для вечора без зайвих планів." />
             <Link href="/menu" className="inline-flex items-center gap-2 font-semibold text-seven-accent transition hover:text-white">
               Меню <ArrowRight size={18} />
             </Link>
@@ -127,7 +126,7 @@ export default function HomePage() {
 
       <section className="bg-black py-20">
         <AnimatedSection className="container-shell">
-          <SectionTitle eyebrow="Events" title={<>Живі вечори <BrandWord tone="terracotta" /></>} description="Футбол, музика, DJ, стендап і спеціальні події — коротко, гучно, по-Seven." />
+          <SectionTitle eyebrow="Events" title="Живі вечори Seven" description="Футбол, музика, DJ, стендап і спеціальні події — коротко, гучно, по-Seven." />
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
             {siteConfig.events.map((event) => (
               <EventCard key={event.id} event={event} />
@@ -180,7 +179,7 @@ export default function HomePage() {
 
       <section className="bg-seven-background py-20">
         <AnimatedSection className="container-shell">
-          <SectionTitle eyebrow="Gallery" title={<>Атмосфера <BrandWord tone="cream" /></>} description="Футбол на екранах, крафтове пиво, друзі за великим столом, тераса, музика і вечори, які хочеться повторити." />
+          <SectionTitle eyebrow="Gallery" title="Атмосфера Seven" description="Футбол на екранах, крафтове пиво, друзі за великим столом, тераса, музика і вечори, які хочеться повторити." />
           <div className="mt-10">
             <AtmosphereCarousel images={siteConfig.galleryImages} />
           </div>

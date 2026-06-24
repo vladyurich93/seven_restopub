@@ -44,17 +44,6 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.brand-word {
-  font-family: var(--font-display), var(--font-montserrat), system-ui, sans-serif;
-  font-weight: 900;
-  font-style: italic;
-  letter-spacing: 0.015em;
-  line-height: 0.82;
-  text-transform: uppercase;
-  transform: skewX(-7deg) rotate(-1deg);
-  text-shadow: 0 14px 38px rgba(201, 113, 74, 0.28);
-}
-
 .premium-lift {
   transition:
     transform 700ms cubic-bezier(0.22, 1, 0.36, 1),

@@ -23,13 +23,13 @@ export default function BanquetsPage() {
       <section className="bg-seven-background pb-20 pt-36">
         <div className="container-shell grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <SectionTitle eyebrow="Banquets" title={rules.title} description="Seven підходить для днів народження, корпоративів, командних зустрічей і великих вечорів з друзями." />
-          <div className="rounded-[8px] bg-seven-card p-7 premium-border md:p-10">
+          <div className="rounded-[8px] bg-seven-card p-7 premium-border premium-lift hover:shadow-glow md:p-10">
             <div className="grid gap-5 sm:grid-cols-2">
-              <div className="rounded-[8px] bg-black/35 p-6 premium-border">
+              <div className="rounded-[8px] bg-black/35 p-6 premium-border premium-lift">
                 <p className="text-sm uppercase tracking-[0.24em] text-seven-muted">Депозит</p>
                 <p className="mt-3 font-display text-4xl font-black text-seven-accent">{rules.deposit}</p>
               </div>
-              <div className="rounded-[8px] bg-black/35 p-6 premium-border">
+              <div className="rounded-[8px] bg-black/35 p-6 premium-border premium-lift">
                 <p className="text-sm uppercase tracking-[0.24em] text-seven-muted">Сервісний збір</p>
                 <p className="mt-3 font-display text-4xl font-black text-seven-accent">{rules.serviceFee}</p>
               </div>

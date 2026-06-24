@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { BrandWord } from "@/components/BrandWord";
 import { LocationCard } from "@/components/LocationCard";
 import { SectionTitle } from "@/components/SectionTitle";
 import { siteConfig } from "@/data/siteConfig";
@@ -19,7 +18,7 @@ export default function LocationsPage() {
   return (
     <section className="bg-seven-background pb-20 pt-36">
       <div className="container-shell">
-        <SectionTitle eyebrow="Locations" title={<>Оберіть <BrandWord tone="cream" /></>} description="Три заклади, три настрої, одна атмосфера Seven." />
+        <SectionTitle eyebrow="Locations" title="Оберіть Seven" description="Три заклади, три настрої, одна атмосфера Seven." />
         <div className="mt-12 grid gap-8 lg:grid-cols-3">
           {siteConfig.locations.map((location) => (
             <LocationCard key={location.id} location={location} />

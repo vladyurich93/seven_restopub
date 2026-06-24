@@ -36,7 +36,7 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
           <article
             key={`${image.src}-${index}`}
             data-carousel-card
-            className="group min-w-[86%] snap-start overflow-hidden rounded-[8px] bg-seven-card premium-border sm:min-w-[48%] lg:min-w-[31%] xl:min-w-[24%]"
+            className="group min-w-[86%] snap-start overflow-hidden rounded-[8px] bg-seven-card premium-border premium-lift hover:shadow-glow sm:min-w-[48%] lg:min-w-[31%] xl:min-w-[24%]"
           >
             <ImageFrame
               src={image.src}
@@ -52,7 +52,7 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
       <div className="mt-6 flex justify-end gap-3">
         <button
           type="button"
-          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white premium-border transition hover:bg-seven-terracotta"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white premium-border premium-lift hover:bg-seven-terracotta"
           onClick={() => scroll("prev")}
           aria-label="Попередні фото"
         >
@@ -60,7 +60,7 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
         </button>
         <button
           type="button"
-          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-seven-terracotta text-white transition hover:bg-seven-cream hover:text-seven-background"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-seven-terracotta text-white premium-lift hover:bg-seven-cream hover:text-seven-background"
           onClick={() => scroll("next")}
           aria-label="Наступні фото"
         >

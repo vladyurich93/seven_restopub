@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { BrandWord } from "@/components/BrandWord";
 import { ContactSection } from "@/components/ContactSection";
 import { SectionTitle } from "@/components/SectionTitle";
 import { siteConfig } from "@/data/siteConfig";
@@ -20,7 +19,7 @@ export default function ContactsPage() {
     <>
       <section className="bg-seven-background pt-36">
         <div className="container-shell pb-10">
-          <SectionTitle eyebrow="Contacts" title={<>Контакти <BrandWord tone="cream" /></>} description="Адреси, телефони, Instagram і маршрути для кожного закладу." />
+          <SectionTitle eyebrow="Contacts" title="Контакти Seven" description="Адреси, телефони, Instagram і маршрути для кожного закладу." />
         </div>
       </section>
       <ContactSection />

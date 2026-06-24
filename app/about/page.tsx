@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { BrandWord } from "@/components/BrandWord";
 import { ImageFrame } from "@/components/ImageFrame";
 import { SectionTitle } from "@/components/SectionTitle";
 import { siteConfig } from "@/data/siteConfig";
@@ -22,10 +21,10 @@ export default function AboutPage() {
   return (
     <section className="wood-grain bg-seven-background pb-20 pt-36">
       <div className="container-shell">
-        <SectionTitle eyebrow="About" title={<>Історія <BrandWord tone="cream" /></>} description="Мережа сучасних українських restopub: крафт, їжа, футбол, тераси, музика і теплі зустрічі." />
+        <SectionTitle eyebrow="About" title="Історія Seven" description="Мережа сучасних українських restopub: крафт, їжа, футбол, тераси, музика і теплі зустрічі." />
         <div className="mt-12 grid gap-7">
           {about.notes.map((text, index) => (
-            <article key={text} className="grid overflow-hidden rounded-[8px] bg-seven-card premium-border lg:grid-cols-[0.9fr_1.1fr]">
+            <article key={text} className="grid overflow-hidden rounded-[8px] bg-seven-card premium-border premium-lift hover:shadow-glow lg:grid-cols-[0.9fr_1.1fr]">
               <ImageFrame src={photos[index]} alt={text} className="min-h-[320px]" />
               <div className="flex flex-col justify-end p-7 md:p-10">
                 <p className="mb-8 font-display text-6xl font-black text-seven-terracotta">0{index + 1}</p>
@@ -38,7 +37,7 @@ export default function AboutPage() {
           <p className="mb-6 text-sm font-semibold uppercase tracking-[0.24em] text-seven-terracotta">Атмосфера Seven</p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {about.expandedWith.map((item) => (
-              <div key={item} className="rounded-full bg-white/[0.08] px-5 py-3 text-lg font-semibold text-white">
+              <div key={item} className="rounded-full bg-seven-green/12 px-5 py-3 text-lg font-semibold text-seven-green premium-border">
                 {item}
               </div>
             ))}

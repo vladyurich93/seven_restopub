@@ -75,7 +75,7 @@ export function LocationPicker({ className = "", label = "Обрати закл�
               <h2 id="location-picker-title" className="mt-5 max-w-[calc(100%-68px)] font-display text-4xl font-black leading-none text-white md:mt-6 md:max-w-none md:text-5xl">Оберіть Seven</h2>
               <button
                 type="button"
-                className="absolute right-4 top-8 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition duration-500 hover:bg-seven-cream hover:text-seven-background active:scale-95 md:right-7 md:h-12 md:w-12"
+                className="absolute right-4 top-8 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 premium-lift hover:bg-seven-cream hover:text-seven-background active:scale-95 md:right-7 md:h-12 md:w-12"
                 onClick={() => setOpen(false)}
                 aria-label="Закрити"
               >
@@ -84,7 +84,7 @@ export function LocationPicker({ className = "", label = "Обрати закл�
             </div>
             <div className="grid gap-4 p-4 pb-6 md:grid-cols-3 md:p-7">
               {siteConfig.locations.map((location) => (
-                <article key={location.id} className="rounded-[8px] bg-seven-card p-5 premium-border">
+                <article key={location.id} className="rounded-[8px] bg-seven-card p-5 premium-border premium-lift hover:shadow-glow">
                   <p className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-seven-green">
                     <MapPinned size={17} />
                     Seven {location.name.replace("Seven Restopub ", "")}
