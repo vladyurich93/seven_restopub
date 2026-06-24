@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
+import { InstagramPicker } from "./InstagramPicker";
 
 export function Footer() {
   return (
@@ -28,9 +29,7 @@ export function Footer() {
                 {phone}
               </a>
             ))}
-            <Link href={siteConfig.instagram} className="block transition hover:text-white" target="_blank">
-              Instagram
-            </Link>
+            <InstagramPicker className="block text-seven-muted hover:text-white [&>svg]:hidden" />
             <Link href={siteConfig.tiktok} className="block transition hover:text-white" target="_blank">
               TikTok
             </Link>

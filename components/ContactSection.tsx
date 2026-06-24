@@ -1,7 +1,8 @@
-import { Instagram, MapPinned, Phone } from "lucide-react";
+import { MapPinned, Phone } from "lucide-react";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 import { Button } from "./Button";
+import { InstagramPicker } from "./InstagramPicker";
 import { PhoneBookingButton } from "./PhoneBookingButton";
 
 export function ContactSection() {
@@ -21,9 +22,7 @@ export function ContactSection() {
                 <a className="flex gap-3 transition hover:text-white" href={phoneHref(location.phone)}>
                   <Phone className="mt-1 shrink-0 text-seven-oak" size={18} />{location.phone}
                 </a>
-                <a className="flex gap-3 transition hover:text-white" href={location.instagram} target="_blank" rel="noreferrer">
-                  <Instagram className="mt-1 shrink-0 text-seven-oak" size={18} />Instagram
-                </a>
+                <InstagramPicker className="flex gap-3 text-seven-muted hover:text-white [&>svg]:mt-1" label="Instagram" />
               </div>
               <p className="mt-5 text-sm leading-6 text-seven-muted">{location.workingHours}</p>
               <div className="mt-auto grid gap-3 pt-6">
@@ -35,7 +34,7 @@ export function ContactSection() {
           ))}
         </div>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href={siteConfig.instagram} variant="ghost">Instagram</Button>
+          <InstagramPicker className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white transition hover:bg-seven-green hover:text-seven-background [&>svg]:text-seven-oak" />
           <Button href={siteConfig.tiktok} variant="ghost">TikTok</Button>
         </div>
       </div>

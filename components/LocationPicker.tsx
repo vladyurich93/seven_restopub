@@ -1,7 +1,7 @@
 "use client";
 
 import { MapPinned, Navigation, Phone, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 
@@ -12,6 +12,40 @@ type LocationPickerProps = {
 
 export function LocationPicker({ className = "", label = "Обрати заклад" }: LocationPickerProps) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const scrollY = window.scrollY;
+    const originalBodyPosition = document.body.style.position;
+    const originalBodyTop = document.body.style.top;
+    const originalBodyWidth = document.body.style.width;
+    const originalBodyOverflow = document.body.style.overflow;
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.position = originalBodyPosition;
+      document.body.style.top = originalBodyTop;
+      document.body.style.width = originalBodyWidth;
+      document.body.style.overflow = originalBodyOverflow;
+      window.scrollTo(0, scrollY);
+    };
+  }, [open]);
 
   return (
     <>
@@ -24,20 +58,29 @@ export function LocationPicker({ className = "", label = "Обрати закл�
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/75 p-4 backdrop-blur-sm sm:items-center" role="dialog" aria-modal="true" aria-labelledby="location-picker-title">
-          <div className="w-full max-w-5xl overflow-hidden rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70">
-            <div className="flex items-center justify-between border-b border-white/10 p-5 md:p-7">
-              <h2 id="location-picker-title" className="font-display text-3xl font-black text-white md:text-5xl">Оберіть Seven</h2>
+        <div
+          className="fixed inset-0 z-[90] flex items-end justify-center bg-black/75 p-3 backdrop-blur-sm sm:items-center sm:p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="location-picker-title"
+          onClick={() => setOpen(false)}
+        >
+          <div
+            className="max-h-[90vh] max-h-[90dvh] w-full max-w-5xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-seven-background/95 p-4 backdrop-blur-xl md:p-7">
+              <h2 id="location-picker-title" className="pr-4 font-display text-3xl font-black text-white md:text-5xl">Оберіть Seven</h2>
               <button
                 type="button"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition hover:bg-seven-cream hover:text-seven-background"
                 onClick={() => setOpen(false)}
                 aria-label="Закрити"
               >
-                <X size={22} />
+                <X size={24} />
               </button>
             </div>
-            <div className="grid gap-4 p-5 md:grid-cols-3 md:p-7">
+            <div className="grid gap-4 p-4 pb-6 md:grid-cols-3 md:p-7">
               {siteConfig.locations.map((location) => (
                 <article key={location.id} className="rounded-[8px] bg-seven-card p-5 premium-border">
                   <p className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-seven-green">
