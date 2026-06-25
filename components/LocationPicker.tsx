@@ -1,7 +1,6 @@
 "use client";
 
 import { MapPinned, Navigation, Phone, X } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
@@ -70,12 +69,12 @@ export function LocationPicker({ className = "", label = "Обрати закл�
             className="relative max-h-[90vh] max-h-[90dvh] w-full max-w-5xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="sticky top-0 z-20 border-b border-white/10 bg-seven-background/95 px-5 pb-6 pt-8 backdrop-blur-xl md:px-7 md:pb-7 md:pt-8">
-              <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={142} height={68} className="h-auto w-28 md:w-36" />
-              <h2 id="location-picker-title" className="mt-5 max-w-[calc(100%-68px)] font-display text-4xl font-black leading-none text-white md:mt-6 md:max-w-none md:text-5xl">Оберіть Seven</h2>
+            <div className="sticky top-0 z-20 border-b border-white/10 bg-seven-background/95 px-5 pb-5 pt-7 backdrop-blur-xl md:px-7 md:pb-6 md:pt-7">
+              <p className="mb-3 text-xs font-black uppercase tracking-[0.24em] text-seven-green">Locations</p>
+              <h2 id="location-picker-title" className="max-w-[calc(100%-68px)] font-display text-4xl font-black leading-none text-white md:max-w-none md:text-5xl">Оберіть Seven</h2>
               <button
                 type="button"
-                className="absolute right-4 top-8 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 premium-lift hover:bg-seven-cream hover:text-seven-background active:scale-95 md:right-7 md:h-12 md:w-12"
+                className="absolute right-4 top-6 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 premium-lift hover:bg-seven-cream hover:text-seven-background active:scale-95 md:right-7 md:top-7 md:h-12 md:w-12"
                 onClick={() => setOpen(false)}
                 aria-label="Закрити"
               >

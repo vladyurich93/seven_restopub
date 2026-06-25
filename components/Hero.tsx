@@ -1,22 +1,23 @@
+import Image from "next/image";
 import { siteConfig } from "@/data/siteConfig";
-import { ImageFrame } from "./ImageFrame";
 import { LocationPicker } from "./LocationPicker";
 
 export function Hero() {
   return (
     <section className="relative min-h-[100svh] overflow-hidden bg-seven-background">
-      <ImageFrame
-        src="/images/hero/hero-02.jpg"
+      <Image
+        src="/images/gallery/gallery-15.jpg"
         alt={siteConfig.slogan}
+        fill
         priority
-        className="absolute inset-0 h-full w-full scale-[1.01] [&_img]:object-[54%_18%] md:[&_img]:object-[54%_34%] lg:[&_img]:object-[62%_42%]"
         sizes="100vw"
+        className="object-cover object-[52%_38%] md:object-[54%_44%] lg:object-[70%_48%]"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,17,17,0.94)_0%,rgba(17,17,17,0.68)_42%,rgba(17,17,17,0.28)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0.22)_0%,rgba(17,17,17,0.12)_28%,rgba(17,17,17,0.9)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(183,225,77,0.14),transparent_28%),radial-gradient(circle_at_78%_72%,rgba(201,113,74,0.24),transparent_36%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,17,17,0.76)_0%,rgba(17,17,17,0.48)_42%,rgba(17,17,17,0.08)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0.04)_0%,rgba(17,17,17,0.05)_30%,rgba(17,17,17,0.72)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(183,225,77,0.1),transparent_28%),radial-gradient(circle_at_78%_72%,rgba(201,113,74,0.16),transparent_36%)]" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-seven-background to-transparent md:h-36" />
-      <div className="container-shell relative z-10 flex min-h-[100svh] items-center pb-12 pt-24 md:pb-16 md:pt-28 lg:pt-32">
+      <div className="container-shell relative z-10 grid min-h-[100svh] items-center gap-10 pb-12 pt-24 md:pb-16 md:pt-28 lg:grid-cols-[0.95fr_0.75fr] lg:pt-32">
         <div className="max-w-5xl">
           <p className="mb-5 inline-flex rounded-full bg-seven-green/15 px-4 py-2 text-sm font-black uppercase tracking-[0.28em] text-seven-green premium-border">Modern Ukrainian Restopub</p>
           <h1 className="font-display text-[clamp(3.25rem,13vw,7rem)] font-black leading-[0.86] text-white md:max-w-5xl">
@@ -35,6 +36,17 @@ export function Hero() {
           <div className="mt-9 flex flex-col gap-4 sm:flex-row">
             <LocationPicker className="min-h-14 px-8 text-base" />
           </div>
+        </div>
+        <div className="group relative hidden min-h-[560px] overflow-hidden rounded-[8px] premium-border shadow-2xl shadow-black/45 lg:block">
+          <Image
+            src="/images/gallery/gallery-03.jpg"
+            alt="Гості на терасі Seven Restopub"
+            fill
+            sizes="38vw"
+            priority
+            className="object-cover object-[50%_45%] transition duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0),rgba(17,17,17,0.16)_64%,rgba(17,17,17,0.42))]" />
         </div>
       </div>
     </section>
