@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { createContext, type FormEvent, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Send, X } from "lucide-react";
 
@@ -15,6 +15,10 @@ type FormState = {
   comment: string;
 };
 
+type CareersModalContextValue = {
+  openCareersModal: () => void;
+};
+
 type FieldProps = {
   id: keyof FormState;
   label: string;
@@ -25,6 +29,8 @@ type FieldProps = {
   placeholder?: string;
   autoComplete?: string;
 };
+
+const CareersModalContext = createContext<CareersModalContextValue | null>(null);
 
 const cityOptions = ["Запоріжжя", "Львів"];
 const locationOptions = ["Seven Володимира Великого", "Seven Площа Ринок", "Seven Запоріжжя"];
@@ -125,7 +131,17 @@ function TextAreaField({
   );
 }
 
-export function HRSection() {
+export function useCareersModal() {
+  const context = useContext(CareersModalContext);
+
+  if (!context) {
+    throw new Error("useCareersModal must be used within CareersModalProvider");
+  }
+
+  return context;
+}
+
+export function CareersModalProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [form, setForm] = useState<FormState>(initialFormState);
@@ -189,7 +205,7 @@ export function HRSection() {
     setForm((current) => ({ ...current, [field]: value }));
   };
 
-  const resetAndOpen = () => {
+  const openCareersModal = () => {
     setStatus("idle");
     setMessage("");
     setPhoneError("");
@@ -315,29 +331,9 @@ export function HRSection() {
   ) : null;
 
   return (
-    <section id="careers" className="scroll-mt-28 bg-black py-14 md:py-16" aria-labelledby="careers-title">
-      <div className="container-shell">
-        <div className="grid gap-6 rounded-[8px] bg-seven-card/80 p-6 premium-border md:grid-cols-[1fr_auto] md:items-center md:p-8">
-          <div>
-            <p className="mb-3 text-xs font-black uppercase tracking-[0.24em] text-seven-green">Careers</p>
-            <h2 id="careers-title" className="font-display text-4xl font-black leading-none text-white md:text-5xl">
-              Стати частиною команди Seven
-            </h2>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-seven-muted">
-              Шукаємо людей, які люблять сервіс, атмосферу і живу енергію закладу.
-            </p>
-          </div>
-          <button
-            type="button"
-            className="inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50 md:min-w-60"
-            onClick={resetAndOpen}
-          >
-            Заповнити анкету
-          </button>
-        </div>
-      </div>
-
+    <CareersModalContext.Provider value={{ openCareersModal }}>
+      {children}
       {mounted && modal ? createPortal(modal, document.body) : null}
-    </section>
+    </CareersModalContext.Provider>
   );
 }

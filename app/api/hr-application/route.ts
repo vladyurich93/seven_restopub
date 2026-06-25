@@ -48,68 +48,85 @@ const getErrorMessage = (error: unknown) => {
   return String(error);
 };
 
+const getEnvValue = (...names: string[]) => {
+  for (const name of names) {
+    const value = process.env[name]?.trim();
+
+    if (value) {
+      return { name, value };
+    }
+  }
+
+  return { name: names[0], value: "" };
+};
+
 export async function POST(request: Request) {
-  let payload: HRApplicationPayload;
-  const botToken = process.env.TELEGRAM_BOT_TOKEN;
-  const hrChatId = process.env.TELEGRAM_HR_CHAT_ID;
-  const envStatus = {
-    TELEGRAM_BOT_TOKEN_EXISTS: Boolean(botToken),
-    TELEGRAM_HR_CHAT_ID_EXISTS: Boolean(hrChatId),
-  };
-
-  console.log("[HR application] Environment status", envStatus);
-
   try {
-    payload = (await request.json()) as HRApplicationPayload;
-  } catch (error) {
-    console.error("[HR application] Invalid request JSON", error);
-    return NextResponse.json({ message: `Некоректні дані анкети: ${getErrorMessage(error)}` }, { status: 400 });
-  }
+    let payload: HRApplicationPayload;
+    const botTokenEnv = getEnvValue("TELEGRAM_BOT_TOKEN");
+    const hrChatIdEnv = getEnvValue("TELEGRAM_HR_CHAT_ID", "TELEGRAM_CHAT_ID");
+    const botToken = botTokenEnv.value;
+    const hrChatId = hrChatIdEnv.value;
+    const envStatus = {
+      TELEGRAM_BOT_TOKEN_EXISTS: Boolean(botToken),
+      TELEGRAM_HR_CHAT_ID_EXISTS: Boolean(process.env.TELEGRAM_HR_CHAT_ID?.trim()),
+      TELEGRAM_CHAT_ID_EXISTS: Boolean(process.env.TELEGRAM_CHAT_ID?.trim()),
+      TELEGRAM_BOT_TOKEN_SOURCE: botToken ? botTokenEnv.name : null,
+      TELEGRAM_HR_CHAT_ID_SOURCE: hrChatId ? hrChatIdEnv.name : null,
+    };
 
-  const name = clean(payload.name);
-  const phone = clean(payload.phone);
+    console.log("[HR application] Environment status", envStatus);
 
-  if (!name || !phone) {
-    return NextResponse.json({ message: "Заповніть імʼя та телефон." }, { status: 400 });
-  }
+    try {
+      payload = (await request.json()) as HRApplicationPayload;
+    } catch (error) {
+      console.error("[HR application] Invalid request JSON", error);
+      return NextResponse.json({ message: `Некоректні дані анкети: ${getErrorMessage(error)}` }, { status: 400 });
+    }
 
-  if (!isValidUkrainianPhone(phone)) {
-    return NextResponse.json({ message: "Вкажіть коректний український номер телефону." }, { status: 400 });
-  }
+    const name = clean(payload.name);
+    const phone = clean(payload.phone);
 
-  if (!botToken || !hrChatId) {
-    const missingVariables = [
-      !botToken ? "TELEGRAM_BOT_TOKEN" : null,
-      !hrChatId ? "TELEGRAM_HR_CHAT_ID" : null,
-    ].filter(Boolean);
-    const message = `Telegram не налаштований. Відсутні env variables: ${missingVariables.join(", ")}.`;
+    if (!name || !phone) {
+      return NextResponse.json({ message: "Заповніть імʼя та телефон." }, { status: 400 });
+    }
 
-    console.error("[HR application] Missing Telegram environment variables", {
-      ...envStatus,
-      missingVariables,
-      message,
-    });
+    if (!isValidUkrainianPhone(phone)) {
+      return NextResponse.json({ message: "Вкажіть коректний український номер телефону." }, { status: 400 });
+    }
 
-    return NextResponse.json({ message }, { status: 503 });
-  }
+    if (!botToken || !hrChatId) {
+      const missingVariables = [
+        !botToken ? "TELEGRAM_BOT_TOKEN" : null,
+        !hrChatId ? "TELEGRAM_HR_CHAT_ID" : null,
+      ].filter(Boolean);
+      const message = `Telegram не налаштований. Відсутні env variables: ${missingVariables.join(", ")}.`;
 
-  const text = [
-    "🟢 <b>Нова HR заявка</b>",
-    "",
-    `👤 <b>Ім'я:</b> ${formatValue(name)}`,
-    `📞 <b>Телефон:</b> ${formatValue(phone)}`,
-    `🏙 <b>Місто:</b> ${formatValue(payload.city)}`,
-    `📍 <b>Заклад:</b> ${formatValue(payload.location)}`,
-    `💼 <b>Посада:</b> ${formatValue(payload.position)}`,
-    `📅 <b>Досвід:</b> ${formatValue(payload.experience)}`,
-    `⏰ <b>Готовий почати:</b> ${formatValue(payload.startDate)}`,
-    `💬 <b>Коментар:</b> ${formatValue(payload.comment)}`,
-    "",
-    "🌐 sevenrestopub",
-    `🕒 ${formatTimestamp()}`,
-  ].join("\n");
+      console.error("[HR application] Missing Telegram environment variables", {
+        ...envStatus,
+        missingVariables,
+        message,
+      });
 
-  try {
+      return NextResponse.json({ message }, { status: 503 });
+    }
+
+    const text = [
+      "🟢 <b>Нова HR заявка</b>",
+      "",
+      `👤 <b>Ім'я:</b> ${formatValue(name)}`,
+      `📞 <b>Телефон:</b> ${formatValue(phone)}`,
+      `🏙 <b>Місто:</b> ${formatValue(payload.city)}`,
+      `📍 <b>Заклад:</b> ${formatValue(payload.location)}`,
+      `💼 <b>Посада:</b> ${formatValue(payload.position)}`,
+      `📅 <b>Досвід:</b> ${formatValue(payload.experience)}`,
+      `⏰ <b>Готовий почати:</b> ${formatValue(payload.startDate)}`,
+      `💬 <b>Коментар:</b> ${formatValue(payload.comment)}`,
+      "",
+      "🌐 sevenrestopub",
+      `🕒 ${formatTimestamp()}`,
+    ].join("\n");
+
     const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -154,8 +171,8 @@ export async function POST(request: Request) {
 
     console.log("[HR application] Telegram API response", telegramLogPayload);
   } catch (error) {
-    console.error("[HR application] Telegram request failed", error);
-    return NextResponse.json({ message: `Telegram request failed: ${getErrorMessage(error)}` }, { status: 502 });
+    console.error("[HR application] Unhandled route error", error);
+    return NextResponse.json({ message: `HR application route failed: ${getErrorMessage(error)}` }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });
