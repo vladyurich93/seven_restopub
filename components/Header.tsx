@@ -14,6 +14,7 @@ const navItems = [
   { href: "/events", label: "Події" },
   { href: "/banquets", label: "Банкети" },
   { href: "/about", label: "Про нас" },
+  { href: "/#careers", label: "Робота" },
   { href: "/contacts", label: "Контакти" },
 ];
 
