@@ -4,39 +4,52 @@ import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 import { InstagramPicker } from "./InstagramPicker";
 
+function TikTokIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M18.7 6.2a5.8 5.8 0 0 1-3.6-1.3A5.9 5.9 0 0 1 13.2 1h-3.1v14.1a2.9 2.9 0 1 1-2-2.8V9.1a6 6 0 1 0 5.2 5.9V8.2a9 9 0 0 0 5.4 1.8V6.2Z" />
+    </svg>
+  );
+}
+
 export function Footer() {
   return (
-    <footer className="wood-grain border-t border-white/10 bg-black py-12">
-      <div className="container-shell grid gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
-        <div>
-          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={220} height={106} className="h-auto w-48" />
-          <p className="mt-5 font-display text-2xl font-black uppercase tracking-[0.18em]">{siteConfig.brandName}</p>
-          <p className="mt-4 max-w-sm text-seven-muted">{siteConfig.slogan}</p>
+    <footer className="wood-grain border-t border-white/10 bg-black py-12 md:py-14">
+      <div className="container-shell grid gap-10 md:grid-cols-[1.15fr_1fr_1fr] lg:gap-14">
+        <div className="space-y-5">
+          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={220} height={106} className="h-auto w-44 md:w-48" />
+          <p className="max-w-sm text-sm leading-7 text-seven-muted md:text-base">{siteConfig.slogan}</p>
         </div>
-        <div>
+
+        <div className="md:pt-3">
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.24em] text-seven-accent">Локації</p>
-          <div className="space-y-2 text-seven-muted">
+          <div className="space-y-3 text-sm leading-6 text-seven-muted">
             {siteConfig.locations.map((location) => (
               <p key={location.id}>{location.address}</p>
             ))}
           </div>
         </div>
-        <div>
+
+        <div className="md:pt-3">
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.24em] text-seven-accent">Зв'язок</p>
-          <div className="space-y-2 text-seven-muted">
+          <div className="space-y-3 text-sm leading-6 text-seven-muted">
             {siteConfig.phones.map((phone) => (
-              <a key={phone} href={phoneHref(phone)} className="block transition hover:text-white">
+              <a key={phone} href={phoneHref(phone)} className="block transition duration-300 hover:text-white">
                 {phone}
               </a>
             ))}
-            <InstagramPicker className="block text-seven-muted hover:text-white [&>svg]:hidden" />
-            <Link href={siteConfig.tiktok} className="block transition hover:text-white" target="_blank">
+
+            <div className="pt-2">
+              <InstagramPicker className="flex items-center gap-2 text-seven-muted hover:text-white [&>svg]:text-seven-oak" />
+            </div>
+            <Link href={siteConfig.tiktok} className="flex items-center gap-2 text-seven-muted transition duration-300 hover:text-white" target="_blank">
+              <TikTokIcon className="shrink-0 text-seven-oak" />
               TikTok
             </Link>
           </div>
         </div>
       </div>
-      <div className="container-shell mt-10 border-t border-white/10 pt-6 text-sm text-seven-muted">
+      <div className="container-shell mt-10 border-t border-white/10 pt-6 text-sm leading-6 text-seven-muted">
         © {new Date().getFullYear()} {siteConfig.brandName}. Всі права захищені.
       </div>
     </footer>
