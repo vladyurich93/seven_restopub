@@ -2,7 +2,7 @@
 
 import { createContext, type FormEvent, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { Send, X } from "lucide-react";
+import { FileText, Send, X } from "lucide-react";
 
 type FormState = {
   name: string;
@@ -48,8 +48,16 @@ const initialFormState: FormState = {
 };
 
 const fallbackMessage = "Заявку не вдалося відправити. Спробуйте ще раз або напишіть нам у Telegram.";
+const maxCvSizeBytes = 10 * 1024 * 1024;
+const allowedCvTypes = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "image/jpeg",
+  "image/png",
+];
 const fieldClass =
-  "mt-2 w-full rounded-[8px] border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none transition placeholder:text-seven-muted/65 focus:border-seven-green focus:ring-2 focus:ring-seven-green/20";
+  "mt-1.5 w-full rounded-[8px] border border-white/10 bg-black/30 px-3.5 py-2.5 text-sm text-white outline-none transition placeholder:text-seven-muted/65 focus:border-seven-green focus:ring-2 focus:ring-seven-green/20";
 
 const isValidUkrainianPhone = (phone: string) => {
   const digits = phone.replace(/\D/g, "");
@@ -148,6 +156,8 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cvError, setCvError] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -209,7 +219,31 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     setStatus("idle");
     setMessage("");
     setPhoneError("");
+    setCvError("");
     setOpen(true);
+  };
+
+  const updateCvFile = (file: File | null) => {
+    setCvError("");
+
+    if (!file) {
+      setCvFile(null);
+      return;
+    }
+
+    if (!allowedCvTypes.includes(file.type)) {
+      setCvFile(null);
+      setCvError("Додайте файл у форматі PDF, DOC, DOCX, JPG або PNG.");
+      return;
+    }
+
+    if (file.size > maxCvSizeBytes) {
+      setCvFile(null);
+      setCvError("Файл має бути до 10 MB.");
+      return;
+    }
+
+    setCvFile(file);
   };
 
   const submitApplication = async (event: FormEvent<HTMLFormElement>) => {
@@ -217,6 +251,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     setStatus("loading");
     setMessage("");
     setPhoneError("");
+    setCvError("");
 
     if (!isValidUkrainianPhone(form.phone)) {
       setStatus("idle");
@@ -225,10 +260,19 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     }
 
     try {
+      const payload = new FormData();
+
+      Object.entries(form).forEach(([key, value]) => {
+        payload.append(key, value);
+      });
+
+      if (cvFile) {
+        payload.append("cv", cvFile);
+      }
+
       const response = await fetch("/api/hr-application", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: payload,
       });
       const result = (await response.json()) as { message?: string };
 
@@ -240,7 +284,8 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
 
       setStatus("success");
       setForm(initialFormState);
-      setMessage("Дякуємо!\nМи отримали вашу заявку.\nНайближчим часом HR звʼяжеться з вами.");
+      setCvFile(null);
+      setMessage(result.message || "Дякуємо! Ми отримали вашу заявку. HR Seven звʼяжеться з вами найближчим часом.");
     } catch {
       setStatus("error");
       setMessage(fallbackMessage);
@@ -256,13 +301,13 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
       onClick={() => setOpen(false)}
     >
       <div
-        className="max-h-[90vh] max-h-[90dvh] w-full max-w-3xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
+        className="max-h-[90vh] max-h-[90dvh] w-full max-w-3xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background/95 premium-border shadow-2xl shadow-black/70 backdrop-blur-xl [-webkit-overflow-scrolling:touch]"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-white/10 bg-seven-background/95 p-4 backdrop-blur-xl md:p-6">
+        <div className="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-white/10 bg-seven-background/95 p-4 backdrop-blur-xl md:px-5 md:py-4">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-seven-green">Careers</p>
-            <h2 id="careers-modal-title" className="mt-2 font-display text-3xl font-black leading-none text-white md:text-4xl">
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-seven-green">Команда Seven</p>
+            <h2 id="careers-modal-title" className="mt-1.5 font-display text-3xl font-black leading-none text-white md:text-4xl">
               Анкета кандидата
             </h2>
           </div>
@@ -276,7 +321,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
           </button>
         </div>
 
-        <form className="grid gap-4 p-4 md:grid-cols-2 md:p-6" onSubmit={submitApplication}>
+        <form className="grid gap-3.5 p-4 md:grid-cols-2 md:p-5" onSubmit={submitApplication}>
           <TextField id="name" label="Імʼя" value={form.name} onChange={updateField} required autoComplete="name" />
           <div>
             <TextField
@@ -297,6 +342,25 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
           <TextField id="startDate" label="Коли готові почати" value={form.startDate} onChange={updateField} placeholder="Наприклад: з наступного тижня" />
           <TextAreaField id="experience" label="Досвід роботи" value={form.experience} onChange={updateField} placeholder="Коротко про попередній досвід" />
           <TextAreaField id="comment" label="Коментар" value={form.comment} onChange={updateField} placeholder="Що ще нам варто знати?" />
+
+          <label htmlFor="cv" className="rounded-[8px] border border-dashed border-white/15 bg-white/[0.03] p-3 text-sm font-semibold text-white transition hover:border-seven-green/50 md:col-span-2">
+            <span className="flex items-center gap-2">
+              <FileText size={17} className="text-seven-green" />
+              CV / Резюме
+              <span className="font-normal text-seven-muted">(необовʼязково)</span>
+            </span>
+            <input
+              id="cv"
+              name="cv"
+              type="file"
+              className="mt-2 block w-full cursor-pointer rounded-[8px] text-sm text-seven-muted file:mr-4 file:rounded-full file:border-0 file:bg-seven-terracotta file:px-4 file:py-2 file:text-xs file:font-black file:uppercase file:tracking-[0.12em] file:text-white hover:file:bg-seven-cream hover:file:text-seven-background"
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png"
+              onChange={(event) => updateCvFile(event.target.files?.[0] ?? null)}
+            />
+            <span className="mt-2 block text-xs font-medium leading-5 text-seven-muted">PDF, DOC, DOCX, JPG або PNG до 10 MB.</span>
+            {cvFile ? <span className="mt-1 block text-xs font-bold text-seven-green">{cvFile.name}</span> : null}
+            {cvError ? <span className="mt-1 block text-xs font-semibold text-seven-terracotta">{cvError}</span> : null}
+          </label>
 
           {message ? (
             <div className={`whitespace-pre-line rounded-[8px] p-4 text-sm leading-6 md:col-span-2 ${statusMessageClass}`} role="status" aria-live="polite">

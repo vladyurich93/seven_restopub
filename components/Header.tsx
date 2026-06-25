@@ -5,22 +5,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
+import { useCareersModal } from "./CareersModal";
 import { LocationPickerButton } from "./LocationPicker";
 
-const navItems = [
+type NavItem = {
+  href?: string;
+  label: string;
+  action?: "careers";
+};
+
+const navItems: NavItem[] = [
   { href: "/", label: "Головна" },
   { href: "/locations", label: "Локації" },
   { href: "/menu", label: "Меню" },
+  { label: "Кар'єра", action: "careers" },
   { href: "/events", label: "Події" },
   { href: "/banquets", label: "Банкети" },
   { href: "/about", label: "Про нас" },
-  { href: "/#careers", label: "Робота" },
   { href: "/contacts", label: "Контакти" },
 ];
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { openCareersModal } = useCareersModal();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -38,9 +46,20 @@ export function Header() {
 
         <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 lg:flex xl:gap-5">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="whitespace-nowrap text-xs font-semibold text-seven-muted transition hover:text-seven-cream xl:text-sm">
-              {item.label}
-            </Link>
+            item.action === "careers" ? (
+              <button
+                key={item.label}
+                type="button"
+                className="whitespace-nowrap text-xs font-semibold text-seven-muted transition hover:text-seven-cream xl:text-sm"
+                onClick={openCareersModal}
+              >
+                {item.label}
+              </button>
+            ) : (
+              <Link key={item.href} href={item.href ?? "/"} className="whitespace-nowrap text-xs font-semibold text-seven-muted transition hover:text-seven-cream xl:text-sm">
+                {item.label}
+              </Link>
+            )
           ))}
         </nav>
 
@@ -74,14 +93,28 @@ export function Header() {
         </div>
         <nav className="grid gap-1 p-5">
           {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded-[8px] px-4 py-3 font-display text-2xl font-black uppercase text-white transition hover:bg-seven-terracotta hover:text-white"
-              onClick={() => setOpen(false)}
-            >
-              {item.label}
-            </Link>
+            item.action === "careers" ? (
+              <button
+                key={item.label}
+                type="button"
+                className="rounded-[8px] px-4 py-3 text-left font-display text-2xl font-black uppercase text-white transition hover:bg-seven-terracotta hover:text-white"
+                onClick={() => {
+                  setOpen(false);
+                  openCareersModal();
+                }}
+              >
+                {item.label}
+              </button>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href ?? "/"}
+                className="rounded-[8px] px-4 py-3 font-display text-2xl font-black uppercase text-white transition hover:bg-seven-terracotta hover:text-white"
+                onClick={() => setOpen(false)}
+              >
+                {item.label}
+              </Link>
+            )
           ))}
         </nav>
         <div className="mt-auto border-t border-white/10 p-5">
