@@ -6,38 +6,38 @@ export function Hero() {
   return (
     <section className="relative min-h-[100svh] overflow-hidden bg-seven-background">
       <Image
-        src="/images/gallery/gallery-15.jpg"
+        src="/images/gallery/gallery-20.jpg"
         alt={siteConfig.slogan}
         fill
         priority
         sizes="100vw"
-        className="object-cover object-[52%_38%] md:object-[54%_44%] lg:object-[70%_48%]"
+        className="object-cover object-[52%_46%] md:object-[54%_45%] lg:object-[72%_45%]"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,17,17,0.72)_0%,rgba(17,17,17,0.42)_48%,rgba(17,17,17,0.08)_100%)] lg:bg-[linear-gradient(90deg,rgba(17,17,17,0.78)_0%,rgba(17,17,17,0.48)_34%,rgba(17,17,17,0.08)_58%,rgba(17,17,17,0)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,17,17,0.74)_0%,rgba(17,17,17,0.45)_48%,rgba(17,17,17,0.1)_100%)] lg:bg-[linear-gradient(90deg,rgba(17,17,17,0.8)_0%,rgba(17,17,17,0.52)_34%,rgba(17,17,17,0.12)_58%,rgba(17,17,17,0.03)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0)_0%,rgba(17,17,17,0.03)_34%,rgba(17,17,17,0.64)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(183,225,77,0.08),transparent_28%),radial-gradient(circle_at_78%_72%,rgba(201,113,74,0.1),transparent_36%)]" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-seven-background to-transparent md:h-36" />
-      <div className="container-shell relative z-10 grid min-h-[100svh] items-center gap-10 pb-12 pt-24 md:pb-16 md:pt-28 lg:grid-cols-[minmax(0,0.9fr)_minmax(390px,0.82fr)] lg:pt-32 xl:grid-cols-[minmax(0,0.88fr)_minmax(460px,0.82fr)]">
+      <div className="container-shell relative z-10 grid min-h-[100svh] items-center gap-8 pb-10 pt-24 md:pb-14 md:pt-28 lg:grid-cols-[minmax(0,0.92fr)_minmax(350px,0.7fr)] lg:gap-8 lg:pb-10 lg:pt-28 xl:grid-cols-[minmax(0,0.9fr)_minmax(420px,0.76fr)] xl:gap-10 [@media_(min-width:1024px)_and_(max-height:780px)]:gap-6 [@media_(min-width:1024px)_and_(max-height:780px)]:pb-8 [@media_(min-width:1024px)_and_(max-height:780px)]:pt-24">
         <div className="min-w-0 max-w-5xl">
-          <p className="mb-5 inline-flex rounded-full bg-seven-green/15 px-4 py-2 text-sm font-black uppercase tracking-[0.28em] text-seven-green premium-border">Modern Ukrainian Restopub</p>
-          <h1 className="font-display text-[clamp(3.25rem,13vw,7rem)] font-black leading-[0.86] text-white md:max-w-5xl">
+          <p className="mb-4 inline-flex rounded-full bg-seven-green/15 px-4 py-2 text-sm font-black uppercase tracking-[0.28em] text-seven-green premium-border [@media_(min-width:1024px)_and_(max-height:780px)]:mb-3 [@media_(min-width:1024px)_and_(max-height:780px)]:py-1.5 [@media_(min-width:1024px)_and_(max-height:780px)]:text-xs">Modern Ukrainian Restopub</p>
+          <h1 className="font-display text-[clamp(3rem,12vw,6.5rem)] font-black leading-[0.88] text-white md:max-w-5xl lg:text-[clamp(4.6rem,6.5vw,6.5rem)] [@media_(min-width:1024px)_and_(max-height:780px)]:text-[clamp(4rem,5.5vw,5.75rem)]">
             Місце для зустрічей, смаку та живих емоцій
           </h1>
-          <p className="mt-6 max-w-2xl text-xl leading-8 text-seven-muted">
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-seven-muted md:text-xl [@media_(min-width:1024px)_and_(max-height:780px)]:mt-4 [@media_(min-width:1024px)_and_(max-height:780px)]:max-w-xl [@media_(min-width:1024px)_and_(max-height:780px)]:text-base [@media_(min-width:1024px)_and_(max-height:780px)]:leading-7">
             Друзі, футбол, український крафт, comfort food, коктейлі, тераса, музика і теплі вечори без зайвого приводу.
           </p>
-          <div className="mt-7 flex flex-wrap gap-2">
+          <div className="mt-6 flex flex-wrap gap-2 [@media_(min-width:1024px)_and_(max-height:780px)]:mt-5">
             {["Крафт", "Футбол", "Бургери", "Коктейлі", "Кальян", "Тераса"].map((item) => (
-              <span key={item} className="rounded-full bg-seven-terracotta/20 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-white premium-border">
+              <span key={item} className="rounded-full bg-seven-terracotta/20 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-white premium-border [@media_(min-width:1024px)_and_(max-height:780px)]:px-3 [@media_(min-width:1024px)_and_(max-height:780px)]:py-1.5">
                 {item}
               </span>
             ))}
           </div>
-          <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-            <LocationPickerButton className="min-h-14 px-8 text-base" />
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row [@media_(min-width:1024px)_and_(max-height:780px)]:mt-6">
+            <LocationPickerButton className="min-h-14 px-8 text-base [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-12 [@media_(min-width:1024px)_and_(max-height:780px)]:px-7 [@media_(min-width:1024px)_and_(max-height:780px)]:text-sm" />
           </div>
         </div>
-        <div className="group relative hidden min-h-[600px] overflow-hidden rounded-[8px] premium-border shadow-[0_28px_80px_rgba(0,0,0,0.38)] lg:block xl:min-h-[640px]">
+        <div className="group relative hidden min-h-[520px] overflow-hidden rounded-[8px] premium-border shadow-[0_28px_80px_rgba(0,0,0,0.38)] lg:block xl:min-h-[580px] [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-[430px] [@media_(min-width:1024px)_and_(max-height:680px)]:min-h-[360px]">
           <Image
             src="/images/hero/hero-02.jpg"
             alt="Гості на терасі Seven Restopub"
