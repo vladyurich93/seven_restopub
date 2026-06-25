@@ -13,9 +13,9 @@ export function Hero() {
         sizes="100vw"
         className="object-cover object-[52%_38%] md:object-[54%_44%] lg:object-[70%_48%]"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,17,17,0.76)_0%,rgba(17,17,17,0.48)_42%,rgba(17,17,17,0.08)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0.04)_0%,rgba(17,17,17,0.05)_30%,rgba(17,17,17,0.72)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(183,225,77,0.1),transparent_28%),radial-gradient(circle_at_78%_72%,rgba(201,113,74,0.16),transparent_36%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,17,17,0.72)_0%,rgba(17,17,17,0.4)_42%,rgba(17,17,17,0)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0)_0%,rgba(17,17,17,0.03)_34%,rgba(17,17,17,0.64)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(183,225,77,0.08),transparent_28%),radial-gradient(circle_at_78%_72%,rgba(201,113,74,0.1),transparent_36%)]" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-seven-background to-transparent md:h-36" />
       <div className="container-shell relative z-10 grid min-h-[100svh] items-center gap-10 pb-12 pt-24 md:pb-16 md:pt-28 lg:grid-cols-[0.95fr_0.75fr] lg:pt-32">
         <div className="max-w-5xl">
@@ -39,14 +39,14 @@ export function Hero() {
         </div>
         <div className="group relative hidden min-h-[560px] overflow-hidden rounded-[8px] premium-border shadow-2xl shadow-black/45 lg:block">
           <Image
-            src="/images/gallery/gallery-03.jpg"
+            src="/images/hero/hero-02.jpg"
             alt="Гості на терасі Seven Restopub"
             fill
             sizes="38vw"
             priority
-            className="object-cover object-[50%_45%] transition duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+            className="object-cover object-[56%_42%] transition duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0),rgba(17,17,17,0.16)_64%,rgba(17,17,17,0.42))]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0),rgba(17,17,17,0.08)_64%,rgba(17,17,17,0.26))]" />
         </div>
       </div>
     </section>
