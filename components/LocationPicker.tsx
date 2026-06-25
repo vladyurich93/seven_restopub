@@ -73,7 +73,7 @@ export function LocationPicker({ className = "", label = "Обрати закл�
           <h2 id="location-picker-title" className="max-w-[calc(100%-68px)] font-display text-4xl font-black leading-none text-white md:max-w-none md:text-5xl">Оберіть Seven</h2>
           <button
             type="button"
-            className="absolute right-4 top-6 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 premium-lift hover:bg-seven-cream hover:text-seven-background active:scale-95 md:right-7 md:top-7 md:h-12 md:w-12"
+            className="absolute right-4 top-6 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition duration-300 hover:bg-seven-cream hover:text-seven-background active:scale-95 md:right-7 md:top-7 md:h-12 md:w-12"
             onClick={() => setOpen(false)}
             aria-label="Закрити"
           >
@@ -82,7 +82,7 @@ export function LocationPicker({ className = "", label = "Обрати закл�
         </div>
         <div className="grid gap-4 p-4 pb-6 md:grid-cols-3 md:p-7">
           {siteConfig.locations.map((location) => (
-            <article key={location.id} className="rounded-[8px] bg-seven-card p-5 premium-border premium-lift hover:shadow-glow">
+            <article key={location.id} className="rounded-[8px] bg-seven-card p-5 premium-border transition-colors duration-300 hover:border-seven-terracotta/50">
               <p className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-seven-green">
                 <MapPinned size={17} />
                 Seven {location.name.replace("Seven Restopub ", "")}
@@ -95,7 +95,7 @@ export function LocationPicker({ className = "", label = "Обрати закл�
               <div className="mt-6 grid gap-3">
                 <a
                   href={phoneHref(location.phone)}
-                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-terracotta px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-cream hover:text-seven-background"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-terracotta px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white transition duration-300 hover:bg-seven-cream hover:text-seven-background"
                 >
                   <Phone size={17} />
                   Зателефонувати
@@ -104,7 +104,7 @@ export function LocationPicker({ className = "", label = "Обрати закл�
                   href={location.menuLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-cream px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-seven-background premium-lift hover:bg-white"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-cream px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-seven-background transition duration-300 hover:bg-white"
                 >
                   Меню
                 </a>
@@ -112,7 +112,7 @@ export function LocationPicker({ className = "", label = "Обрати закл�
                   href={location.googleMaps}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white/5 px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-border premium-lift hover:bg-seven-green hover:text-seven-background"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white/5 px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-border transition duration-300 hover:bg-seven-green hover:text-seven-background"
                 >
                   <Navigation size={17} />
                   Побудувати маршрут
