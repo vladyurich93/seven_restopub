@@ -6,6 +6,7 @@ import { Button } from "@/components/Button";
 import { ContactSection } from "@/components/ContactSection";
 import { EventCard } from "@/components/EventCard";
 import { Hero } from "@/components/Hero";
+import { HRSection } from "@/components/HRSection";
 import { ImageFrame } from "@/components/ImageFrame";
 import { LocationCard } from "@/components/LocationCard";
 import { MenuCategoryCard } from "@/components/MenuCategoryCard";
@@ -187,6 +188,7 @@ export default function HomePage() {
       </section>
 
       <ContactSection />
+      <HRSection />
     </>
   );
 }
