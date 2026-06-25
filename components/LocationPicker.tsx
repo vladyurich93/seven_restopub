@@ -6,6 +6,8 @@ import { MapPinned, Navigation, Phone, X } from "lucide-react";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 
+const LOCATION_PICKER_ROOT = "seven-location-picker-root";
+
 type LocationPickerContextValue = {
   openPicker: () => void;
 };
@@ -25,13 +27,49 @@ const LocationPickerContext = createContext<LocationPickerContextValue | null>(n
 export function LocationPickerProvider({ children }: LocationPickerProviderProps) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const openPicker = useCallback(() => setOpen(true), []);
-  const closePicker = useCallback(() => setOpen(false), []);
+  const removeStaleLocationPickerRoots = useCallback(() => {
+    document.querySelectorAll(`[data-modal-root="${LOCATION_PICKER_ROOT}"]`).forEach((node) => {
+      node.remove();
+    });
+  }, []);
+  const openPicker = useCallback(() => {
+    if (open) {
+      return;
+    }
+
+    removeStaleLocationPickerRoots();
+    if (process.env.NODE_ENV === "development") {
+      console.log("[LocationPicker] modal open");
+    }
+    setOpen(true);
+  }, [open, removeStaleLocationPickerRoots]);
+  const closePicker = useCallback(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[LocationPicker] modal close");
+    }
+    setOpen(false);
+  }, []);
   const contextValue = useMemo(() => ({ openPicker }), [openPicker]);
 
   useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[LocationPickerProvider] mount");
+    }
     setMounted(true);
-  }, []);
+
+    return () => {
+      if (process.env.NODE_ENV === "development") {
+        console.log("[LocationPickerProvider] unmount");
+      }
+      removeStaleLocationPickerRoots();
+    };
+  }, [removeStaleLocationPickerRoots]);
+
+  useEffect(() => {
+    if (!open) {
+      removeStaleLocationPickerRoots();
+    }
+  }, [open, removeStaleLocationPickerRoots]);
 
   useEffect(() => {
     if (!open) {
@@ -79,12 +117,25 @@ export function LocationPickerProvider({ children }: LocationPickerProviderProps
 }
 
 function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[LocationPicker] mount");
+    }
+
+    return () => {
+      if (process.env.NODE_ENV === "development") {
+        console.log("[LocationPicker] unmount");
+      }
+    };
+  }, []);
+
   if (!open) {
     return null;
   }
 
   return createPortal(
     <div
+      data-modal-root={LOCATION_PICKER_ROOT}
       className="fixed inset-0 z-[140] flex items-end justify-center bg-black/72 p-3 backdrop-blur-sm sm:items-center sm:p-4"
       role="dialog"
       aria-modal="true"
