@@ -84,7 +84,7 @@ export function Header() {
           ))}
         </nav>
         <div className="mt-auto border-t border-white/10 p-5">
-          <LocationPicker className="w-full" />
+          <LocationPicker className="w-full" onOpen={() => setOpen(false)} />
         </div>
       </aside>
     </header>

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Montserrat, Oswald } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { LocationPickerProvider } from "@/components/LocationPicker";
 import { siteConfig } from "@/data/siteConfig";
 import "./globals.css";
 
@@ -54,9 +55,11 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html lang="uk" className={`${montserrat.variable} ${oswald.variable}`}>
       <body className="font-sans antialiased">
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <LocationPickerProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </LocationPickerProvider>
       </body>
     </html>
   );
