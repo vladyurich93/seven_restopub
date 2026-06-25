@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, type ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { MapPinned, Navigation, Phone, X } from "lucide-react";
 import { phoneHref } from "@/data/phone";
@@ -14,7 +14,7 @@ type LocationPickerProviderProps = {
   children: ReactNode;
 };
 
-type LocationPickerProps = {
+type LocationPickerButtonProps = {
   className?: string;
   label?: string;
   onOpen?: () => void;
@@ -25,6 +25,9 @@ const LocationPickerContext = createContext<LocationPickerContextValue | null>(n
 export function LocationPickerProvider({ children }: LocationPickerProviderProps) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const openPicker = useCallback(() => setOpen(true), []);
+  const closePicker = useCallback(() => setOpen(false), []);
+  const contextValue = useMemo(() => ({ openPicker }), [openPicker]);
 
   useEffect(() => {
     setMounted(true);
@@ -50,7 +53,7 @@ export function LocationPickerProvider({ children }: LocationPickerProviderProps
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setOpen(false);
+        closePicker();
       }
     };
 
@@ -65,15 +68,28 @@ export function LocationPickerProvider({ children }: LocationPickerProviderProps
       document.documentElement.style.overflow = originalHtmlOverflow;
       window.scrollTo(0, scrollY);
     };
-  }, [open]);
+  }, [closePicker, open]);
 
-  const modal = open ? (
+  return (
+    <LocationPickerContext.Provider value={contextValue}>
+      {children}
+      {mounted ? <LocationPicker open={open} onClose={closePicker} /> : null}
+    </LocationPickerContext.Provider>
+  );
+}
+
+function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void }) {
+  if (!open) {
+    return null;
+  }
+
+  return createPortal(
     <div
       className="fixed inset-0 z-[140] flex items-end justify-center bg-black/72 p-3 backdrop-blur-sm sm:items-center sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="location-picker-title"
-      onClick={() => setOpen(false)}
+      onClick={onClose}
     >
       <div
         className="relative max-h-[90vh] max-h-[90dvh] w-full max-w-5xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
@@ -87,7 +103,7 @@ export function LocationPickerProvider({ children }: LocationPickerProviderProps
           <button
             type="button"
             className="absolute right-4 top-6 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition duration-300 hover:bg-seven-cream hover:text-seven-background active:scale-95 md:right-7 md:top-7 md:h-12 md:w-12"
-            onClick={() => setOpen(false)}
+            onClick={onClose}
             aria-label="Закрити"
           >
             <X size={24} />
@@ -135,18 +151,12 @@ export function LocationPickerProvider({ children }: LocationPickerProviderProps
           ))}
         </div>
       </div>
-    </div>
-  ) : null;
-
-  return (
-    <LocationPickerContext.Provider value={{ openPicker: () => setOpen(true) }}>
-      {children}
-      {mounted && modal ? createPortal(modal, document.body) : null}
-    </LocationPickerContext.Provider>
+    </div>,
+    document.body,
   );
 }
 
-export function LocationPicker({ className = "", label = "Обрати заклад", onOpen }: LocationPickerProps) {
+export function LocationPickerButton({ className = "", label = "Обрати заклад", onOpen }: LocationPickerButtonProps) {
   const picker = useContext(LocationPickerContext);
 
   return (

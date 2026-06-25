@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
-import { LocationPicker } from "./LocationPicker";
+import { LocationPickerButton } from "./LocationPicker";
 
 const navItems = [
   { href: "/", label: "Головна" },
@@ -44,7 +44,7 @@ export function Header() {
         </nav>
 
         <div className="hidden lg:block">
-          <LocationPicker />
+          <LocationPickerButton />
         </div>
 
         <button
@@ -84,7 +84,7 @@ export function Header() {
           ))}
         </nav>
         <div className="mt-auto border-t border-white/10 p-5">
-          <LocationPicker className="w-full" onOpen={() => setOpen(false)} />
+          <LocationPickerButton className="w-full" onOpen={() => setOpen(false)} />
         </div>
       </aside>
     </header>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { siteConfig } from "@/data/siteConfig";
-import { LocationPicker } from "./LocationPicker";
+import { LocationPickerButton } from "./LocationPicker";
 
 export function Hero() {
   return (
@@ -34,7 +34,7 @@ export function Hero() {
             ))}
           </div>
           <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-            <LocationPicker className="min-h-14 px-8 text-base" />
+            <LocationPickerButton className="min-h-14 px-8 text-base" />
           </div>
         </div>
         <div className="group relative hidden min-h-[600px] overflow-hidden rounded-[8px] premium-border shadow-[0_28px_80px_rgba(0,0,0,0.38)] lg:block xl:min-h-[640px]">

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CheckCircle2 } from "lucide-react";
-import { LocationPicker } from "@/components/LocationPicker";
+import { LocationPickerButton } from "@/components/LocationPicker";
 import { SectionTitle } from "@/components/SectionTitle";
 import { siteConfig } from "@/data/siteConfig";
 
@@ -45,7 +45,7 @@ export default function BanquetsPage() {
                 ))}
               </div>
             </div>
-            <LocationPicker label="Обговорити банкет" className="mt-8 min-h-14 w-full text-base" />
+            <LocationPickerButton label="Обговорити банкет" className="mt-8 min-h-14 w-full text-base" />
           </div>
         </div>
       </section>
