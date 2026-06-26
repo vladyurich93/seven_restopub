@@ -36,6 +36,14 @@ const CareersModalContext = createContext<CareersModalContextValue | null>(null)
 const cityOptions = ["Запоріжжя", "Львів"];
 const locationOptions = ["Seven Володимира Великого", "Seven Площа Ринок", "Seven Запоріжжя"];
 const positionOptions = ["Офіціант", "Бармен", "Кухар", "Кальянщик", "Адміністратор", "Інше"];
+const locationInstagramLinks: Record<string, string> = {
+  "Seven Запоріжжя": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
+  "Seven Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
+  "Seven Площа Ринок": "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
+  Запоріжжя: "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
+  "Львів Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
+  "Львів Площа Ринок": "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
+};
 
 const initialFormState: FormState = {
   name: "",
@@ -159,6 +167,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
   const [phoneError, setPhoneError] = useState("");
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [cvError, setCvError] = useState("");
+  const [submittedLocation, setSubmittedLocation] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -293,6 +302,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
       }
 
       setStatus("success");
+      setSubmittedLocation(form.location);
       setForm(initialFormState);
       setCvFile(null);
       setMessage(result.message || "Дякуємо! Ми отримали вашу заявку. HR Seven звʼяжеться з вами найближчим часом.");
@@ -301,6 +311,10 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
       setMessage(fallbackMessage);
     }
   };
+
+  const selectedInstagramLink = submittedLocation ? locationInstagramLinks[submittedLocation] : undefined;
+  const instagramHref = selectedInstagramLink || siteConfig.instagram;
+  const instagramLabel = selectedInstagramLink ? "Instagram закладу" : "Instagram Seven";
 
   const modal = open ? (
     <div
@@ -345,9 +359,9 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
               HR-команда вже отримала вашу анкету в Telegram. Ми переглянемо її та звʼяжемося з вами найближчим часом.
             </p>
             <p className="mx-auto mt-5 max-w-lg text-xs font-semibold uppercase tracking-[0.14em] text-seven-muted">
-              Поки очікуєте відповідь — можете подивитися атмосферу Seven в Instagram.
+              Поки очікуєте відповідь — можете подивитися атмосферу саме того Seven, який обрали в анкеті.
             </p>
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+            <div className="mt-7 grid gap-3 sm:grid-cols-3">
               <button
                 type="button"
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
@@ -356,13 +370,21 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
                 Закрити
               </button>
               <a
-                href={siteConfig.instagram}
+                href={instagramHref}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-green hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
               >
                 <Instagram size={17} />
-                Instagram
+                {instagramLabel}
+              </a>
+              <a
+                href="https://t.me/Hrsevengroup"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-white/5 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
+              >
+                Написати HR
               </a>
             </div>
             <button
