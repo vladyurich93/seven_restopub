@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getSevenAssistantContext } from "@/lib/sevenData";
 
 const OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses";
-const DEFAULT_ASSISTANT_MODEL = "gpt-5.5-mini";
+const DEFAULT_ASSISTANT_MODEL = "gpt-5-mini";
 
 type ChatMessage = {
   role: "user" | "assistant";
