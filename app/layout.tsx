@@ -5,7 +5,6 @@ import { CareersModalProvider } from "@/components/CareersModal";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LocationPickerProvider } from "@/components/LocationPicker";
-import { SevenAssistant } from "@/components/SevenAssistant";
 import { siteConfig } from "@/data/siteConfig";
 import "./globals.css";
 
@@ -65,7 +64,6 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
             <Header />
             <main>{children}</main>
             <Footer />
-            <SevenAssistant />
           </LocationPickerProvider>
         </CareersModalProvider>
       </body>
