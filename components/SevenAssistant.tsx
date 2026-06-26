@@ -111,7 +111,7 @@ export function SevenAssistant() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`fixed bottom-4 right-4 z-[55] inline-flex min-h-12 items-center gap-2 rounded-full bg-seven-terracotta px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-white shadow-[0_18px_46px_rgba(201,113,74,0.32)] transition duration-500 hover:-translate-y-1 hover:bg-seven-cream hover:text-seven-background md:bottom-6 md:right-6 ${
+        className={`fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] right-4 z-[55] inline-flex min-h-12 items-center gap-2 rounded-full bg-seven-terracotta px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-white shadow-[0_18px_46px_rgba(201,113,74,0.32)] transition duration-500 hover:bg-seven-cream hover:text-seven-background md:bottom-8 md:right-8 ${
           open ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
         aria-label="Відкрити чат Запитати Seven"
@@ -122,9 +122,9 @@ export function SevenAssistant() {
       </button>
 
       {open ? (
-        <div className="fixed inset-x-3 bottom-3 z-[90] animate-[fadeIn_420ms_ease-out] sm:inset-x-auto sm:bottom-6 sm:right-6">
+        <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+1rem)] right-4 z-[90] w-[calc(100vw-32px)] max-w-[380px] animate-[fadeIn_420ms_ease-out] md:bottom-8 md:right-8">
           <section
-            className="premium-border flex max-h-[calc(100dvh-24px)] w-full flex-col overflow-hidden rounded-[28px] bg-[#151515]/95 shadow-[0_30px_90px_rgba(0,0,0,0.48)] backdrop-blur-xl sm:w-[390px] sm:max-h-[min(640px,calc(100dvh-48px))]"
+            className="premium-border flex max-h-[70vh] w-full max-w-[380px] flex-col overflow-hidden rounded-[24px] bg-[#151515] shadow-[0_30px_90px_rgba(0,0,0,0.48)]"
             aria-label="Чат Запитати Seven"
           >
             <header className="flex items-start justify-between gap-4 border-b border-white/10 px-4 py-4 sm:px-5">

@@ -136,7 +136,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
   return createPortal(
     <div
       data-modal-root={LOCATION_PICKER_ROOT}
-      className="fixed inset-0 z-[140] flex items-end justify-center bg-black/72 p-3 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-[140] flex items-end justify-center bg-black/78 p-3 sm:items-center sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="location-picker-title"
@@ -146,21 +146,21 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
         className="relative max-h-[90vh] max-h-[90dvh] w-full max-w-5xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="sticky top-0 z-20 border-b border-white/10 bg-seven-background/95 px-5 pb-5 pt-7 backdrop-blur-xl md:px-7 md:pb-6 md:pt-7">
+        <div className="sticky top-0 z-20 border-b border-white/10 bg-seven-background px-5 pb-5 pt-7 md:px-7 md:pb-6 md:pt-7">
           <p className="mb-3 text-xs font-black uppercase tracking-[0.24em] text-seven-green">Locations</p>
           <h2 id="location-picker-title" className="max-w-[calc(100%-68px)] font-display text-4xl font-black leading-none text-white md:max-w-none md:text-5xl">
             Оберіть Seven
           </h2>
           <button
             type="button"
-            className="absolute right-4 top-6 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition duration-300 hover:bg-seven-cream hover:text-seven-background active:scale-95 md:right-7 md:top-7 md:h-12 md:w-12"
+            className="absolute right-4 top-6 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition duration-300 hover:bg-seven-cream hover:text-seven-background md:right-7 md:top-7 md:h-12 md:w-12"
             onClick={onClose}
             aria-label="Закрити"
           >
             <X size={24} />
           </button>
         </div>
-        <div className="grid gap-4 p-4 pb-6 md:grid-cols-3 md:p-7">
+        <div className="grid gap-4 p-4 pb-6 md:grid-cols-2 md:p-7 min-[1281px]:grid-cols-3">
           {siteConfig.locations.map((location) => (
             <article key={location.id} className="flex min-h-full flex-col rounded-[8px] bg-seven-card p-5 premium-border transition-colors duration-300 hover:border-seven-terracotta/50">
               <p className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-seven-green">
@@ -213,7 +213,7 @@ export function LocationPickerButton({ className = "", label = "Обрати з�
   return (
     <button
       type="button"
-      className={`inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_14px_36px_rgba(201,113,74,0.22)] premium-lift hover:bg-seven-cream hover:text-seven-background active:translate-y-0 ${className}`}
+      className={`inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_14px_36px_rgba(201,113,74,0.22)] premium-lift hover:bg-seven-cream hover:text-seven-background ${className}`}
       onClick={() => {
         onOpen?.();
         picker?.openPicker();

@@ -44,7 +44,7 @@ export function Hero() {
             fill
             sizes="38vw"
             priority
-            className="object-cover object-[52%_38%] transition duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+            className="object-cover object-[52%_38%]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0),rgba(17,17,17,0.04)_64%,rgba(17,17,17,0.16))]" />
         </div>

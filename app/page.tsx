@@ -30,7 +30,7 @@ export default function HomePage() {
               Всі локації <ArrowRight size={18} />
             </Link>
           </div>
-          <div className="grid gap-7 lg:grid-cols-3">
+          <div className="grid items-stretch gap-7 md:grid-cols-2 min-[1281px]:grid-cols-3">
             {siteConfig.locations.map((location) => (
               <LocationCard key={location.id} location={location} />
             ))}
@@ -71,7 +71,7 @@ export default function HomePage() {
               <div className="flex flex-col justify-end">
                 <div className="grid gap-3 sm:grid-cols-2">
                   {upcomingLocation.features.map((feature) => (
-                    <article key={feature.title} className="rounded-[8px] bg-seven-card/85 p-5 premium-border premium-lift backdrop-blur-sm hover:shadow-glow">
+                    <article key={feature.title} className="rounded-[8px] bg-seven-card/85 p-5 premium-border premium-lift hover:shadow-glow">
                       <span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-seven-terracotta/20 text-2xl">{feature.icon}</span>
                       <h3 className="font-display text-3xl font-black leading-none text-white">{feature.title}</h3>
                     </article>

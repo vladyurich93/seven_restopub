@@ -318,17 +318,17 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
 
   const modal = open ? (
     <div
-      className="fixed inset-0 z-[130] flex items-end justify-center bg-black/75 p-3 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-[130] flex items-end justify-center bg-black/78 p-3 sm:items-center sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="careers-modal-title"
       onClick={() => setOpen(false)}
     >
       <div
-        className="max-h-[90vh] max-h-[90dvh] w-full max-w-3xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background/95 premium-border shadow-2xl shadow-black/70 backdrop-blur-xl [-webkit-overflow-scrolling:touch]"
+        className="max-h-[90vh] max-h-[90dvh] w-full max-w-3xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-white/10 bg-seven-background/95 p-4 backdrop-blur-xl md:px-5 md:py-4">
+        <div className="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-white/10 bg-seven-background p-4 md:px-5 md:py-4">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.2em] text-seven-green">Команда Seven</p>
             <h2 id="careers-modal-title" className="mt-1.5 font-display text-3xl font-black leading-none text-white md:text-4xl">

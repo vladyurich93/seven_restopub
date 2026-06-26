@@ -38,25 +38,25 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 border-b transition duration-500 ${scrolled || open ? "border-white/10 bg-seven-background/90 shadow-2xl shadow-black/30 backdrop-blur-xl" : "border-transparent bg-gradient-to-b from-black/55 to-transparent"}`}>
+    <header className={`fixed inset-x-0 top-0 z-50 border-b transition duration-500 ${scrolled || open ? "border-white/10 bg-seven-background/95 shadow-2xl shadow-black/30" : "border-transparent bg-gradient-to-b from-black/55 to-transparent"}`}>
       <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-24 lg:h-28">
         <Link href="/" className="flex shrink-0 items-center" aria-label={siteConfig.brandName}>
           <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} className="h-auto w-36 md:w-48 lg:w-56 xl:w-60" priority />
         </Link>
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 lg:flex xl:gap-5">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-5 lg:flex xl:gap-6">
           {navItems.map((item) => (
             item.action === "careers" ? (
               <button
                 key={item.label}
                 type="button"
-                className="whitespace-nowrap text-xs font-semibold text-seven-muted transition hover:text-seven-cream xl:text-sm"
+                className="whitespace-nowrap text-sm font-semibold text-seven-muted transition hover:text-seven-cream"
                 onClick={openCareersModal}
               >
                 {item.label}
               </button>
             ) : (
-              <Link key={item.href} href={item.href ?? "/"} className="whitespace-nowrap text-xs font-semibold text-seven-muted transition hover:text-seven-cream xl:text-sm">
+              <Link key={item.href} href={item.href ?? "/"} className="whitespace-nowrap text-sm font-semibold text-seven-muted transition hover:text-seven-cream">
                 {item.label}
               </Link>
             )
@@ -78,8 +78,8 @@ export function Header() {
         </button>
       </div>
 
-      <div className={`fixed inset-0 top-0 z-[70] bg-black/45 backdrop-blur-sm transition lg:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
-      <aside className={`fixed right-0 top-0 z-[80] flex h-dvh w-[min(360px,calc(100vw-28px))] flex-col bg-seven-background shadow-2xl shadow-black/60 premium-border transition-transform duration-300 lg:hidden ${open ? "translate-x-0" : "translate-x-full"}`}>
+      <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition lg:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
+      <aside className={`fixed top-0 z-[80] flex h-dvh w-[min(360px,calc(100vw-28px))] flex-col bg-seven-background shadow-2xl shadow-black/60 premium-border transition-[right] duration-300 lg:hidden ${open ? "right-0" : "-right-[390px]"}`}>
         <div className="flex items-center justify-between border-b border-white/10 p-5">
           <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={180} height={86} className="h-auto w-36" priority />
           <button

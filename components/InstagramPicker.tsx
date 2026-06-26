@@ -59,7 +59,7 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
 
       {open ? (
         <div
-          className="fixed inset-0 z-[120] flex items-end justify-center bg-black/75 p-3 backdrop-blur-sm sm:items-center sm:p-4"
+          className="fixed inset-0 z-[120] flex items-end justify-center bg-black/78 p-3 sm:items-center sm:p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="instagram-picker-title"
@@ -69,13 +69,13 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
             className="max-h-[90vh] max-h-[90dvh] w-full max-w-xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-seven-background/95 p-4 backdrop-blur-xl md:p-6">
+            <div className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-seven-background p-4 md:p-6">
               <h2 id="instagram-picker-title" className="pr-4 font-display text-3xl font-black text-white md:text-4xl">
                 Оберіть Instagram локації
               </h2>
               <button
                 type="button"
-                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition duration-500 hover:bg-seven-cream hover:text-seven-background active:scale-95"
+                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition duration-500 hover:bg-seven-cream hover:text-seven-background"
                 onClick={() => setOpen(false)}
                 aria-label="Закрити"
               >
