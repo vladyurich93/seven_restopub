@@ -2,7 +2,8 @@
 
 import { createContext, type FormEvent, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { FileText, Send, X } from "lucide-react";
+import { CheckCircle2, FileText, Instagram, Send, X } from "lucide-react";
+import { siteConfig } from "@/data/siteConfig";
 
 type FormState = {
   name: string;
@@ -223,6 +224,15 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     setOpen(true);
   };
 
+  const resetApplicationForm = () => {
+    setStatus("idle");
+    setMessage("");
+    setPhoneError("");
+    setCvError("");
+    setForm(initialFormState);
+    setCvFile(null);
+  };
+
   const updateCvFile = (file: File | null) => {
     setCvError("");
 
@@ -321,75 +331,119 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
           </button>
         </div>
 
-        <form className="grid gap-3.5 p-4 md:grid-cols-2 md:p-5" onSubmit={submitApplication}>
-          <TextField id="name" label="Імʼя" value={form.name} onChange={updateField} required autoComplete="name" />
-          <div>
-            <TextField
-              id="phone"
-              label="Телефон"
-              value={form.phone}
-              onChange={updateField}
-              required
-              type="tel"
-              placeholder="+380 XX XXX XX XX"
-              autoComplete="tel"
-            />
-            {phoneError ? <p className="mt-2 text-xs font-semibold text-seven-terracotta">{phoneError}</p> : null}
-          </div>
-          <SelectField id="city" label="Місто" value={form.city} onChange={updateField} options={cityOptions} />
-          <SelectField id="location" label="Заклад" value={form.location} onChange={updateField} options={locationOptions} />
-          <SelectField id="position" label="Посада" value={form.position} onChange={updateField} options={positionOptions} />
-          <TextField id="startDate" label="Коли готові почати" value={form.startDate} onChange={updateField} placeholder="Наприклад: з наступного тижня" />
-          <TextAreaField id="experience" label="Досвід роботи" value={form.experience} onChange={updateField} placeholder="Коротко про попередній досвід" />
-          <TextAreaField id="comment" label="Коментар" value={form.comment} onChange={updateField} placeholder="Що ще нам варто знати?" />
-
-          <label htmlFor="cv" className="rounded-[8px] border border-dashed border-white/15 bg-white/[0.03] p-3 text-sm font-semibold text-white transition hover:border-seven-green/50 md:col-span-2">
-            <span className="flex items-center gap-2">
-              <FileText size={17} className="text-seven-green" />
-              CV / Резюме
-              <span className="font-normal text-seven-muted">(необовʼязково)</span>
-            </span>
-            <input
-              id="cv"
-              name="cv"
-              type="file"
-              className="mt-2 block w-full cursor-pointer rounded-[8px] text-sm text-seven-muted file:mr-4 file:rounded-full file:border-0 file:bg-seven-terracotta file:px-4 file:py-2 file:text-xs file:font-black file:uppercase file:tracking-[0.12em] file:text-white hover:file:bg-seven-cream hover:file:text-seven-background"
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png"
-              onChange={(event) => updateCvFile(event.target.files?.[0] ?? null)}
-            />
-            <span className="mt-2 block text-xs font-medium leading-5 text-seven-muted">PDF, DOC, DOCX, JPG або PNG до 10 MB.</span>
-            {cvFile ? <span className="mt-1 block text-xs font-bold text-seven-green">{cvFile.name}</span> : null}
-            {cvError ? <span className="mt-1 block text-xs font-semibold text-seven-terracotta">{cvError}</span> : null}
-          </label>
-
-          {message ? (
-            <div className={`whitespace-pre-line rounded-[8px] p-4 text-sm leading-6 md:col-span-2 ${statusMessageClass}`} role="status" aria-live="polite">
-              {message}
+        {status === "success" ? (
+          <div className="animate-[fadeIn_500ms_ease-out] px-4 py-8 text-center md:px-10 md:py-10" role="status" aria-live="polite">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-seven-green/12 text-seven-green premium-border shadow-glow">
+              <CheckCircle2 size={34} strokeWidth={1.8} />
             </div>
-          ) : null}
-
-          {status === "error" ? (
-            <a
-              href="https://t.me/Hrsevengroup"
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-full px-1 text-sm font-bold text-seven-green underline underline-offset-4 md:col-span-2"
-            >
-              Написати HR у Telegram
-            </a>
-          ) : null}
-
-          <div className="md:col-span-2">
+            <p className="mt-5 text-xs font-black uppercase tracking-[0.2em] text-seven-green">Анкета в Telegram</p>
+            <h3 className="mt-2 font-display text-4xl font-black leading-none text-white md:text-5xl">Заявку отримано!</h3>
+            <p className="mx-auto mt-4 max-w-xl text-lg font-semibold leading-7 text-seven-cream">
+              Дякуємо, що хочете стати частиною команди Seven.
+            </p>
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-seven-muted md:text-base">
+              HR-команда вже отримала вашу анкету в Telegram. Ми переглянемо її та звʼяжемося з вами найближчим часом.
+            </p>
+            <p className="mx-auto mt-5 max-w-lg text-xs font-semibold uppercase tracking-[0.14em] text-seven-muted">
+              Поки очікуєте відповідь — можете подивитися атмосферу Seven в Instagram.
+            </p>
+            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
+                onClick={() => setOpen(false)}
+              >
+                Закрити
+              </button>
+              <a
+                href={siteConfig.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-green hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
+              >
+                <Instagram size={17} />
+                Instagram
+              </a>
+            </div>
             <button
-              type="submit"
-              className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50 disabled:cursor-not-allowed disabled:opacity-60"
-              disabled={status === "loading"}
+              type="button"
+              className="mt-5 text-sm font-bold text-seven-green underline underline-offset-4 transition hover:text-seven-cream"
+              onClick={resetApplicationForm}
             >
-              <Send size={17} />
-              {status === "loading" ? "Відправляємо..." : "Відправити анкету"}
+              Заповнити ще одну анкету
             </button>
           </div>
-        </form>
+        ) : (
+          <form className="grid gap-3.5 p-4 md:grid-cols-2 md:p-5" onSubmit={submitApplication}>
+            <TextField id="name" label="Імʼя" value={form.name} onChange={updateField} required autoComplete="name" />
+            <div>
+              <TextField
+                id="phone"
+                label="Телефон"
+                value={form.phone}
+                onChange={updateField}
+                required
+                type="tel"
+                placeholder="+380 XX XXX XX XX"
+                autoComplete="tel"
+              />
+              {phoneError ? <p className="mt-2 text-xs font-semibold text-seven-terracotta">{phoneError}</p> : null}
+            </div>
+            <SelectField id="city" label="Місто" value={form.city} onChange={updateField} options={cityOptions} />
+            <SelectField id="location" label="Заклад" value={form.location} onChange={updateField} options={locationOptions} />
+            <SelectField id="position" label="Посада" value={form.position} onChange={updateField} options={positionOptions} />
+            <TextField id="startDate" label="Коли готові почати" value={form.startDate} onChange={updateField} placeholder="Наприклад: з наступного тижня" />
+            <TextAreaField id="experience" label="Досвід роботи" value={form.experience} onChange={updateField} placeholder="Коротко про попередній досвід" />
+            <TextAreaField id="comment" label="Коментар" value={form.comment} onChange={updateField} placeholder="Що ще нам варто знати?" />
+
+            <label htmlFor="cv" className="rounded-[8px] border border-dashed border-white/15 bg-white/[0.03] p-3 text-sm font-semibold text-white transition hover:border-seven-green/50 md:col-span-2">
+              <span className="flex items-center gap-2">
+                <FileText size={17} className="text-seven-green" />
+                CV / Резюме
+                <span className="font-normal text-seven-muted">(необовʼязково)</span>
+              </span>
+              <input
+                id="cv"
+                name="cv"
+                type="file"
+                className="mt-2 block w-full cursor-pointer rounded-[8px] text-sm text-seven-muted file:mr-4 file:rounded-full file:border-0 file:bg-seven-terracotta file:px-4 file:py-2 file:text-xs file:font-black file:uppercase file:tracking-[0.12em] file:text-white hover:file:bg-seven-cream hover:file:text-seven-background"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png"
+                onChange={(event) => updateCvFile(event.target.files?.[0] ?? null)}
+              />
+              <span className="mt-2 block text-xs font-medium leading-5 text-seven-muted">PDF, DOC, DOCX, JPG або PNG до 10 MB.</span>
+              {cvFile ? <span className="mt-1 block text-xs font-bold text-seven-green">{cvFile.name}</span> : null}
+              {cvError ? <span className="mt-1 block text-xs font-semibold text-seven-terracotta">{cvError}</span> : null}
+            </label>
+
+            {message ? (
+              <div className={`whitespace-pre-line rounded-[8px] p-4 text-sm leading-6 md:col-span-2 ${statusMessageClass}`} role="status" aria-live="polite">
+                {message}
+              </div>
+            ) : null}
+
+            {status === "error" ? (
+              <a
+                href="https://t.me/Hrsevengroup"
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full px-1 text-sm font-bold text-seven-green underline underline-offset-4 md:col-span-2"
+              >
+                Написати HR у Telegram
+              </a>
+            ) : null}
+
+            <div className="md:col-span-2">
+              <button
+                type="submit"
+                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50 disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={status === "loading"}
+              >
+                <Send size={17} />
+                {status === "loading" ? "Відправляємо..." : "Відправити анкету"}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   ) : null;

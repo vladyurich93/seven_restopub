@@ -35,6 +35,18 @@ a {
   color: #ffffff;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .container-shell {
   width: min(1180px, calc(100% - 32px));
   margin-inline: auto;
