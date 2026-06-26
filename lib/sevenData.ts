@@ -176,9 +176,36 @@ export const sevenKnowledgeBase = {
     snookball: siteConfig.snookball,
   },
   children: {
-    note: "Дитяча кімната є у Seven Володимира Великого та Seven Площа Ринок.",
-    venues: ["Seven Володимира Великого", "Seven Площа Ринок"],
-    familyFocus: "Seven підходить для сімейних вечорів: є комфорт-фуд, тераса і простір для відпочинку.",
+    note: "Дитяча кімната є у двох львівських закладах Seven. У Seven Restopub Запоріжжя дитячої кімнати немає.",
+    expectedAnswer: [
+      "Дитяча кімната є у двох закладах:",
+      "• Seven Restopub Львів — вул. Володимира Великого, 18.",
+      "• Seven Restopub Львів — площа Ринок, 25.",
+      "У Seven Restopub Запоріжжя дитячої кімнати немає.",
+    ],
+    venuesWithKidsRoom: [
+      {
+        name: "Seven Restopub Володимира Великого",
+        city: "Львів",
+        address: "м. Львів, вул. Володимира Великого, 18",
+        hasKidsRoom: true,
+      },
+      {
+        name: "Seven Restopub Площа Ринок",
+        city: "Львів",
+        address: "м. Львів, площа Ринок, 25",
+        hasKidsRoom: true,
+      },
+    ],
+    venuesWithoutKidsRoom: [
+      {
+        name: "Seven Restopub Запоріжжя",
+        city: "Запоріжжя",
+        address: "м. Запоріжжя, вул. Сталеварів, 30",
+        hasKidsRoom: false,
+      },
+    ],
+    familyFocus: "З дитиною можна приходити в Seven, але дитяча кімната є тільки у двох львівських локаціях.",
   },
   hookah: {
     note: "Кальян є частиною вечірнього відпочинку у Seven.",
@@ -223,7 +250,7 @@ const sectionKeywords: Record<KnowledgeSection, string[]> = {
   hr: ["робот", "ваканс", "кар'єр", "карʼєр", "анкета", "hr", "резюме", "cv", "офіціант", "бармен", "кухар"],
   contacts: ["контакт", "телефон", "подзвон", "дзвон", "instagram", "інст", "tiktok", "тікток", "соц"],
   events: ["поді", "афіш", "футбол", "трансляц", "dj", "дідж", "стендап", "музик", "концерт", "snookball"],
-  children: ["дит", "дитяча", "діти", "сім", "сімей", "родин"],
+  children: ["дит", "дитяча", "дитяча кімната", "кімната для дітей", "діти", "kids", "kids room", "можна з дитиною", "family", "сім", "сімей", "родин"],
   hookah: ["кальян", "дим", "hookah"],
   assistantRules: ["правил", "інструкц"],
 };
