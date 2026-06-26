@@ -11,7 +11,6 @@ type ChatMessage = {
 
 type AssistantRequest = {
   messages?: ChatMessage[];
-  message?: string;
 };
 
 type OpenAIResponsesPayload = {
@@ -64,7 +63,7 @@ function sanitizeMessages(messages: ChatMessage[] = []) {
 
 function buildTranscript(messages: ChatMessage[]) {
   return messages
-    .map((message) => `${message.role === "assistant" ? "Асистент" : "Гість"}: ${message.content}`)
+    .map((message, index) => `${index + 1}. ${message.role === "assistant" ? "Асистент" : "Гість"}: ${message.content}`)
     .join("\n");
 }
 
@@ -115,19 +114,22 @@ export async function POST(request: Request) {
     logStep("Request body parsed", {
       hasMessages: Array.isArray(body.messages),
       messagesCount: Array.isArray(body.messages) ? body.messages.length : 0,
-      hasDirectMessage: typeof body.message === "string" && body.message.trim().length > 0,
     });
+
+    if (!Array.isArray(body.messages)) {
+      console.error("[Seven assistant] Invalid request: messages array is required");
+      return NextResponse.json({ error: "Conversation messages array is required." }, { status: 400 });
+    }
 
     logStep("Sanitizing messages");
     const messages = sanitizeMessages(body.messages);
-    const directMessage = typeof body.message === "string" ? body.message.trim() : "";
-    const conversation = directMessage ? [...messages, { role: "user" as const, content: directMessage }] : messages;
     logStep("Conversation prepared", {
-      messagesCount: conversation.length,
-      lastRole: conversation[conversation.length - 1]?.role,
+      messagesCount: messages.length,
+      lastRole: messages[messages.length - 1]?.role,
+      chronologicalOrder: "preserved",
     });
 
-    if (!conversation.length || conversation[conversation.length - 1]?.role !== "user") {
+    if (!messages.length || messages[messages.length - 1]?.role !== "user") {
       console.error("[Seven assistant] Invalid request: last message is not user");
       return NextResponse.json({ error: "Message is required." }, { status: 400 });
     }
@@ -146,6 +148,7 @@ export async function POST(request: Request) {
       "Відповідай українською, коротко, дружньо і корисно.",
       "Відповідай тільки про Seven Restopub: локації, адреси, години роботи, меню, крафтове пиво, кальян, банкети, дитячу кімнату, події, вакансії, HR-анкету, контакти, Instagram/TikTok, бронювання, дзвінки та маршрути.",
       "Якщо питання не стосується Seven Restopub, відповідай тільки: Я допомагаю тільки з питаннями про Seven Restopub.",
+      "Завжди використовуй історію діалогу нижче. Follow-up питання типу 'Скільки коштує?', 'А там є?', 'На сьогодні?', 'А для 15 людей?' трактуй у контексті попередніх повідомлень.",
       "Використовуй тільки structured knowledge base нижче. Не вигадуй ціни, акції, деталі меню або умови.",
       "Якщо відповідь існує в knowledge base, НІКОЛИ не відповідай: Точної інформації зараз немає.",
       "Якщо інформація є в розділах company, locations, menu, banquets, children, hookah, faq, contacts, events або vacancies — відповідай впевнено і конкретно.",
@@ -159,11 +162,11 @@ export async function POST(request: Request) {
       `Complete Seven knowledge base:\n${knowledgeBaseText}`,
     ].join("\n\n");
 
-    const transcript = buildTranscript(conversation);
+    const transcript = buildTranscript(messages);
     const openAiBody = {
       model,
       instructions,
-      input: transcript,
+      input: `Conversation history, last ${messages.length} messages in chronological order:\n${transcript}`,
       max_output_tokens: 360,
     };
 

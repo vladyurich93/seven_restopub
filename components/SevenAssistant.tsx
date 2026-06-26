@@ -71,7 +71,7 @@ export function SevenAssistant() {
       const response = await fetch("/api/assistant", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: nextMessages }),
+        body: JSON.stringify({ messages: nextMessages.slice(-10) }),
       });
 
       const data = (await response.json()) as { reply?: string; error?: string };
