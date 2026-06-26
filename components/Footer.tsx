@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 import { InstagramPicker } from "./InstagramPicker";
@@ -10,7 +9,7 @@ export function Footer() {
     <footer className="wood-grain border-t border-white/10 bg-black py-12 md:py-14">
       <div className="container-shell grid gap-10 md:grid-cols-[1.15fr_1fr_1fr] lg:gap-14">
         <div className="space-y-5">
-          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={220} height={106} className="h-auto w-44 md:w-48" />
+          <img src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={220} height={106} loading="eager" className="h-auto w-44 md:w-48" />
           <p className="max-w-sm text-sm leading-7 text-seven-muted md:text-base">{siteConfig.slogan}</p>
         </div>
 

@@ -9,8 +9,6 @@ export function Hero() {
         alt={siteConfig.slogan}
         sizes="100vw"
         loading="eager"
-        decoding="async"
-        fetchPriority="high"
         className="absolute inset-0 block h-full w-full object-cover object-[52%_46%] md:object-[54%_45%] lg:object-[72%_45%]"
       />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,17,17,0.74)_0%,rgba(17,17,17,0.45)_48%,rgba(17,17,17,0.1)_100%)] lg:bg-[linear-gradient(90deg,rgba(17,17,17,0.8)_0%,rgba(17,17,17,0.52)_34%,rgba(17,17,17,0.12)_58%,rgba(17,17,17,0.03)_100%)]" />
@@ -43,8 +41,6 @@ export function Hero() {
             alt="Гості на терасі Seven Restopub"
             sizes="38vw"
             loading="eager"
-            decoding="async"
-            fetchPriority="high"
             className="absolute inset-0 block h-full w-full object-cover object-[52%_38%]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0),rgba(17,17,17,0.04)_64%,rgba(17,17,17,0.16))]" />
