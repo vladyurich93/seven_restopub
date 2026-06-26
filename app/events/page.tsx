@@ -21,7 +21,7 @@ export default function EventsPage() {
         <SectionTitle eyebrow="Events" title="Вечори Seven" description="Футбол, музика, DJ, стендап і спеціальні події — кожен формат має свою енергію." />
         <div className="mt-12 grid gap-7 lg:grid-cols-2">
           {siteConfig.events.map((event, index) => (
-            <div key={event.id} className={index === 0 ? "lg:col-span-2" : ""}>
+            <div key={event.id} className={index === 0 ? "h-full lg:col-span-2" : "h-full"}>
               <EventCard event={event} featured={index === 0} />
             </div>
           ))}

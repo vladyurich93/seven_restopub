@@ -214,7 +214,7 @@ export const siteConfig = {
       title: "Спеціальні події",
       category: "Weekend Events",
       description: "Тематичні вечори та формати для великих компаній.",
-      date: "За афішею",
+      date: "За попереднім бронюванням",
       image: "/images/events/event-special-03.jpg",
     },
   ] satisfies EventItem[],
