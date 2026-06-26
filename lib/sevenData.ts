@@ -238,15 +238,3 @@ export const sevenKnowledgeBase = {
     restriction: "Відповідати тільки на питання про Seven Restopub.",
   },
 } as const;
-
-type KnowledgeSection = keyof typeof sevenKnowledgeBase;
-
-export function findRelevantContext() {
-  const sections = Object.keys(sevenKnowledgeBase) as KnowledgeSection[];
-
-  return {
-    sections,
-    context: sevenKnowledgeBase,
-    contextText: JSON.stringify(sevenKnowledgeBase, null, 2),
-  };
-}

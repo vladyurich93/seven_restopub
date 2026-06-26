@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { findRelevantContext } from "@/lib/sevenData";
+import { sevenKnowledgeBase } from "@/lib/sevenData";
 
 const OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses";
 const DEFAULT_ASSISTANT_MODEL = "gpt-5-mini";
@@ -132,11 +132,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Message is required." }, { status: 400 });
     }
 
-    const relevantContext = findRelevantContext();
+    const knowledgeBaseText = JSON.stringify(sevenKnowledgeBase, null, 2);
+    const knowledgeSections = Object.keys(sevenKnowledgeBase);
 
-    logStep("Full knowledge base selected", {
-      sections: relevantContext.sections,
-      contextLength: relevantContext.contextText.length,
+    logStep("Complete knowledge base selected", {
+      sections: knowledgeSections,
+      contextLength: knowledgeBaseText.length,
     });
 
     logStep("Building instructions");
@@ -154,8 +155,8 @@ export async function POST(request: Request) {
       "Завжди пропонуй корисну наступну дію: зателефонувати у вибрану локацію, відкрити меню, заповнити HR-форму, написати HR або обрати локацію.",
       "Для бронювання столу, банкету або гри направляй гостя телефонувати у вибрану локацію.",
       "Говори українською за замовчуванням. Відповіді мають бути короткі й практичні.",
-      `Seven knowledge base sections: ${relevantContext.sections.join(", ")}`,
-      `Knowledge base:\n${relevantContext.contextText}`,
+      `Complete Seven knowledge base sections: ${knowledgeSections.join(", ")}`,
+      `Complete Seven knowledge base:\n${knowledgeBaseText}`,
     ].join("\n\n");
 
     const transcript = buildTranscript(conversation);
