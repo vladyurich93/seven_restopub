@@ -4,6 +4,7 @@ import { siteConfig } from "@/data/siteConfig";
 import { Button } from "./Button";
 import { InstagramPicker } from "./InstagramPicker";
 import { PhoneBookingButton } from "./PhoneBookingButton";
+import { TikTokIcon } from "./TikTokIcon";
 
 export function ContactSection() {
   return (
@@ -35,7 +36,10 @@ export function ContactSection() {
         </div>
         <div className="mt-8 flex flex-wrap gap-3">
           <InstagramPicker className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-green hover:text-seven-background [&>svg]:text-seven-oak" />
-          <Button href={siteConfig.tiktok} variant="ghost">TikTok</Button>
+          <Button href={siteConfig.tiktok} variant="ghost" className="gap-2">
+            <TikTokIcon className="shrink-0 text-seven-oak" />
+            TikTok
+          </Button>
         </div>
       </div>
     </section>
