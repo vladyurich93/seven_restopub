@@ -26,6 +26,8 @@ type OpenAIResponsesPayload = {
   };
 };
 
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+
 function logStep(step: string, details?: Record<string, unknown>) {
   console.log(`[Seven assistant] ${step}`, details ?? {});
 }
@@ -40,6 +42,14 @@ function getErrorMessage(error: unknown) {
   }
 
   return "Unknown assistant route error.";
+}
+
+function parseJsonSafely(text: string): JsonValue | null {
+  try {
+    return JSON.parse(text) as JsonValue;
+  } catch {
+    return null;
+  }
 }
 
 function sanitizeMessages(messages: ChatMessage[] = []) {
@@ -165,23 +175,56 @@ export async function POST(request: Request) {
       contentType: response.headers.get("content-type"),
     });
 
-    const payload = (await response.json()) as OpenAIResponsesPayload;
+    const responseBody = await response.text();
+    const parsedResponse = parseJsonSafely(responseBody);
+
+    if (!response.ok) {
+      console.error("[Seven assistant] OpenAI non-OK response", {
+        endpoint: OPENAI_RESPONSES_URL,
+        model,
+        status: response.status,
+        body: responseBody,
+      });
+
+      if (parsedResponse) {
+        return NextResponse.json(parsedResponse, { status: response.status });
+      }
+
+      return NextResponse.json(
+        {
+          error: {
+            message: responseBody || `OpenAI request failed with status ${response.status}`,
+          },
+        },
+        { status: response.status },
+      );
+    }
+
+    if (!parsedResponse) {
+      console.error("[Seven assistant] OpenAI returned non-JSON success response", {
+        endpoint: OPENAI_RESPONSES_URL,
+        model,
+        status: response.status,
+        body: responseBody,
+      });
+
+      return NextResponse.json(
+        {
+          error: {
+            message: "OpenAI returned a non-JSON response.",
+            body: responseBody,
+          },
+        },
+        { status: 502 },
+      );
+    }
+
+    const payload = parsedResponse as OpenAIResponsesPayload;
     logStep("OpenAI response parsed", {
       hasOutputText: Boolean(payload.output_text),
       outputItems: payload.output?.length ?? 0,
       errorMessage: payload.error?.message,
     });
-
-    if (!response.ok) {
-      console.error("Seven assistant OpenAI error:", payload);
-      return NextResponse.json(
-        {
-          error: payload.error?.message || "OpenAI request failed.",
-          reply: "Помічник Seven зараз не відповідає. Спробуйте, будь ласка, ще раз або зателефонуйте у потрібний заклад.",
-        },
-        { status: response.status },
-      );
-    }
 
     const reply = extractReply(payload);
     logStep("Reply extracted", { replyLength: reply.length });
