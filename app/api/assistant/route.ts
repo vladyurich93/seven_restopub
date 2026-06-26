@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSevenAssistantContext } from "@/lib/sevenData";
+import { findRelevantContext } from "@/lib/sevenData";
 
 const OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses";
 const DEFAULT_ASSISTANT_MODEL = "gpt-5-mini";
@@ -132,20 +132,28 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Message is required." }, { status: 400 });
     }
 
+    const latestQuestion = conversation[conversation.length - 1]?.content ?? "";
+    const relevantContext = findRelevantContext(latestQuestion);
+
+    logStep("Relevant context selected", {
+      sections: relevantContext.sections,
+      contextLength: relevantContext.contextText.length,
+    });
+
     logStep("Building instructions");
     const instructions = [
       "Ти компактний AI-помічник сайту Seven Restopub.",
       "Відповідай українською, коротко, дружньо і корисно.",
       "Відповідай тільки про Seven Restopub: локації, адреси, години роботи, меню, крафтове пиво, кальян, банкети, дитячу кімнату, події, вакансії, HR-анкету, контакти, Instagram/TikTok, бронювання, дзвінки та маршрути.",
       "Якщо питання не стосується Seven Restopub, відповідай тільки: Я допомагаю тільки з питаннями про Seven Restopub.",
-      "Використовуй тільки дані з контексту нижче. Не вигадуй ціни, акції, деталі меню або умови.",
-      "Якщо інформація є в venues, banquetRules, hr, social, menuCategories, events або snookball — відповідай впевнено і конкретно.",
-      "Не кажи, що точної інформації немає, якщо відповідь можна знайти в структурованих даних Seven.",
-      "Якщо в полі є placeholder, скажи, що посилання краще уточнити у закладі або скористатися кнопками на сайті. Якщо поруч є realInstagram чи realMapsLink, можна використовувати ці реальні посилання.",
-      "Якщо точної інформації справді немає в контексті, скажи: Точної інформації зараз немає, краще уточнити у закладі.",
+      "Використовуй тільки релевантні розділи knowledge base нижче. Не вигадуй ціни, акції, деталі меню або умови.",
+      "Якщо відповідь існує в knowledge base, НІКОЛИ не відповідай: Точної інформації зараз немає.",
+      "Якщо інформація є в переданих розділах company, locations, menu, banquets, faq, hr, contacts, events, children або hookah — відповідай впевнено і конкретно.",
+      "Фразу Точної інформації зараз немає, краще уточнити у закладі використовуй тільки якщо запитувана інформація відсутня в knowledge base.",
       "Не приймай платежі, не збирай чутливі персональні дані.",
       "Для бронювання столу, банкету або гри направляй гостя телефонувати у вибрану локацію.",
-      `Дані Seven Restopub:\n${getSevenAssistantContext()}`,
+      `Relevant Seven knowledge base sections: ${relevantContext.sections.join(", ")}`,
+      `Knowledge base:\n${relevantContext.contextText}`,
     ].join("\n\n");
 
     const transcript = buildTranscript(conversation);
