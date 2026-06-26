@@ -31,7 +31,7 @@ export function ImageFrame({ src, alt, className = "", sizes = "(min-width: 1024
           sizes={sizes}
           priority={priority}
           onError={() => setFailed(true)}
-          className="object-cover"
+          className="image-frame-img object-cover"
         />
       )}
     </div>
