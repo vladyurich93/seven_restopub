@@ -4,6 +4,8 @@ export const sevenKnowledgeBase = {
   company: {
     name: "Seven Restopub",
     description: "Seven Restopub — сучасна українська мережа restopub.",
+    atmosphere: "Крафтове пиво, їжа, коктейлі, футбол, тераса, кальян, події, банкети та жива командна енергія.",
+    tone: "Дружній, впевнений, неформальний.",
     slogan: siteConfig.slogan,
     mainFocus: [
       "крафтове пиво",
@@ -31,6 +33,7 @@ export const sevenKnowledgeBase = {
       menu: "https://seven-restopub-lviv.choiceqr.com/menu",
       instagram: siteConfig.locations[0].instagram,
       mapsLink: siteConfig.locations[0].googleMaps,
+      notes: "Локація для сімейних вечорів, тераси, бізнес-ланчів, кальяну, крафтового пива і комфорт-фуду. Тут також є Snookball на терасі.",
     },
     {
       id: "lviv-rynok",
@@ -44,6 +47,7 @@ export const sevenKnowledgeBase = {
       menu: "https://mytsi.choiceqr.com/",
       instagram: siteConfig.locations[1].instagram,
       mapsLink: siteConfig.locations[1].googleMaps,
+      notes: "Локація в центрі Львова на площі Ринок. Підходить для гостей міста, коктейлів, кальяну, кухні та вечора в туристичному серці Львова.",
     },
     {
       id: "zaporizhzhia",
@@ -57,14 +61,29 @@ export const sevenKnowledgeBase = {
       menu: "https://seven-restopub.choiceqr.com/",
       instagram: siteConfig.locations[2].instagram,
       mapsLink: siteConfig.locations[2].googleMaps,
+      notes: "Перший Seven у Запоріжжі з класичною restopub атмосферою, крафтовим пивом, закусками та спортивними трансляціями.",
     },
   ],
   menu: {
     note: "Seven не дублює повне меню в чаті. Актуальне меню відкривається за посиланням конкретної локації.",
-    categories: siteConfig.menuCategories.map((category) => ({
+    categories: [
+      "craft beer",
+      "burgers",
+      "pizza",
+      "snacks",
+      "soups",
+      "salads",
+      "comfort food",
+      "cocktails",
+      "hookah",
+      "business lunches",
+      ...siteConfig.menuCategories.map((category) => category.title),
+    ],
+    categoryDetails: siteConfig.menuCategories.map((category) => ({
       title: category.title,
       description: category.description,
     })),
+    pricePolicy: "Не називати точні ціни, якщо їх немає в базі знань.",
     menuLinks: siteConfig.locations.map((location) => ({
       venue: location.name,
       link: location.menuLink,
@@ -72,6 +91,7 @@ export const sevenKnowledgeBase = {
   },
   banquets: {
     title: "Банкети у Seven",
+    available: "Банкети доступні у Seven.",
     fromPeople: "від 10 людей",
     deposit: "1500 UAH / людина",
     serviceCharge: "+10% service charge",
@@ -81,12 +101,44 @@ export const sevenKnowledgeBase = {
   },
   faq: [
     {
+      question: "Чи є дитяча кімната?",
+      answer: "Так. Дитяча кімната є у Seven Володимира Великого та Seven Площа Ринок.",
+    },
+    {
+      question: "Чи є кальян?",
+      answer: "Так. Кальян є у Seven Володимира Великого та Seven Площа Ринок. Для деталей краще зателефонувати у вибрану локацію.",
+    },
+    {
       question: "Як забронювати стіл?",
       answer: "Оберіть потрібну локацію Seven і зателефонуйте напряму в заклад.",
     },
     {
+      question: "Чи можна провести банкет?",
+      answer: "Так. Банкети доступні від 10 людей: депозит 1500 UAH / людина, +10% service charge, cork fee за правилами закладу. Для бронювання потрібно зателефонувати у вибрану локацію.",
+    },
+    {
+      question: "Чи можна зі своїм алкоголем?",
+      answer: "Так, за cork fee: 300 UAH за пляшку вина або ігристого, 500 UAH за пляшку міцного алкоголю.",
+    },
+    {
       question: "Де подивитися актуальне меню?",
       answer: "Актуальне меню відкривається за ChoiceQR-посиланням конкретної локації.",
+    },
+    {
+      question: "Як подати заявку на роботу?",
+      answer: "Заповніть HR-форму на сайті. CV можна прикріпити опційно. Також можна написати HR у Telegram: https://t.me/Hrsevengroup.",
+    },
+    {
+      question: "Який графік роботи?",
+      answer: "Усі три локації працюють щодня 12:00–23:00.",
+    },
+    {
+      question: "Які є локації?",
+      answer: "Є Seven Володимира Великого у Львові, Seven Площа Ринок у Львові та Seven Запоріжжя.",
+    },
+    {
+      question: "Чи є тераса?",
+      answer: "Так. Тераса є у Seven Володимира Великого.",
     },
     {
       question: "Чи можна дізнатися точну афішу подій у чаті?",
@@ -99,7 +151,7 @@ export const sevenKnowledgeBase = {
     telegram: "https://t.me/Hrsevengroup",
     cvUpload: "CV upload is optional.",
     applicationsDestination: "Telegram HR",
-    positions: ["Офіціант", "Бармен", "Кухар", "Кальянщик", "Адміністратор", "Інше"],
+    positions: ["Кухар", "Офіціант", "Бармен", "Адміністратор", "Кальянщик", "Менеджер", "Інше"],
   },
   contacts: {
     phones: siteConfig.locations.map((location) => ({
@@ -114,7 +166,7 @@ export const sevenKnowledgeBase = {
     tiktok: siteConfig.tiktok,
   },
   events: {
-    note: "У Seven є спортивні трансляції, жива музика, DJ-вечори, стендап та спеціальні події.",
+    note: "У Seven є футбольні трансляції, жива музика, standup / comedy та seasonal events. Якщо точної дати немає, потрібно перевірити Instagram або зателефонувати у заклад.",
     items: siteConfig.events.map((event) => ({
       title: event.title,
       category: event.category,
@@ -132,6 +184,14 @@ export const sevenKnowledgeBase = {
     note: "Кальян є частиною вечірнього відпочинку у Seven.",
     venues: ["Seven Володимира Великого", "Seven Площа Ринок"],
     recommendation: "Щоб уточнити наявність, смаки або бронювання кальяну, краще зателефонувати у вибрану локацію.",
+  },
+  assistantRules: {
+    defaultLanguage: "Українська",
+    answerStyle: "Коротко, дружньо, корисно, без офіційного тону.",
+    whenDataExists: "Якщо відповідь є в sevenKnowledgeBase, відповідати впевнено і не казати, що точної інформації немає.",
+    whenDetailMissing: "Якщо бракує конкретної ціни, дати, позиції меню або іншої деталі, сказати: Точної інформації зараз немає, краще уточнити у закладі.",
+    nextAction: "Наприкінці давати корисну наступну дію: зателефонувати в локацію, відкрити меню, заповнити HR-форму, написати HR або обрати локацію.",
+    restriction: "Відповідати тільки на питання про Seven Restopub.",
   },
 } as const;
 
@@ -165,6 +225,7 @@ const sectionKeywords: Record<KnowledgeSection, string[]> = {
   events: ["поді", "афіш", "футбол", "трансляц", "dj", "дідж", "стендап", "музик", "концерт", "snookball"],
   children: ["дит", "дитяча", "діти", "сім", "сімей", "родин"],
   hookah: ["кальян", "дим", "hookah"],
+  assistantRules: ["правил", "інструкц"],
 };
 
 function normalizeQuestion(question: string) {
@@ -178,8 +239,9 @@ export function findRelevantContext(question: string) {
   );
 
   const sections = matchedSections.length ? Array.from(new Set(matchedSections)) : (["company", "faq"] satisfies KnowledgeSection[]);
+  const sectionsWithRules = Array.from(new Set([...sections, "assistantRules" as const]));
 
-  const context = sections.reduce(
+  const context = sectionsWithRules.reduce(
     (result, section) => ({
       ...result,
       [section]: sevenKnowledgeBase[section],
@@ -188,7 +250,7 @@ export function findRelevantContext(question: string) {
   );
 
   return {
-    sections,
+    sections: sectionsWithRules,
     context,
     contextText: JSON.stringify(context, null, 2),
   };
