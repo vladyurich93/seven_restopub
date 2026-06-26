@@ -145,7 +145,7 @@ export const sevenKnowledgeBase = {
       answer: "Чат підкаже типи подій, але точну афішу краще уточнити в Instagram локації або телефоном.",
     },
   ],
-  hr: {
+  vacancies: {
     title: "Стати частиною команди Seven",
     note: "Кандидати можуть подати заявку через HR-форму на сайті. CV / резюме можна прикріпити опційно. Заявки надходять HR-команді в Telegram.",
     telegram: "https://t.me/Hrsevengroup",
@@ -241,79 +241,12 @@ export const sevenKnowledgeBase = {
 
 type KnowledgeSection = keyof typeof sevenKnowledgeBase;
 
-const sectionKeywords: Record<KnowledgeSection, string[]> = {
-  company: ["seven", "севен", "restopub", "рестопаб", "мереж", "концепц", "що таке"],
-  locations: [
-    "локац",
-    "заклад",
-    "адрес",
-    "де знаход",
-    "володимира",
-    "великого",
-    "ринок",
-    "площа",
-    "запор",
-    "львів",
-    "маршрут",
-    "карта",
-    "maps",
-    "годин",
-    "графік",
-    "працю",
-  ],
-  menu: ["меню", "їжа", "страв", "бургер", "піца", "закуск", "пиво", "крафт", "коктей", "ланч", "обід"],
-  banquets: ["банкет", "депозит", "cork", "корк", "збір", "сервіс", "людей", "свят", "подія", "зал"],
-  faq: ["як", "можна", "питання", "підкаж", "брон", "заброн"],
-  hr: ["робот", "ваканс", "кар'єр", "карʼєр", "анкета", "hr", "резюме", "cv", "офіціант", "бармен", "кухар"],
-  contacts: ["контакт", "телефон", "подзвон", "дзвон", "instagram", "інст", "tiktok", "тікток", "соц"],
-  events: ["поді", "афіш", "футбол", "трансляц", "dj", "дідж", "стендап", "музик", "концерт", "snookball"],
-  children: [
-    "дит",
-    "дитяча",
-    "дитяча кімната",
-    "ціна дитячої кімнати",
-    "вартість",
-    "скільки коштує",
-    "скільки коштує дитяча",
-    "кімната для дітей",
-    "діти",
-    "kids",
-    "kids room",
-    "play room",
-    "можна з дитиною",
-    "family",
-    "сім",
-    "сімей",
-    "родин",
-  ],
-  hookah: ["кальян", "дим", "hookah"],
-  assistantRules: ["правил", "інструкц"],
-};
-
-function normalizeQuestion(question: string) {
-  return question.toLowerCase().replace(/ё/g, "е").replace(/ʼ/g, "'").trim();
-}
-
-export function findRelevantContext(question: string) {
-  const normalizedQuestion = normalizeQuestion(question);
-  const matchedSections = (Object.keys(sectionKeywords) as KnowledgeSection[]).filter((section) =>
-    sectionKeywords[section].some((keyword) => normalizedQuestion.includes(keyword)),
-  );
-
-  const sections = matchedSections.length ? Array.from(new Set(matchedSections)) : (["company", "faq"] satisfies KnowledgeSection[]);
-  const sectionsWithRules = Array.from(new Set([...sections, "assistantRules" as const]));
-
-  const context = sectionsWithRules.reduce(
-    (result, section) => ({
-      ...result,
-      [section]: sevenKnowledgeBase[section],
-    }),
-    {} as Partial<typeof sevenKnowledgeBase>,
-  );
+export function findRelevantContext() {
+  const sections = Object.keys(sevenKnowledgeBase) as KnowledgeSection[];
 
   return {
-    sections: sectionsWithRules,
-    context,
-    contextText: JSON.stringify(context, null, 2),
+    sections,
+    context: sevenKnowledgeBase,
+    contextText: JSON.stringify(sevenKnowledgeBase, null, 2),
   };
 }

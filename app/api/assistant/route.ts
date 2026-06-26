@@ -132,10 +132,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Message is required." }, { status: 400 });
     }
 
-    const latestQuestion = conversation[conversation.length - 1]?.content ?? "";
-    const relevantContext = findRelevantContext(latestQuestion);
+    const relevantContext = findRelevantContext();
 
-    logStep("Relevant context selected", {
+    logStep("Full knowledge base selected", {
       sections: relevantContext.sections,
       contextLength: relevantContext.contextText.length,
     });
@@ -146,16 +145,16 @@ export async function POST(request: Request) {
       "Відповідай українською, коротко, дружньо і корисно.",
       "Відповідай тільки про Seven Restopub: локації, адреси, години роботи, меню, крафтове пиво, кальян, банкети, дитячу кімнату, події, вакансії, HR-анкету, контакти, Instagram/TikTok, бронювання, дзвінки та маршрути.",
       "Якщо питання не стосується Seven Restopub, відповідай тільки: Я допомагаю тільки з питаннями про Seven Restopub.",
-      "Використовуй тільки релевантні розділи knowledge base нижче. Не вигадуй ціни, акції, деталі меню або умови.",
+      "Використовуй тільки structured knowledge base нижче. Не вигадуй ціни, акції, деталі меню або умови.",
       "Якщо відповідь існує в knowledge base, НІКОЛИ не відповідай: Точної інформації зараз немає.",
-      "Якщо інформація є в переданих розділах company, locations, menu, banquets, faq, hr, contacts, events, children або hookah — відповідай впевнено і конкретно.",
+      "Якщо інформація є в розділах company, locations, menu, banquets, children, hookah, faq, contacts, events або vacancies — відповідай впевнено і конкретно.",
       "Якщо бракує лише конкретної ціни, дати або позиції меню, скажи що точної інформації немає тільки для цієї деталі, але все одно дай корисну відповідь з наявних даних.",
       "Фразу Точної інформації зараз немає, краще уточнити у закладі використовуй тільки якщо запитувана інформація відсутня в knowledge base.",
       "Не приймай платежі, не збирай чутливі персональні дані.",
       "Завжди пропонуй корисну наступну дію: зателефонувати у вибрану локацію, відкрити меню, заповнити HR-форму, написати HR або обрати локацію.",
       "Для бронювання столу, банкету або гри направляй гостя телефонувати у вибрану локацію.",
       "Говори українською за замовчуванням. Відповіді мають бути короткі й практичні.",
-      `Relevant Seven knowledge base sections: ${relevantContext.sections.join(", ")}`,
+      `Seven knowledge base sections: ${relevantContext.sections.join(", ")}`,
       `Knowledge base:\n${relevantContext.contextText}`,
     ].join("\n\n");
 
