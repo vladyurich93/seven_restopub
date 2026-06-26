@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 
 type ImageFrameProps = {
@@ -24,14 +23,15 @@ export function ImageFrame({ src, alt, className = "", sizes = "(min-width: 1024
           </div>
         </div>
       ) : (
-        <Image
+        <img
           src={src}
           alt={alt}
-          fill
           sizes={sizes}
-          priority={priority}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
+          fetchPriority={priority ? "high" : "auto"}
           onError={() => setFailed(true)}
-          className="image-frame-img object-cover"
+          className="image-frame-img absolute inset-0 block h-full w-full object-cover"
         />
       )}
     </div>

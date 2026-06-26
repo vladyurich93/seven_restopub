@@ -1,17 +1,17 @@
-import Image from "next/image";
 import { siteConfig } from "@/data/siteConfig";
 import { LocationPickerButton } from "./LocationPicker";
 
 export function Hero() {
   return (
     <section className="relative min-h-[100svh] overflow-hidden bg-seven-background">
-      <Image
+      <img
         src="/images/gallery/gallery-20.jpg"
         alt={siteConfig.slogan}
-        fill
-        priority
         sizes="100vw"
-        className="object-cover object-[52%_46%] md:object-[54%_45%] lg:object-[72%_45%]"
+        loading="eager"
+        decoding="async"
+        fetchPriority="high"
+        className="absolute inset-0 block h-full w-full object-cover object-[52%_46%] md:object-[54%_45%] lg:object-[72%_45%]"
       />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,17,17,0.74)_0%,rgba(17,17,17,0.45)_48%,rgba(17,17,17,0.1)_100%)] lg:bg-[linear-gradient(90deg,rgba(17,17,17,0.8)_0%,rgba(17,17,17,0.52)_34%,rgba(17,17,17,0.12)_58%,rgba(17,17,17,0.03)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0)_0%,rgba(17,17,17,0.03)_34%,rgba(17,17,17,0.64)_100%)]" />
@@ -38,13 +38,14 @@ export function Hero() {
           </div>
         </div>
         <div className="group relative hidden min-h-[520px] overflow-hidden rounded-[8px] premium-border shadow-[0_28px_80px_rgba(0,0,0,0.38)] lg:block xl:min-h-[580px] [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-[430px] [@media_(min-width:1024px)_and_(max-height:680px)]:min-h-[360px]">
-          <Image
+          <img
             src="/images/hero/hero-02.jpg"
             alt="Гості на терасі Seven Restopub"
-            fill
             sizes="38vw"
-            priority
-            className="object-cover object-[52%_38%]"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            className="absolute inset-0 block h-full w-full object-cover object-[52%_38%]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0),rgba(17,17,17,0.04)_64%,rgba(17,17,17,0.16))]" />
         </div>

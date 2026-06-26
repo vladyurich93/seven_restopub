@@ -127,11 +127,6 @@ a {
     will-change: auto !important;
   }
 
-  .location-card {
-    contain: layout paint;
-    isolation: isolate;
-  }
-
   .location-card img {
     object-fit: cover;
   }
