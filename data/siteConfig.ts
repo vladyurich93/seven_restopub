@@ -212,7 +212,7 @@ export const siteConfig = {
     {
       id: "special",
       title: "Спеціальні події",
-      category: "Seven Nights",
+      category: "Weekend Events",
       description: "Тематичні ночі та формати для великих компаній.",
       date: "За афішею",
       image: "/images/events/event-special-03.jpg",
