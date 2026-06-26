@@ -176,12 +176,20 @@ export const sevenKnowledgeBase = {
     snookball: siteConfig.snookball,
   },
   children: {
-    note: "Дитяча кімната є у двох львівських закладах Seven. У Seven Restopub Запоріжжя дитячої кімнати немає.",
-    expectedAnswer: [
+    note: "У Seven є дві дитячі кімнати: у Seven Restopub Володимира Великого та Seven Restopub Площа Ринок. У Seven Restopub Запоріжжя дитячої кімнати немає.",
+    expectedLocationAnswer: [
       "Дитяча кімната є у двох закладах:",
-      "• Seven Restopub Львів — вул. Володимира Великого, 18.",
-      "• Seven Restopub Львів — площа Ринок, 25.",
+      "• Seven Restopub Львів — вул. Володимира Великого, 18",
+      "• Seven Restopub Львів — площа Ринок, 25",
       "У Seven Restopub Запоріжжя дитячої кімнати немає.",
+    ],
+    expectedPriceAnswer: [
+      "У Seven є дві дитячі кімнати.",
+      "📍 Seven Restopub Володимира Великого",
+      "• 1 година — 100 грн",
+      "• Безліміт на день — 200 грн",
+      "📍 Seven Restopub Площа Ринок",
+      "• користування безкоштовне.",
     ],
     venuesWithKidsRoom: [
       {
@@ -189,12 +197,21 @@ export const sevenKnowledgeBase = {
         city: "Львів",
         address: "м. Львів, вул. Володимира Великого, 18",
         hasKidsRoom: true,
+        price: {
+          oneHour: "100 грн",
+          dayUnlimited: "200 грн",
+          note: "1 година — 100 грн. Безліміт на день — 200 грн.",
+        },
       },
       {
         name: "Seven Restopub Площа Ринок",
         city: "Львів",
         address: "м. Львів, площа Ринок, 25",
         hasKidsRoom: true,
+        price: {
+          use: "безкоштовно",
+          note: "Користування дитячою кімнатою безкоштовне.",
+        },
       },
     ],
     venuesWithoutKidsRoom: [
@@ -205,7 +222,7 @@ export const sevenKnowledgeBase = {
         hasKidsRoom: false,
       },
     ],
-    familyFocus: "З дитиною можна приходити в Seven, але дитяча кімната є тільки у двох львівських локаціях.",
+    familyFocus: "З дитиною можна приходити в Seven. Дитяча кімната є тільки у двох львівських локаціях: Володимира Великого та Площа Ринок.",
   },
   hookah: {
     note: "Кальян є частиною вечірнього відпочинку у Seven.",
@@ -250,7 +267,25 @@ const sectionKeywords: Record<KnowledgeSection, string[]> = {
   hr: ["робот", "ваканс", "кар'єр", "карʼєр", "анкета", "hr", "резюме", "cv", "офіціант", "бармен", "кухар"],
   contacts: ["контакт", "телефон", "подзвон", "дзвон", "instagram", "інст", "tiktok", "тікток", "соц"],
   events: ["поді", "афіш", "футбол", "трансляц", "dj", "дідж", "стендап", "музик", "концерт", "snookball"],
-  children: ["дит", "дитяча", "дитяча кімната", "кімната для дітей", "діти", "kids", "kids room", "можна з дитиною", "family", "сім", "сімей", "родин"],
+  children: [
+    "дит",
+    "дитяча",
+    "дитяча кімната",
+    "ціна дитячої кімнати",
+    "вартість",
+    "скільки коштує",
+    "скільки коштує дитяча",
+    "кімната для дітей",
+    "діти",
+    "kids",
+    "kids room",
+    "play room",
+    "можна з дитиною",
+    "family",
+    "сім",
+    "сімей",
+    "родин",
+  ],
   hookah: ["кальян", "дим", "hookah"],
   assistantRules: ["правил", "інструкц"],
 };
