@@ -11,7 +11,7 @@ type LocationCardProps = {
 
 export function LocationCard({ location }: LocationCardProps) {
   return (
-    <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-[8px] bg-seven-card premium-border premium-lift hover:shadow-glow">
+    <article className="location-card group flex h-full min-h-[560px] min-w-0 flex-col overflow-hidden rounded-[8px] bg-seven-card premium-border premium-lift hover:shadow-glow md:min-h-[620px] min-[1281px]:min-h-0">
       <ImageFrame src={location.image} alt={location.name} className="aspect-[4/3] md:aspect-[5/4] min-[1281px]:aspect-[4/5]" />
       <div className="flex flex-1 flex-col p-6 md:p-7">
         <p className="text-sm font-semibold uppercase tracking-[0.24em] text-seven-terracotta">{location.city}</p>
