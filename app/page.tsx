@@ -128,7 +128,7 @@ export default function HomePage() {
       <section className="bg-black py-20">
         <AnimatedSection className="container-shell">
           <SectionTitle eyebrow="Events" title="Живі вечори Seven" description="Футбол, музика, DJ, стендап і спеціальні події — коротко, гучно, по-Seven." />
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-10 grid items-stretch gap-6 md:grid-cols-2 lg:grid-cols-5">
             {siteConfig.events.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}

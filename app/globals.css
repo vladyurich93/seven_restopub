@@ -80,6 +80,21 @@ a {
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .premium-lift {
+    transition:
+      transform 500ms ease,
+      border-color 500ms ease,
+      box-shadow 500ms ease,
+      background-color 500ms ease,
+      color 500ms ease;
+  }
+
+  .premium-lift:hover {
+    transform: translateY(-3px);
+    border-color: rgba(201, 113, 74, 0.42);
+    box-shadow: 0 22px 58px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(201, 113, 74, 0.08);
+  }
+
   .group:hover .image-frame-img {
     transform: scale(1.04);
   }
