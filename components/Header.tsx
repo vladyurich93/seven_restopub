@@ -38,37 +38,37 @@ export function Header() {
 
   return (
     <header className={`fixed inset-x-0 top-0 z-50 border-b transition duration-500 ${scrolled || open ? "border-white/10 bg-seven-background/95 shadow-2xl shadow-black/30" : "border-transparent bg-gradient-to-b from-black/55 to-transparent"}`}>
-      <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-24 min-[1281px]:h-28">
+      <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-[88px] lg:h-24 min-[1200px]:h-28">
         <Link href="/" className="flex shrink-0 items-center" aria-label={siteConfig.brandName}>
-          <img src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} loading="eager" className="h-auto w-36 md:w-48 min-[1281px]:w-56 xl:w-60" />
+          <img src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} loading="eager" className="h-auto w-36 md:w-44 lg:w-48 min-[1200px]:w-52 xl:w-60" />
         </Link>
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-5 min-[1281px]:flex xl:gap-6">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 min-[1200px]:flex min-[1281px]:gap-5 xl:gap-6">
           {navItems.map((item) => (
             item.action === "careers" ? (
               <button
                 key={item.label}
                 type="button"
-                className="whitespace-nowrap text-sm font-semibold text-seven-muted transition hover:text-seven-cream"
+                className="whitespace-nowrap text-[13px] font-semibold text-seven-muted transition hover:text-seven-cream min-[1281px]:text-sm"
                 onClick={openCareersModal}
               >
                 {item.label}
               </button>
             ) : (
-              <Link key={item.href} href={item.href ?? "/"} className="whitespace-nowrap text-sm font-semibold text-seven-muted transition hover:text-seven-cream">
+              <Link key={item.href} href={item.href ?? "/"} className="whitespace-nowrap text-[13px] font-semibold text-seven-muted transition hover:text-seven-cream min-[1281px]:text-sm">
                 {item.label}
               </Link>
             )
           ))}
         </nav>
 
-        <div className="hidden min-[1281px]:block">
+        <div className="hidden min-[1200px]:block">
           <LocationPickerButton />
         </div>
 
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 min-[1281px]:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 min-[1200px]:hidden"
           onClick={() => setOpen((value) => !value)}
           aria-label="Відкрити меню"
           aria-expanded={open}
@@ -77,8 +77,8 @@ export function Header() {
         </button>
       </div>
 
-      <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition min-[1281px]:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
-      <aside className={`fixed top-0 z-[80] flex h-dvh w-[min(360px,calc(100vw-28px))] flex-col bg-seven-background shadow-2xl shadow-black/60 premium-border transition-[right] duration-300 min-[1281px]:hidden ${open ? "right-0" : "-right-[390px]"}`}>
+      <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition min-[1200px]:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
+      <aside className={`fixed top-0 z-[80] flex h-dvh w-[min(380px,calc(100vw-28px))] flex-col bg-seven-background shadow-2xl shadow-black/60 premium-border transition-[right] duration-300 min-[1200px]:hidden ${open ? "right-0" : "-right-[410px]"}`}>
         <div className="flex items-center justify-between border-b border-white/10 p-5">
           <img src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={180} height={86} loading="eager" className="h-auto w-36" />
           <button

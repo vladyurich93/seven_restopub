@@ -17,14 +17,14 @@ export const metadata: Metadata = {
 
 export default function MenuPage() {
   return (
-    <section className="bg-seven-background pb-20 pt-36">
+    <section className="bg-seven-background pb-20 pt-32 md:pt-36">
       <div className="container-shell">
         <SectionTitle eyebrow="Menu" title="Меню настрою" description="Крафт, закуски, бургери, піца, коктейлі, кальян і ланчі для вечора в Seven." />
-        <div className="mt-12 grid items-stretch gap-5 md:grid-cols-2 min-[1281px]:grid-cols-3">
+        <div className="mt-12 grid items-stretch gap-5 md:grid-cols-1 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
           {siteConfig.locations.map((location) => (
-            <article key={location.id} className="flex h-full min-h-[344px] flex-col rounded-[8px] bg-seven-card p-6 premium-border premium-lift hover:shadow-glow md:min-h-[262px] lg:min-h-0">
+            <article key={location.id} className="flex h-full min-h-[344px] min-w-0 flex-col rounded-[8px] bg-seven-card p-6 premium-border premium-lift hover:shadow-glow md:min-h-[262px] min-[900px]:min-h-[300px] min-[1281px]:min-h-0">
               <p className="text-sm font-black uppercase tracking-[0.18em] text-seven-green">{location.city}</p>
-              <h2 className="mt-3 font-display text-4xl font-black uppercase leading-none text-white lg:min-h-20">{location.name.replace("Seven Restopub ", "Seven ")}</h2>
+              <h2 className="mt-3 font-display text-4xl font-black uppercase leading-none text-white min-[900px]:min-h-20">{location.name.replace("Seven Restopub ", "Seven ")}</h2>
               <p className="mt-4 min-h-12 text-sm leading-6 text-seven-muted">{location.address}</p>
               <div className="mt-auto pt-6">
                 <Button href={location.menuLink} className="min-h-14 w-full text-base">Відкрити меню</Button>

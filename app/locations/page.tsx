@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 
 export default function LocationsPage() {
   return (
-    <section className="bg-seven-background pb-20 pt-36">
+    <section className="bg-seven-background pb-20 pt-32 md:pt-36">
       <div className="container-shell">
         <SectionTitle eyebrow="Locations" title="Оберіть Seven" description="Три заклади, три настрої, одна атмосфера Seven." />
-        <div className="mt-12 grid items-stretch gap-8 md:grid-cols-2 min-[1281px]:grid-cols-3">
+        <div className="mt-12 grid items-stretch gap-7 md:grid-cols-1 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
           {siteConfig.locations.map((location) => (
             <LocationCard key={location.id} location={location} />
           ))}

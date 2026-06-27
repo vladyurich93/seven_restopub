@@ -160,7 +160,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
             <X size={24} />
           </button>
         </div>
-        <div className="grid gap-4 p-4 pb-6 md:grid-cols-2 md:p-7 min-[1281px]:grid-cols-3">
+        <div className="grid gap-4 p-4 pb-6 md:grid-cols-1 md:p-7 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
           {siteConfig.locations.map((location) => (
             <article key={location.id} className="flex min-h-full flex-col rounded-[8px] bg-seven-card p-5 premium-border transition-colors duration-300 hover:border-seven-terracotta/50">
               <p className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-seven-green">

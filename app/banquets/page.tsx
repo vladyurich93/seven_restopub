@@ -20,8 +20,8 @@ export default function BanquetsPage() {
 
   return (
     <>
-      <section className="bg-seven-background pb-20 pt-36">
-        <div className="container-shell grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+      <section className="bg-seven-background pb-20 pt-32 md:pt-36">
+        <div className="container-shell grid gap-10 min-[1200px]:grid-cols-[0.9fr_1.1fr] min-[1200px]:items-start">
           <SectionTitle eyebrow="Banquets" title={rules.title} description="Seven підходить для днів народження, корпоративів, командних зустрічей і великих вечорів з друзями." />
           <div className="rounded-[8px] bg-seven-card p-7 premium-border premium-lift hover:shadow-glow md:p-10">
             <div className="grid gap-5 sm:grid-cols-2">

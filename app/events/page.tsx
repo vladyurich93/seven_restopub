@@ -16,12 +16,12 @@ export const metadata: Metadata = {
 
 export default function EventsPage() {
   return (
-    <section className="bg-seven-background pb-20 pt-36">
+    <section className="bg-seven-background pb-20 pt-32 md:pt-36">
       <div className="container-shell">
         <SectionTitle eyebrow="Events" title="Вечори Seven" description="Футбол, музика, DJ, стендап і спеціальні події — кожен формат має свою енергію." />
-        <div className="mt-12 grid gap-7 lg:grid-cols-2">
+        <div className="mt-12 grid items-stretch gap-7 md:grid-cols-2">
           {siteConfig.events.map((event, index) => (
-            <div key={event.id} className={index === 0 ? "h-full lg:col-span-2" : "h-full"}>
+            <div key={event.id} className={index === 0 ? "h-full md:col-span-2" : "h-full"}>
               <EventCard event={event} featured={index === 0} />
             </div>
           ))}
