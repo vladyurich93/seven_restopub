@@ -40,12 +40,12 @@ export function Header() {
 
   return (
     <header className={`site-header fixed inset-x-0 top-0 z-50 border-b transition duration-700 ease-premium ${scrolled || open ? "is-scrolled border-white/10 bg-seven-background/94 shadow-[0_18px_58px_rgba(0,0,0,0.24)]" : "border-transparent bg-gradient-to-b from-black/55 to-transparent"}`}>
-      <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-[88px] lg:h-24 min-[1200px]:h-28">
+      <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-[84px] lg:h-[88px] min-[1201px]:h-28">
         <Link href="/" className="flex shrink-0 items-center" aria-label={siteConfig.brandName}>
-          <img src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} loading="eager" className="h-auto w-36 md:w-44 lg:w-48 min-[1200px]:w-52 xl:w-60" />
+          <img src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} loading="eager" className="h-auto w-36 md:w-36 lg:w-40 min-[1201px]:w-52 xl:w-60" />
         </Link>
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 min-[1200px]:flex min-[1281px]:gap-5 xl:gap-6">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 min-[1201px]:flex min-[1281px]:gap-5 xl:gap-6">
           {navItems.map((item) => {
             const active = item.href ? (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)) : false;
 
@@ -66,13 +66,13 @@ export function Header() {
           })}
         </nav>
 
-        <div className="hidden min-[1200px]:block">
-          <LocationPickerButton />
+        <div className="hidden md:block">
+          <LocationPickerButton className="px-5 text-xs min-[900px]:px-6 min-[1201px]:text-sm" />
         </div>
 
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 min-[1200px]:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 min-[1201px]:hidden"
           onClick={() => setOpen((value) => !value)}
           aria-label="Відкрити меню"
           aria-expanded={open}
@@ -81,8 +81,8 @@ export function Header() {
         </button>
       </div>
 
-      <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition min-[1200px]:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
-      <aside className={`fixed top-0 z-[80] flex h-dvh w-[min(380px,calc(100vw-28px))] flex-col bg-seven-background shadow-2xl shadow-black/60 premium-border transition-[right] duration-300 min-[1200px]:hidden ${open ? "right-0" : "-right-[410px]"}`}>
+      <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition min-[1201px]:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
+      <aside className={`fixed top-0 z-[80] flex h-dvh w-[min(380px,calc(100vw-28px))] flex-col bg-seven-background shadow-2xl shadow-black/60 premium-border transition-[right] duration-300 min-[1201px]:hidden ${open ? "right-0" : "-right-[410px]"}`}>
         <div className="flex items-center justify-between border-b border-white/10 p-5">
           <img src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={180} height={86} loading="eager" className="h-auto w-36" />
           <button

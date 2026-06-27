@@ -223,6 +223,38 @@ a {
   }
 }
 
+@media (min-width: 768px) and (max-width: 1200px) {
+  .container-shell {
+    width: min(1120px, calc(100% - 48px));
+  }
+
+  .site-header,
+  .site-header.is-scrolled {
+    background: rgba(17, 17, 17, 0.94);
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.22);
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .section-reveal {
+    animation: fadeIn 420ms var(--ease-premium) both;
+  }
+
+  .location-card,
+  .location-card *,
+  article,
+  article *,
+  .image-frame-img {
+    backface-visibility: visible !important;
+    perspective: none !important;
+    transform-style: flat !important;
+  }
+
+  .premium-lift:hover {
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

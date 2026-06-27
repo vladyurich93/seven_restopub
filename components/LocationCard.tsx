@@ -11,20 +11,20 @@ type LocationCardProps = {
 
 export function LocationCard({ location }: LocationCardProps) {
   return (
-    <article className="location-card group flex h-full min-h-[560px] min-w-0 flex-col overflow-hidden rounded-[8px] bg-seven-card premium-border premium-lift hover:shadow-glow md:min-h-[660px] min-[900px]:min-h-[640px] min-[1200px]:min-h-[620px] min-[1281px]:min-h-0">
-      <ImageFrame src={location.image} alt={location.name} className="aspect-[4/3] md:aspect-[5/4] min-[900px]:aspect-[16/11] min-[1200px]:aspect-[5/4] min-[1281px]:aspect-[4/5]" />
-      <div className="flex flex-1 flex-col p-6 md:p-6 min-[1200px]:p-7">
+    <article className="location-card group flex h-full min-h-[560px] min-w-0 flex-col overflow-hidden rounded-[8px] bg-seven-card premium-border premium-lift hover:shadow-glow md:min-h-[660px] min-[900px]:min-h-[640px] min-[1201px]:min-h-[620px] min-[1281px]:min-h-0">
+      <ImageFrame src={location.image} alt={location.name} className="aspect-[4/3] md:aspect-[5/4] min-[900px]:aspect-[16/11] min-[1201px]:aspect-[5/4] min-[1281px]:aspect-[4/5]" />
+      <div className="flex flex-1 flex-col p-6 md:p-6 min-[1201px]:p-7">
         <p className="text-sm font-semibold uppercase tracking-[0.24em] text-seven-terracotta">{location.city}</p>
-        <h3 className="mt-3 font-display text-3xl font-black leading-tight min-[900px]:text-[1.9rem] min-[1200px]:text-3xl">{location.name}</h3>
+        <h3 className="mt-3 font-display text-3xl font-black leading-tight min-[900px]:text-[1.9rem] min-[1201px]:text-3xl">{location.name}</h3>
         <p className="mt-4 flex min-h-12 gap-3 text-sm leading-6 text-seven-muted">
           <MapPinned className="mt-1 shrink-0 text-seven-oak" size={20} />
           {location.address}
         </p>
-        <a className="mt-5 flex items-center gap-3 font-display text-3xl font-black text-white transition hover:text-seven-cream min-[900px]:text-[1.85rem] min-[1200px]:text-3xl" href={phoneHref(location.phone)}>
+        <a className="mt-5 flex items-center gap-3 font-display text-3xl font-black text-white transition hover:text-seven-cream min-[900px]:text-[1.85rem] min-[1201px]:text-3xl" href={phoneHref(location.phone)}>
           <Phone className="shrink-0 text-seven-oak" size={24} />
           {location.phone}
         </a>
-        <div className="mt-6 flex min-h-[112px] flex-wrap content-start gap-2 min-[1200px]:min-h-[88px]">
+        <div className="mt-6 flex min-h-[112px] flex-wrap content-start gap-2 min-[1201px]:min-h-[88px]">
           {location.features.map((feature) => (
             <span key={feature} className="rounded-full bg-seven-green/12 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-seven-green premium-border">
               {feature}
