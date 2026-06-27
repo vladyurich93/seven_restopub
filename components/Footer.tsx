@@ -34,7 +34,7 @@ export function Footer() {
             <div className="pt-2">
               <InstagramPicker className="flex items-center gap-2 text-seven-muted hover:text-white [&>svg]:text-seven-oak" />
             </div>
-            <Link href={siteConfig.tiktok} className="flex items-center gap-2 text-seven-muted transition duration-300 hover:text-white" target="_blank">
+            <Link href={siteConfig.tiktok} className="flex items-center gap-2 text-seven-muted transition duration-300 hover:text-white" target="_blank" rel="noreferrer">
               <TikTokIcon className="shrink-0 text-seven-oak" />
               TikTok
             </Link>

@@ -2,6 +2,7 @@
 
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
 import { useCareersModal } from "./CareersModal";
@@ -28,6 +29,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { openCareersModal } = useCareersModal();
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -37,29 +39,31 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 border-b transition duration-500 ${scrolled || open ? "border-white/10 bg-seven-background/95 shadow-2xl shadow-black/30" : "border-transparent bg-gradient-to-b from-black/55 to-transparent"}`}>
+    <header className={`site-header fixed inset-x-0 top-0 z-50 border-b transition duration-700 ease-premium ${scrolled || open ? "is-scrolled border-white/10 bg-seven-background/94 shadow-[0_18px_58px_rgba(0,0,0,0.24)]" : "border-transparent bg-gradient-to-b from-black/55 to-transparent"}`}>
       <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-[88px] lg:h-24 min-[1200px]:h-28">
         <Link href="/" className="flex shrink-0 items-center" aria-label={siteConfig.brandName}>
           <img src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} loading="eager" className="h-auto w-36 md:w-44 lg:w-48 min-[1200px]:w-52 xl:w-60" />
         </Link>
 
         <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 min-[1200px]:flex min-[1281px]:gap-5 xl:gap-6">
-          {navItems.map((item) => (
-            item.action === "careers" ? (
+          {navItems.map((item) => {
+            const active = item.href ? (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)) : false;
+
+            return item.action === "careers" ? (
               <button
                 key={item.label}
                 type="button"
-                className="whitespace-nowrap text-[13px] font-semibold text-seven-muted transition hover:text-seven-cream min-[1281px]:text-sm"
+                className="nav-link whitespace-nowrap text-[13px] font-semibold text-seven-muted transition min-[1281px]:text-sm"
                 onClick={openCareersModal}
               >
                 {item.label}
               </button>
             ) : (
-              <Link key={item.href} href={item.href ?? "/"} className="whitespace-nowrap text-[13px] font-semibold text-seven-muted transition hover:text-seven-cream min-[1281px]:text-sm">
+              <Link key={item.href} href={item.href ?? "/"} aria-current={active ? "page" : undefined} className={`nav-link whitespace-nowrap text-[13px] font-semibold transition min-[1281px]:text-sm ${active ? "is-active text-seven-cream" : "text-seven-muted"}`}>
                 {item.label}
               </Link>
-            )
-          ))}
+            );
+          })}
         </nav>
 
         <div className="hidden min-[1200px]:block">
