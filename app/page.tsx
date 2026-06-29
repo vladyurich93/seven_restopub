@@ -22,9 +22,9 @@ export default function HomePage() {
     <>
       <Hero />
 
-      <section className="bg-black py-24">
+      <section className="bg-black py-24 md:py-28 min-[1281px]:py-32">
         <AnimatedSection className="container-shell">
-          <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <SectionTitle eyebrow="Locations" title="Три Seven — три настрої" description="Тераса, центр Львова або перший Seven у Запоріжжі — оберіть простір під свій вечір." />
             <Link href="/locations" className="inline-flex items-center gap-2 font-semibold text-seven-accent transition hover:text-white">
               Всі локації <ArrowRight size={18} />
@@ -38,13 +38,13 @@ export default function HomePage() {
         </AnimatedSection>
       </section>
 
-      <section className="bg-seven-background py-24">
+      <section className="bg-seven-background py-24 md:py-28 min-[1281px]:py-32">
         <AnimatedSection className="container-shell">
           <div className="relative overflow-hidden rounded-[8px] bg-black premium-border">
             <ImageFrame src={upcomingLocation.image} alt={upcomingLocation.title} className="absolute inset-0 h-full w-full" sizes="100vw" />
             <div className="absolute inset-0 bg-black/70" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(183,225,77,0.24),transparent_30%),radial-gradient(circle_at_86%_78%,rgba(201,113,74,0.32),transparent_34%)]" />
-            <div className="relative z-10 grid gap-10 p-6 md:p-10 min-[1201px]:grid-cols-[1.05fr_0.95fr] min-[1201px]:p-14">
+            <div className="relative z-10 grid gap-10 p-6 md:p-10 min-[1201px]:grid-cols-[1.05fr_0.95fr] min-[1201px]:p-16">
               <div>
                 <p className="mb-6 inline-flex rounded-full bg-seven-green/15 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-seven-green premium-border">
                   {upcomingLocation.badge}
@@ -87,8 +87,8 @@ export default function HomePage() {
         </AnimatedSection>
       </section>
 
-      <section className="wood-grain bg-seven-background py-24">
-        <AnimatedSection className="container-shell grid gap-12 min-[1201px]:grid-cols-[1.05fr_0.95fr] min-[1201px]:items-center">
+      <section className="wood-grain bg-seven-background py-24 md:py-28 min-[1281px]:py-32">
+        <AnimatedSection className="container-shell grid gap-14 min-[1201px]:grid-cols-[1.05fr_0.95fr] min-[1201px]:items-center">
           <div className="group overflow-hidden rounded-[8px] premium-border">
             <ImageFrame src="/images/gallery/gallery-03.jpg" alt="Вечірня атмосфера Seven Restopub" className="aspect-[4/5] md:aspect-[16/11] min-[1201px]:aspect-[4/5]" sizes="(min-width: 1024px) 50vw, 100vw" />
           </div>
@@ -109,9 +109,9 @@ export default function HomePage() {
         </AnimatedSection>
       </section>
 
-      <section className="bg-seven-background py-20">
+      <section className="bg-seven-background py-24 md:py-28">
         <AnimatedSection className="container-shell">
-          <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <SectionTitle eyebrow="Menu" title="Що знайдеться у нас" description="Крафт, закуски, бургери, піца, коктейлі, кальян і ланчі — усе для вечора без зайвих планів." />
             <Link href="/menu" className="inline-flex items-center gap-2 font-semibold text-seven-accent transition hover:text-white">
               Меню <ArrowRight size={18} />
@@ -125,10 +125,10 @@ export default function HomePage() {
         </AnimatedSection>
       </section>
 
-      <section className="bg-black py-20">
+      <section className="bg-black py-24 md:py-28">
         <AnimatedSection className="container-shell">
           <SectionTitle eyebrow="Events" title="Живі вечори Seven" description="Футбол, музика, DJ, стендап і спеціальні події — коротко, гучно, по-Seven." />
-          <div className="mt-10 grid items-stretch gap-6 md:grid-cols-2 min-[1281px]:grid-cols-5">
+          <div className="mt-12 grid items-stretch gap-6 md:grid-cols-2 min-[1281px]:grid-cols-5">
             {siteConfig.events.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
@@ -136,7 +136,7 @@ export default function HomePage() {
         </AnimatedSection>
       </section>
 
-      <section className="bg-seven-background py-24">
+      <section className="bg-seven-background py-24 md:py-28 min-[1281px]:py-32">
         <AnimatedSection className="container-shell">
           <div className="grid overflow-hidden rounded-[8px] bg-seven-card premium-border min-[1201px]:grid-cols-[1.05fr_0.95fr]">
             <div className="group relative min-h-[420px] overflow-hidden md:min-h-[520px] min-[1201px]:min-h-[560px]">
@@ -178,7 +178,7 @@ export default function HomePage() {
         </AnimatedSection>
       </section>
 
-      <section className="bg-seven-background py-20">
+      <section className="bg-seven-background py-24 md:py-28">
         <AnimatedSection className="container-shell">
           <SectionTitle eyebrow="Gallery" title="Атмосфера Seven" description="Футбол на екранах, крафтове пиво, друзі за великим столом, тераса, музика і вечори, які хочеться повторити." />
           <div className="mt-10">

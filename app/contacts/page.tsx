@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 export default function ContactsPage() {
   return (
     <>
-      <section className="bg-seven-background pt-36">
-        <div className="container-shell pb-10">
+      <section className="bg-seven-background pt-32 md:pt-40">
+        <div className="container-shell pb-12">
           <SectionTitle eyebrow="Contacts" title="Контакти Seven" description="Адреси, телефони, Instagram і маршрути для кожного закладу." />
         </div>
       </section>

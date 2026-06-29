@@ -39,7 +39,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`site-header fixed inset-x-0 top-0 z-50 border-b transition duration-700 ease-premium ${scrolled || open ? "is-scrolled border-white/10 bg-seven-background/94 shadow-[0_18px_58px_rgba(0,0,0,0.24)]" : "border-transparent bg-gradient-to-b from-black/55 to-transparent"}`}>
+    <header className={`site-header fixed inset-x-0 top-0 z-50 border-b transition duration-700 ease-premium ${scrolled || open ? "is-scrolled border-white/10 bg-seven-background/88 shadow-[0_18px_58px_rgba(0,0,0,0.24)]" : "border-transparent bg-gradient-to-b from-black/50 to-transparent"}`}>
       <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-[84px] lg:h-[88px] min-[1201px]:h-28">
         <Link href="/" className="flex shrink-0 items-center" aria-label={siteConfig.brandName}>
           <img src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} loading="eager" className="h-auto w-36 md:w-36 lg:w-40 min-[1201px]:w-52 xl:w-60" />
@@ -53,13 +53,13 @@ export function Header() {
               <button
                 key={item.label}
                 type="button"
-                className="nav-link whitespace-nowrap text-[13px] font-semibold text-seven-muted transition min-[1281px]:text-sm"
+                className="nav-link whitespace-nowrap text-[13px] font-semibold text-seven-muted transition duration-500 min-[1281px]:text-sm"
                 onClick={openCareersModal}
               >
                 {item.label}
               </button>
             ) : (
-              <Link key={item.href} href={item.href ?? "/"} aria-current={active ? "page" : undefined} className={`nav-link whitespace-nowrap text-[13px] font-semibold transition min-[1281px]:text-sm ${active ? "is-active text-seven-cream" : "text-seven-muted"}`}>
+              <Link key={item.href} href={item.href ?? "/"} aria-current={active ? "page" : undefined} className={`nav-link whitespace-nowrap text-[13px] font-semibold transition duration-500 min-[1281px]:text-sm ${active ? "is-active text-seven-cream" : "text-seven-muted"}`}>
                 {item.label}
               </Link>
             );

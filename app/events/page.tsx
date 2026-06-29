@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function EventsPage() {
   return (
-    <section className="bg-seven-background pb-20 pt-32 md:pt-36">
+    <section className="bg-seven-background pb-24 pt-32 md:pb-28 md:pt-40">
       <div className="container-shell">
         <SectionTitle eyebrow="Events" title="Вечори Seven" description="Футбол, музика, DJ, стендап і спеціальні події — кожен формат має свою енергію." />
         <div className="mt-12 grid items-stretch gap-7 md:grid-cols-2">

@@ -213,7 +213,7 @@ export function LocationPickerButton({ className = "", label = "Обрати з�
   return (
     <button
       type="button"
-      className={`inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_14px_36px_rgba(201,113,74,0.22)] premium-lift hover:bg-seven-cream hover:text-seven-background ${className}`}
+      className={`inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] premium-lift button-press hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/45 ${className}`}
       onClick={() => {
         onOpen?.();
         picker?.openPicker();

@@ -11,10 +11,10 @@ export function SectionTitle({ eyebrow, title, description, align = "left" }: Se
   return (
     <div className={`max-w-3xl ${align === "center" ? "mx-auto text-center" : ""}`}>
       {eyebrow ? (
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.32em] text-seven-accent">{eyebrow}</p>
+        <p className="mb-5 text-xs font-black uppercase tracking-[0.34em] text-seven-accent">{eyebrow}</p>
       ) : null}
-      <h2 className="font-display text-[clamp(2.55rem,8.5vw,4.65rem)] font-black leading-[0.92] text-white md:leading-[0.9]">{title}</h2>
-      {description ? <p className="mt-5 text-lg leading-8 text-seven-muted">{description}</p> : null}
+      <h2 className="font-display text-[clamp(2.65rem,8.5vw,4.85rem)] font-black leading-[0.9] text-white md:leading-[0.88]">{title}</h2>
+      {description ? <p className="mt-6 max-w-2xl text-lg leading-8 text-seven-muted">{description}</p> : null}
     </div>
   );
 }
