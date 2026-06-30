@@ -75,17 +75,32 @@ const maskChatId = (value: string) => {
 
 const isNumericTelegramChatId = (value: string) => /^-?\d+$/.test(value);
 
+const normalizeTelegramChatId = (value: string) => {
+  if (value.startsWith("-100")) {
+    return value;
+  }
+
+  if (value.startsWith("-") && isNumericTelegramChatId(value)) {
+    return `-100${value.slice(1)}`;
+  }
+
+  return value;
+};
+
 const getBookingChatDebugStatus = () => ({
   TELEGRAM_BOOKING_CHAT_VV: {
     maskedChatId: maskChatId(process.env.TELEGRAM_BOOKING_CHAT_VV?.trim() || ""),
+    normalizedMaskedChatId: maskChatId(normalizeTelegramChatId(process.env.TELEGRAM_BOOKING_CHAT_VV?.trim() || "")),
     isNumeric: isNumericTelegramChatId(process.env.TELEGRAM_BOOKING_CHAT_VV?.trim() || ""),
   },
   TELEGRAM_BOOKING_CHAT_RYNOK: {
     maskedChatId: maskChatId(process.env.TELEGRAM_BOOKING_CHAT_RYNOK?.trim() || ""),
+    normalizedMaskedChatId: maskChatId(normalizeTelegramChatId(process.env.TELEGRAM_BOOKING_CHAT_RYNOK?.trim() || "")),
     isNumeric: isNumericTelegramChatId(process.env.TELEGRAM_BOOKING_CHAT_RYNOK?.trim() || ""),
   },
   TELEGRAM_BOOKING_CHAT_ZP: {
     maskedChatId: maskChatId(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim() || ""),
+    normalizedMaskedChatId: maskChatId(normalizeTelegramChatId(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim() || "")),
     isNumeric: isNumericTelegramChatId(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim() || ""),
   },
 });
@@ -160,12 +175,15 @@ export async function POST(request: Request) {
 
     const locationConfig = bookingLocationById[payload.location];
     const chatId = process.env[locationConfig.envKey]?.trim() || "";
+    const normalizedChatId = normalizeTelegramChatId(chatId);
 
     console.error("[Booking] Telegram booking chat debug", {
       selectedLocation: payload.location,
       selectedEnv: locationConfig.envKey,
       selectedMaskedChatId: maskChatId(chatId),
+      selectedNormalizedMaskedChatId: maskChatId(normalizedChatId),
       selectedChatIdIsNumeric: isNumericTelegramChatId(chatId),
+      normalizedChatIdWasChanged: chatId !== normalizedChatId,
       bookingChats: getBookingChatDebugStatus(),
     });
 
@@ -187,6 +205,7 @@ export async function POST(request: Request) {
         location: payload.location,
         chatEnv: locationConfig.envKey,
         maskedChatId: maskChatId(chatId),
+        normalizedMaskedChatId: maskChatId(normalizedChatId),
         startsWithAt: chatId.startsWith("@"),
       });
       return NextResponse.json(
@@ -232,7 +251,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        chat_id: chatId,
+        chat_id: normalizedChatId,
         text,
         parse_mode: "HTML",
         disable_web_page_preview: true,
@@ -246,8 +265,8 @@ export async function POST(request: Request) {
         statusText: telegramResponse.statusText,
         location: locationConfig.displayName,
         chatEnv: locationConfig.envKey,
-        maskedChatId: maskChatId(chatId),
-        chatIdIsNumeric: isNumericTelegramChatId(chatId),
+        maskedChatId: maskChatId(normalizedChatId),
+        chatIdIsNumeric: isNumericTelegramChatId(normalizedChatId),
         body: telegramBody.body,
       });
       return NextResponse.json(
