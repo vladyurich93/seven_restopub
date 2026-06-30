@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { bookingLocationById, type BookingLocationId } from "@/data/bookingConfig";
 
 type BookingPayload = {
   location: string;
@@ -11,7 +10,39 @@ type BookingPayload = {
   comment: string;
 };
 
+type BookingLocationKey = "rynok" | "vv" | "zp";
+
+type BookingRouteConfig = {
+  displayName: string;
+  envKey: "TELEGRAM_BOOKING_CHAT_RYNOK" | "TELEGRAM_BOOKING_CHAT_VV" | "TELEGRAM_BOOKING_CHAT_ZP";
+};
+
 const friendlyError = "Бронювання поки не відправилось. Будь ласка, зателефонуйте в заклад.";
+
+const getBookingRouteConfig = (location: string): BookingRouteConfig | null => {
+  if (location === "rynok") {
+    return {
+      displayName: "Seven Restopub Львів — Площа Ринок",
+      envKey: "TELEGRAM_BOOKING_CHAT_RYNOK",
+    };
+  }
+
+  if (location === "vv") {
+    return {
+      displayName: "Seven Restopub Львів — Володимира Великого",
+      envKey: "TELEGRAM_BOOKING_CHAT_VV",
+    };
+  }
+
+  if (location === "zp") {
+    return {
+      displayName: "Seven Restopub Запоріжжя",
+      envKey: "TELEGRAM_BOOKING_CHAT_ZP",
+    };
+  }
+
+  return null;
+};
 
 const clean = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
@@ -47,7 +78,8 @@ const getTelegramDescription = (body: unknown) =>
     ? body.description
     : friendlyError;
 
-const isBookingLocationId = (value: string): value is BookingLocationId => value in bookingLocationById;
+const isBookingLocationKey = (value: string): value is BookingLocationKey =>
+  value === "rynok" || value === "vv" || value === "zp";
 
 const devDetails = (details: Record<string, unknown>) => (process.env.NODE_ENV !== "production" ? details : {});
 
@@ -135,7 +167,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, message: "Вкажіть коректну кількість гостей." }, { status: 400 });
     }
 
-    if (!isBookingLocationId(payload.location)) {
+    if (!isBookingLocationKey(payload.location)) {
       console.error("[Booking] Unknown booking location", { location: payload.location });
       return NextResponse.json(
         { ok: false, message: "Оберіть коректний заклад для бронювання.", ...devDetails({ location: payload.location }) },
@@ -143,7 +175,22 @@ export async function POST(request: Request) {
       );
     }
 
-    const locationConfig = bookingLocationById[payload.location];
+    const locationConfig = getBookingRouteConfig(payload.location);
+
+    if (!locationConfig) {
+      console.error("[Booking] Missing route config for booking location", { location: payload.location });
+      return NextResponse.json(
+        { ok: false, message: "Оберіть коректний заклад для бронювання.", ...devDetails({ location: payload.location }) },
+        { status: 400 },
+      );
+    }
+
+    console.log("[Booking] Route selection", {
+      submittedLocationKey: payload.location,
+      displayName: locationConfig.displayName,
+      selectedChatEnv: locationConfig.envKey,
+    });
+
     const chatId = process.env[locationConfig.envKey]?.trim() || "";
 
     if (!chatId) {
