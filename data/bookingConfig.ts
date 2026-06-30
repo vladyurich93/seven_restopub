@@ -5,7 +5,7 @@ export type BookingLocation = {
   label: string;
   displayName: string;
   city: string;
-  envKey: "TELEGRAM_BOOKING_CHAT_RYNOK" | "TELEGRAM_BOOKING_CHAT_W" | "TELEGRAM_BOOKING_CHAT_ZP";
+  envKey: "TELEGRAM_BOOKING_CHAT_RYNOK" | "TELEGRAM_BOOKING_CHAT_VV" | "TELEGRAM_BOOKING_CHAT_ZP";
 };
 
 export const bookingLocations = [
@@ -21,7 +21,7 @@ export const bookingLocations = [
     label: "Lviv – Volodymyra Velykoho",
     displayName: "Seven Restopub Львів – Володимира Великого",
     city: "Львів",
-    envKey: "TELEGRAM_BOOKING_CHAT_W",
+    envKey: "TELEGRAM_BOOKING_CHAT_VV",
   },
   {
     id: "zp",

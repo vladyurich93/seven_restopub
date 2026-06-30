@@ -55,7 +55,7 @@ const getTelegramEnvKeys = () => Object.keys(process.env).filter((key) => key.st
 
 const getBookingEnvStatus = () => ({
   TELEGRAM_BOT_TOKEN_EXISTS: Boolean(process.env.TELEGRAM_BOT_TOKEN?.trim()),
-  TELEGRAM_BOOKING_CHAT_W_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_W?.trim()),
+  TELEGRAM_BOOKING_CHAT_VV_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_VV?.trim()),
   TELEGRAM_BOOKING_CHAT_RYNOK_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_RYNOK?.trim()),
   TELEGRAM_BOOKING_CHAT_ZP_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim()),
 });
