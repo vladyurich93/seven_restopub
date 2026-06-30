@@ -1,4 +1,4 @@
-export type BookingLocationId = "lviv-rynok" | "lviv-vv" | "zaporizhzhia";
+export type BookingLocationId = "rynok" | "vv" | "zp";
 
 export type BookingLocation = {
   id: BookingLocationId;
@@ -10,21 +10,21 @@ export type BookingLocation = {
 
 export const bookingLocations = [
   {
-    id: "lviv-rynok",
+    id: "rynok",
     label: "Lviv – Rynok Square",
     displayName: "Seven Restopub Львів – Площа Ринок",
     city: "Львів",
     envKey: "TELEGRAM_BOOKING_CHAT_RYNOK",
   },
   {
-    id: "lviv-vv",
+    id: "vv",
     label: "Lviv – Volodymyra Velykoho",
     displayName: "Seven Restopub Львів – Володимира Великого",
     city: "Львів",
     envKey: "TELEGRAM_BOOKING_CHAT_W",
   },
   {
-    id: "zaporizhzhia",
+    id: "zp",
     label: "Zaporizhzhia",
     displayName: "Seven Restopub Запоріжжя",
     city: "Запоріжжя",

@@ -43,6 +43,8 @@ const initialBookingForm: BookingForm = {
 const fieldClass =
   "mt-2 w-full rounded-[8px] border border-white/10 bg-black/30 px-4 py-3 text-base text-white outline-none transition placeholder:text-seven-muted/65 focus:border-seven-green focus:ring-2 focus:ring-seven-green/20";
 
+const activeFieldClass = "border-seven-terracotta bg-seven-terracotta/12 shadow-[0_0_0_1px_rgba(201,113,74,0.32),0_14px_34px_rgba(201,113,74,0.14)]";
+
 const isValidUkrainianPhone = (phone: string) => {
   const digits = phone.replace(/\D/g, "");
   return (digits.length === 10 && digits.startsWith("0")) || (digits.length === 12 && digits.startsWith("380"));
@@ -189,7 +191,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          location: selectedLocation?.displayName || form.locationId,
+          location: form.locationId,
           name: form.name,
           phone: form.phone,
           guests: form.guests,
@@ -298,12 +300,21 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                           <button
                             key={location.id}
                             type="button"
-                            className={`min-h-44 rounded-[8px] p-5 text-left transition duration-500 premium-border premium-lift ${form.locationId === location.id ? "border-seven-green bg-seven-green/12 shadow-glow" : "bg-seven-card/75 hover:border-seven-terracotta/50"}`}
+                            className={`min-h-44 rounded-[8px] p-5 text-left transition duration-500 premium-border premium-lift ${
+                              form.locationId === location.id
+                                ? "border-seven-terracotta bg-seven-terracotta/18 shadow-[0_0_0_1px_rgba(201,113,74,0.35),0_22px_54px_rgba(201,113,74,0.18)]"
+                                : "bg-seven-card/75 hover:border-seven-terracotta/50"
+                            }`}
                             onClick={() => updateField("locationId", location.id)}
                           >
-                            <MapPinned className="mb-5 text-seven-terracotta" size={24} />
+                            <MapPinned className={`mb-5 ${form.locationId === location.id ? "text-seven-green" : "text-seven-terracotta"}`} size={24} />
                             <span className="block font-display text-3xl font-black leading-none text-white">{location.label}</span>
-                            <span className="mt-3 block text-sm font-semibold uppercase tracking-[0.14em] text-seven-muted">{location.city}</span>
+                            <span className={`mt-3 block text-sm font-semibold uppercase tracking-[0.14em] ${form.locationId === location.id ? "text-seven-cream" : "text-seven-muted"}`}>{location.city}</span>
+                            {form.locationId === location.id ? (
+                              <span className="mt-5 inline-flex rounded-full bg-seven-green px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-seven-background">
+                                Обрано
+                              </span>
+                            ) : null}
                           </button>
                         ))}
                       </div>
@@ -315,17 +326,17 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                     <div className="grid gap-5 md:grid-cols-3">
                       <label className="text-sm font-semibold text-white">
                         Дата <span className="text-seven-green">*</span>
-                        <input type="date" min={today()} className={fieldClass} value={form.date} onChange={(event) => updateField("date", event.target.value)} required />
+                        <input type="date" min={today()} className={`${fieldClass} ${form.date ? activeFieldClass : ""}`} value={form.date} onChange={(event) => updateField("date", event.target.value)} required />
                         {errors.date ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.date}</span> : null}
                       </label>
                       <label className="text-sm font-semibold text-white">
                         Час <span className="text-seven-green">*</span>
-                        <input type="time" className={fieldClass} value={form.time} onChange={(event) => updateField("time", event.target.value)} required />
+                        <input type="time" className={`${fieldClass} ${form.time ? activeFieldClass : ""}`} value={form.time} onChange={(event) => updateField("time", event.target.value)} required />
                         {errors.time ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.time}</span> : null}
                       </label>
                       <label className="text-sm font-semibold text-white">
                         Кількість гостей <span className="text-seven-green">*</span>
-                        <div className="mt-2 flex min-h-12 items-center rounded-[8px] border border-white/10 bg-black/30">
+                        <div className={`mt-2 flex min-h-12 items-center rounded-[8px] border border-white/10 bg-black/30 transition ${form.guests ? activeFieldClass : ""}`}>
                           <button type="button" className="grid h-12 w-12 place-items-center text-seven-green" onClick={() => changeGuests(-1)} aria-label="Зменшити кількість гостей">
                             <Minus size={18} />
                           </button>
@@ -402,7 +413,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                         disabled={status === "loading"}
                       >
                         {status === "loading" ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/35 border-t-white" /> : <Send size={17} />}
-                        {status === "loading" ? "Відправляємо..." : "Забронювати"}
+                        {status === "loading" ? "Надсилаємо бронювання..." : "Забронювати"}
                       </button>
                     )}
                   </div>

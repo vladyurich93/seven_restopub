@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { bookingLocations } from "@/data/bookingConfig";
+import { bookingLocationById, type BookingLocationId } from "@/data/bookingConfig";
 
 type BookingPayload = {
   location: string;
@@ -47,17 +47,9 @@ const getTelegramDescription = (body: unknown) =>
     ? body.description
     : friendlyError;
 
-const getLocationConfig = (locationValue: string) =>
-  bookingLocations.find((location) => {
-    const normalized = locationValue.toLowerCase();
-    return (
-      location.displayName.toLowerCase() === normalized ||
-      location.label.toLowerCase() === normalized ||
-      location.id.toLowerCase() === normalized ||
-      normalized.includes(location.displayName.toLowerCase()) ||
-      normalized.includes(location.label.toLowerCase())
-    );
-  });
+const isBookingLocationId = (value: string): value is BookingLocationId => value in bookingLocationById;
+
+const devDetails = (details: Record<string, unknown>) => (process.env.NODE_ENV !== "production" ? details : {});
 
 export async function POST(request: Request) {
   try {
@@ -86,7 +78,7 @@ export async function POST(request: Request) {
 
     const raw = (typeof body === "object" && body !== null ? body : {}) as Record<string, unknown>;
     const payload: BookingPayload = {
-      location: clean(raw.location),
+      location: clean(raw.location).toLowerCase(),
       name: clean(raw.name),
       phone: clean(raw.phone),
       guests: clean(raw.guests),
@@ -123,21 +115,34 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, message: "Вкажіть коректну кількість гостей." }, { status: 400 });
     }
 
-    const locationConfig = getLocationConfig(payload.location);
+    console.log("[Booking] Selected location value", { location: payload.location });
 
-    if (!locationConfig) {
+    if (!isBookingLocationId(payload.location)) {
       console.error("[Booking] Unknown booking location", { location: payload.location });
-      return NextResponse.json({ ok: false, message: "Оберіть коректний заклад для бронювання." }, { status: 400 });
+      return NextResponse.json(
+        { ok: false, message: "Оберіть коректний заклад для бронювання.", ...devDetails({ location: payload.location }) },
+        { status: 400 },
+      );
     }
 
+    const locationConfig = bookingLocationById[payload.location];
     const chatId = process.env[locationConfig.envKey]?.trim() || "";
 
+    console.log("[Booking] Resolved booking chat env", {
+      location: payload.location,
+      chatEnv: locationConfig.envKey,
+      chatEnvExists: Boolean(chatId),
+    });
+
     if (!chatId) {
-      console.error("[Booking] Missing booking chat id", {
-        location: locationConfig.displayName,
+      console.error(`Missing booking chat env for location: ${payload.location}`, {
         missingEnv: locationConfig.envKey,
+        displayName: locationConfig.displayName,
       });
-      return NextResponse.json({ ok: false, message: friendlyError }, { status: 503 });
+      return NextResponse.json(
+        { ok: false, message: friendlyError, ...devDetails({ location: payload.location, missingEnv: locationConfig.envKey }) },
+        { status: 503 },
+      );
     }
 
     const text = [
@@ -192,7 +197,14 @@ export async function POST(request: Request) {
         body: telegramBody.body,
       });
       return NextResponse.json(
-        { ok: false, message: friendlyError, telegramError: getTelegramDescription(telegramBody.body) },
+        {
+          ok: false,
+          message: friendlyError,
+          ...devDetails({
+            telegramError: getTelegramDescription(telegramBody.body),
+            telegramResponse: telegramBody.body,
+          }),
+        },
         { status: telegramResponse.status },
       );
     }
