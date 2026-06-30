@@ -11,7 +11,7 @@ type BookingPayload = {
   comment: string;
 };
 
-const fallbackMessage = "Бронювання не вдалося відправити. Спробуйте ще раз або зателефонуйте у заклад.";
+const fallbackMessage = "Бронювання поки не відправилось. Будь ласка, зателефонуйте в заклад.";
 
 const clean = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
@@ -119,27 +119,34 @@ export async function POST(request: Request) {
     const chatId = process.env[location.envKey]?.trim() || "";
 
     if (!chatId) {
-      const message = `Telegram chat для бронювання не налаштований. Відсутня env variable: ${location.envKey}.`;
+      const message = fallbackMessage;
       console.error("[Table booking] Missing booking chat id", { location, missingEnv: location.envKey, message });
       return NextResponse.json({ message }, { status: 503 });
     }
 
     const text = [
-      "🍺 <b>NEW TABLE BOOKING</b>",
+      "🍺 <b>НОВЕ БРОНЮВАННЯ</b>",
       "",
-      `📍 <b>Location:</b> ${formatValue(location.displayName)}`,
+      "📍 <b>Локація:</b>",
+      formatValue(location.displayName),
       "",
-      `📅 <b>Date:</b> ${formatValue(payload.date)}`,
+      "📅 <b>Дата:</b>",
+      formatValue(payload.date),
       "",
-      `🕒 <b>Time:</b> ${formatValue(payload.time)}`,
+      "🕒 <b>Час:</b>",
+      formatValue(payload.time),
       "",
-      `👥 <b>Guests:</b> ${formatValue(payload.guests)}`,
+      "👥 <b>Гостей:</b>",
+      formatValue(payload.guests),
       "",
-      `👤 <b>Name:</b> ${formatValue(payload.name)}`,
+      "👤 <b>Імʼя:</b>",
+      formatValue(payload.name),
       "",
-      `📞 <b>Phone:</b> ${formatValue(payload.phone)}`,
+      "📞 <b>Телефон:</b>",
+      formatValue(payload.phone),
       "",
-      `💬 <b>Comment:</b> ${formatValue(payload.comment)}`,
+      "💬 <b>Коментар:</b>",
+      formatValue(payload.comment),
       "",
       "🌐 sevenrestopub",
       `🕒 ${formatTimestamp()}`,

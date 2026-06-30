@@ -194,7 +194,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
 
       if (!response.ok) {
         setStatus("error");
-        setMessage(result.message || "Бронювання не вдалося відправити. Спробуйте ще раз.");
+        setMessage(result.message || "Бронювання поки не відправилось. Будь ласка, зателефонуйте в заклад.");
         return;
       }
 
@@ -202,7 +202,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
       setMessage(result.message || "Дякуємо! Ми отримали ваше бронювання.");
     } catch {
       setStatus("error");
-      setMessage("Бронювання не вдалося відправити. Спробуйте ще раз або зателефонуйте у заклад.");
+      setMessage("Бронювання поки не відправилось. Будь ласка, зателефонуйте в заклад.");
     }
   };
 
