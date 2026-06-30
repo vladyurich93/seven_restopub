@@ -185,10 +185,18 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     setMessage("");
 
     try {
-      const response = await fetch("/api/table-booking", {
+      const response = await fetch("/api/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          location: selectedLocation?.displayName || form.locationId,
+          name: form.name,
+          phone: form.phone,
+          guests: form.guests,
+          date: form.date,
+          time: form.time,
+          comment: form.comment,
+        }),
       });
       const result = (await response.json()) as { message?: string };
 
@@ -199,7 +207,10 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
       }
 
       setStatus("success");
-      setMessage(result.message || "Дякуємо! Ми отримали ваше бронювання.");
+      setMessage(
+        result.message ||
+          "Дякуємо! Ваше бронювання вже отримав адміністратор. Ми скоро звʼяжемося з вами.",
+      );
     } catch {
       setStatus("error");
       setMessage("Бронювання поки не відправилось. Будь ласка, зателефонуйте в заклад.");
@@ -255,10 +266,10 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-seven-green/12 text-seven-green premium-border shadow-glow">
                       <CheckCircle2 size={34} strokeWidth={1.8} />
                     </div>
-                    <p className="mt-6 text-xs font-black uppercase tracking-[0.24em] text-seven-green">Booking received</p>
-                    <h3 className="mt-3 font-display text-5xl font-black leading-none text-white">Бронювання отримано!</h3>
+                    <p className="mt-6 text-xs font-black uppercase tracking-[0.24em] text-seven-green">Бронювання отримано</p>
+                    <h3 className="mt-3 font-display text-5xl font-black leading-none text-white">Дякуємо!</h3>
                     <p className="mt-5 text-lg leading-8 text-seven-muted">
-                      {message || "Адміністратор Seven звʼяжеться з вами для підтвердження."}
+                      {message || "Ваше бронювання вже отримав адміністратор. Ми скоро звʼяжемося з вами."}
                     </p>
                     <button
                       type="button"
