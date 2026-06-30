@@ -34,9 +34,15 @@ type FieldProps = {
 const CareersModalContext = createContext<CareersModalContextValue | null>(null);
 
 const cityOptions = ["Запоріжжя", "Львів"];
-const locationOptions = ["Seven Володимира Великого", "Seven Площа Ринок", "Seven Запоріжжя"];
+const locationOptionsByCity: Record<string, string[]> = {
+  Львів: ["Seven Restopub Володимира Великого", "Seven Restopub Площа Ринок"],
+  Запоріжжя: ["Seven Restopub Запоріжжя"],
+};
 const positionOptions = ["Офіціант", "Бармен", "Кухар", "Кальянщик", "Адміністратор", "Інше"];
 const locationInstagramLinks: Record<string, string> = {
+  "Seven Restopub Запоріжжя": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
+  "Seven Restopub Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
+  "Seven Restopub Площа Ринок": "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
   "Seven Запоріжжя": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
   "Seven Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
   "Seven Площа Ринок": "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
@@ -167,6 +173,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
   const [phoneError, setPhoneError] = useState("");
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [cvError, setCvError] = useState("");
+  const [locationError, setLocationError] = useState("");
   const [submittedLocation, setSubmittedLocation] = useState("");
 
   useEffect(() => {
@@ -222,6 +229,14 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     if (field === "phone") {
       setPhoneError("");
     }
+    if (field === "city") {
+      setLocationError("");
+      setForm((current) => ({ ...current, city: value, location: "" }));
+      return;
+    }
+    if (field === "location") {
+      setLocationError("");
+    }
     setForm((current) => ({ ...current, [field]: value }));
   };
 
@@ -230,6 +245,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     setMessage("");
     setPhoneError("");
     setCvError("");
+    setLocationError("");
     setOpen(true);
   };
 
@@ -238,6 +254,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     setMessage("");
     setPhoneError("");
     setCvError("");
+    setLocationError("");
     setForm(initialFormState);
     setCvFile(null);
   };
@@ -271,10 +288,19 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     setMessage("");
     setPhoneError("");
     setCvError("");
+    setLocationError("");
 
     if (!isValidUkrainianPhone(form.phone)) {
       setStatus("idle");
       setPhoneError("Вкажіть український номер у форматі 0XX XXX XX XX або +380 XX XXX XX XX.");
+      return;
+    }
+
+    const availableLocations = locationOptionsByCity[form.city] ?? [];
+
+    if (form.location && !availableLocations.includes(form.location)) {
+      setStatus("idle");
+      setLocationError("Оберіть заклад, який відповідає вибраному місту.");
       return;
     }
 
@@ -315,6 +341,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
   const selectedInstagramLink = submittedLocation ? locationInstagramLinks[submittedLocation] : undefined;
   const instagramHref = selectedInstagramLink || siteConfig.instagram;
   const instagramLabel = selectedInstagramLink ? "Instagram закладу" : "Instagram Seven";
+  const locationOptions = form.city ? locationOptionsByCity[form.city] ?? [] : [];
 
   const modal = open ? (
     <div
@@ -412,7 +439,11 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
               {phoneError ? <p className="mt-2 text-xs font-semibold text-seven-terracotta">{phoneError}</p> : null}
             </div>
             <SelectField id="city" label="Місто" value={form.city} onChange={updateField} options={cityOptions} />
-            <SelectField id="location" label="Заклад" value={form.location} onChange={updateField} options={locationOptions} />
+            <div>
+              <SelectField id="location" label="Заклад" value={form.location} onChange={updateField} options={locationOptions} />
+              {!form.city ? <p className="mt-2 text-xs font-semibold text-seven-muted">Спочатку оберіть місто.</p> : null}
+              {locationError ? <p className="mt-2 text-xs font-semibold text-seven-terracotta">{locationError}</p> : null}
+            </div>
             <SelectField id="position" label="Посада" value={form.position} onChange={updateField} options={positionOptions} />
             <TextField id="startDate" label="Коли готові почати" value={form.startDate} onChange={updateField} placeholder="Наприклад: з наступного тижня" />
             <TextAreaField id="experience" label="Досвід роботи" value={form.experience} onChange={updateField} placeholder="Коротко про попередній досвід" />

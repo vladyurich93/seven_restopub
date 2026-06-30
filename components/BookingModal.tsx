@@ -2,7 +2,7 @@
 
 import { createContext, type FormEvent, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { CalendarDays, CheckCircle2, ChevronLeft, Clock3, MapPinned, Minus, Plus, Send, UserRound, X } from "lucide-react";
+import { CalendarDays, CheckCircle2, ChevronDown, ChevronLeft, Clock3, MapPinned, Minus, Plus, Send, UserRound, X } from "lucide-react";
 import { bookingLocations, type BookingLocationId } from "@/data/bookingConfig";
 
 type BookingForm = {
@@ -45,6 +45,14 @@ const fieldClass =
 
 const activeFieldClass = "border-seven-terracotta bg-seven-terracotta/12 shadow-[0_0_0_1px_rgba(201,113,74,0.32),0_14px_34px_rgba(201,113,74,0.14)]";
 
+const timeOptions = Array.from({ length: 23 }, (_, index) => {
+  const totalMinutes = 12 * 60 + index * 30;
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+});
+
 const isValidUkrainianPhone = (phone: string) => {
   const digits = phone.replace(/\D/g, "");
   return (digits.length === 10 && digits.startsWith("0")) || (digits.length === 12 && digits.startsWith("380"));
@@ -70,6 +78,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<Partial<Record<keyof BookingForm, string>>>({});
+  const [timePickerOpen, setTimePickerOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -122,11 +131,17 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     setForm((current) => ({ ...current, [field]: value }));
   };
 
+  const selectTime = (value: string) => {
+    updateField("time", value);
+    setTimePickerOpen(false);
+  };
+
   const openBookingModal = (locationId?: BookingLocationId) => {
     setStep(0);
     setStatus("idle");
     setMessage("");
     setErrors({});
+    setTimePickerOpen(false);
     setForm({ ...initialBookingForm, locationId: locationId ?? "" });
     setOpen(true);
   };
@@ -323,7 +338,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                           <button
                             key={location.id}
                             type="button"
-                            className={`min-h-44 rounded-[8px] p-5 text-left transition duration-500 premium-border premium-lift ${
+                            className={`flex min-h-48 flex-col rounded-[8px] p-5 text-left transition duration-500 premium-border premium-lift ${
                               form.locationId === location.id
                                 ? "border-seven-terracotta bg-seven-terracotta/18 shadow-[0_0_0_1px_rgba(201,113,74,0.35),0_22px_54px_rgba(201,113,74,0.18)]"
                                 : "bg-seven-card/75 hover:border-seven-terracotta/50"
@@ -337,12 +352,13 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                               ) : null}
                             </div>
                             <span className="block font-display text-3xl font-black leading-none text-white">{location.label}</span>
-                            <span className={`mt-3 block text-sm font-semibold uppercase tracking-[0.14em] ${form.locationId === location.id ? "text-seven-cream" : "text-seven-muted"}`}>{location.city}</span>
                             {form.locationId === location.id ? (
                               <span className="mt-5 inline-flex rounded-full bg-seven-green px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-seven-background">
-                                Обрано
+                                <CheckCircle2 size={13} />
+                                <span className="ml-1.5">ОБРАНО</span>
                               </span>
                             ) : null}
+                            <span className={`mt-auto block pt-6 text-[11px] font-black uppercase tracking-[0.18em] ${form.locationId === location.id ? "text-seven-cream" : "text-seven-muted"}`}>{location.city}</span>
                           </button>
                         ))}
                       </div>
@@ -359,7 +375,48 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                       </label>
                       <label className="text-sm font-semibold text-white">
                         Час <span className="text-seven-green">*</span>
-                        <input type="time" className={`${fieldClass} ${form.time ? activeFieldClass : ""}`} value={form.time} onChange={(event) => updateField("time", event.target.value)} required />
+                        <div className="relative">
+                          <button
+                            type="button"
+                            className={`${fieldClass} ${form.time ? activeFieldClass : ""} flex min-h-12 items-center justify-between text-left`}
+                            onClick={() => setTimePickerOpen((current) => !current)}
+                            aria-haspopup="listbox"
+                            aria-expanded={timePickerOpen}
+                          >
+                            <span className={form.time ? "text-white" : "text-seven-muted/65"}>{form.time || "Оберіть час"}</span>
+                            <ChevronDown size={18} className={`text-seven-green transition ${timePickerOpen ? "rotate-180" : ""}`} />
+                          </button>
+                          {timePickerOpen ? (
+                            <div
+                              className="absolute left-0 right-0 top-[calc(100%+8px)] z-30 max-h-64 overflow-y-auto rounded-[8px] border border-white/10 bg-seven-card p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] [-webkit-overflow-scrolling:touch]"
+                              role="listbox"
+                              aria-label="Оберіть час бронювання"
+                            >
+                              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-2">
+                                {timeOptions.map((time) => {
+                                  const selected = form.time === time;
+
+                                  return (
+                                    <button
+                                      key={time}
+                                      type="button"
+                                      className={`rounded-[8px] px-3 py-2.5 text-sm font-black transition ${
+                                        selected
+                                          ? "bg-seven-terracotta text-white shadow-[0_0_0_1px_rgba(201,113,74,0.42),0_12px_28px_rgba(201,113,74,0.2)]"
+                                          : "bg-white/5 text-seven-cream hover:bg-seven-green hover:text-seven-background"
+                                      }`}
+                                      onClick={() => selectTime(time)}
+                                      role="option"
+                                      aria-selected={selected}
+                                    >
+                                      {time}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
                         {errors.time ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.time}</span> : null}
                       </label>
                       <label className="text-sm font-semibold text-white">
