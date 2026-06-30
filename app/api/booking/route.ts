@@ -51,19 +51,24 @@ const isBookingLocationId = (value: string): value is BookingLocationId => value
 
 const devDetails = (details: Record<string, unknown>) => (process.env.NODE_ENV !== "production" ? details : {});
 
+const getTelegramEnvKeys = () => Object.keys(process.env).filter((key) => key.startsWith("TELEGRAM_")).sort();
+
+const getBookingEnvStatus = () => ({
+  TELEGRAM_BOT_TOKEN_EXISTS: Boolean(process.env.TELEGRAM_BOT_TOKEN?.trim()),
+  TELEGRAM_BOOKING_CHAT_W_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_W?.trim()),
+  TELEGRAM_BOOKING_CHAT_RYNOK_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_RYNOK?.trim()),
+  TELEGRAM_BOOKING_CHAT_ZP_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim()),
+});
+
 export async function POST(request: Request) {
   try {
     const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim() || "";
 
-    console.log("[Booking] Environment status", {
-      TELEGRAM_BOT_TOKEN_EXISTS: Boolean(botToken),
-      TELEGRAM_BOOKING_CHAT_RYNOK_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_RYNOK?.trim()),
-      TELEGRAM_BOOKING_CHAT_W_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_W?.trim()),
-      TELEGRAM_BOOKING_CHAT_ZP_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim()),
-    });
-
     if (!botToken) {
-      console.error("[Booking] Missing TELEGRAM_BOT_TOKEN");
+      console.error("[Booking] Missing TELEGRAM_BOT_TOKEN", {
+        telegramEnvKeys: getTelegramEnvKeys(),
+        envStatus: getBookingEnvStatus(),
+      });
       return NextResponse.json({ ok: false, message: friendlyError }, { status: 503 });
     }
 
@@ -115,8 +120,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, message: "Вкажіть коректну кількість гостей." }, { status: 400 });
     }
 
-    console.log("[booking] location key:", payload.location);
-
     if (!isBookingLocationId(payload.location)) {
       console.error("[Booking] Unknown booking location", { location: payload.location });
       return NextResponse.json(
@@ -128,19 +131,12 @@ export async function POST(request: Request) {
     const locationConfig = bookingLocationById[payload.location];
     const chatId = process.env[locationConfig.envKey]?.trim() || "";
 
-    console.log("[booking] env variable:", locationConfig.envKey);
-    console.log("[booking] has chat id:", Boolean(chatId));
-
-    console.log("[Booking] Resolved booking chat env", {
-      location: payload.location,
-      chatEnv: locationConfig.envKey,
-      chatEnvExists: Boolean(chatId),
-    });
-
     if (!chatId) {
       console.error(`Missing booking chat env for location: ${payload.location}`, {
         missingEnv: locationConfig.envKey,
         displayName: locationConfig.displayName,
+        telegramEnvKeys: getTelegramEnvKeys(),
+        envStatus: getBookingEnvStatus(),
       });
       return NextResponse.json(
         { ok: false, message: friendlyError, ...devDetails({ location: payload.location, missingEnv: locationConfig.envKey }) },
@@ -185,18 +181,12 @@ export async function POST(request: Request) {
     });
     const telegramBody = await parseTelegramResponse(telegramResponse);
 
-    console.log("[Booking] Telegram sendMessage response", {
-      ok: telegramResponse.ok,
-      status: telegramResponse.status,
-      statusText: telegramResponse.statusText,
-      location: locationConfig.displayName,
-      chatEnv: locationConfig.envKey,
-      body: telegramBody.body,
-    });
-
     if (!telegramResponse.ok) {
       console.error("[Booking] Telegram API failed", {
         status: telegramResponse.status,
+        statusText: telegramResponse.statusText,
+        location: locationConfig.displayName,
+        chatEnv: locationConfig.envKey,
         body: telegramBody.body,
       });
       return NextResponse.json(
