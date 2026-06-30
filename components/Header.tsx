@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
+import { BookingButton } from "./BookingModal";
 import { useCareersModal } from "./CareersModal";
 import { LocationPickerButton } from "./LocationPicker";
 
@@ -67,7 +68,7 @@ export function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <LocationPickerButton className="px-5 text-xs min-[900px]:px-6 min-[1201px]:text-sm" />
+          <BookingButton className="px-5 text-xs min-[900px]:px-6 min-[1201px]:text-sm" label="Забронювати" />
         </div>
 
         <button
@@ -121,7 +122,10 @@ export function Header() {
           ))}
         </nav>
         <div className="mt-auto border-t border-white/10 p-5">
-          <LocationPickerButton className="w-full" onOpen={() => setOpen(false)} />
+          <div className="grid gap-3">
+            <BookingButton className="w-full" label="Забронювати" onOpen={() => setOpen(false)} />
+            <LocationPickerButton className="w-full" onOpen={() => setOpen(false)} />
+          </div>
         </div>
       </aside>
     </header>

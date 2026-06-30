@@ -1,4 +1,5 @@
 import { siteConfig } from "@/data/siteConfig";
+import { BookingButton } from "./BookingModal";
 import { LocationPickerButton } from "./LocationPicker";
 
 export function Hero() {
@@ -33,7 +34,8 @@ export function Hero() {
             ))}
           </div>
           <div className="mt-9 flex flex-col gap-4 sm:flex-row [@media_(min-width:1024px)_and_(max-height:780px)]:mt-6">
-            <LocationPickerButton className="min-h-14 px-8 text-base [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-12 [@media_(min-width:1024px)_and_(max-height:780px)]:px-7 [@media_(min-width:1024px)_and_(max-height:780px)]:text-sm" />
+            <BookingButton className="min-h-14 px-8 text-base [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-12 [@media_(min-width:1024px)_and_(max-height:780px)]:px-7 [@media_(min-width:1024px)_and_(max-height:780px)]:text-sm" />
+            <LocationPickerButton className="min-h-14 bg-black/30 px-8 text-base premium-border hover:bg-seven-green hover:text-seven-background [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-12 [@media_(min-width:1024px)_and_(max-height:780px)]:px-7 [@media_(min-width:1024px)_and_(max-height:780px)]:text-sm" />
           </div>
         </div>
         <div className="group relative hidden min-h-[460px] overflow-hidden rounded-[8px] premium-border shadow-[0_28px_80px_rgba(0,0,0,0.38)] min-[1201px]:block xl:min-h-[580px] [@media_(min-width:1201px)_and_(max-height:780px)]:min-h-[430px] [@media_(min-width:1201px)_and_(max-height:680px)]:min-h-[360px]">

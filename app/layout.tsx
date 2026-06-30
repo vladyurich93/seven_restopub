@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Montserrat, Oswald } from "next/font/google";
+import { BookingModalProvider } from "@/components/BookingModal";
 import { CareersModalProvider } from "@/components/CareersModal";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -61,12 +62,14 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     <html lang="uk" className={`${montserrat.variable} ${oswald.variable}`}>
       <body className="font-sans antialiased">
         <CareersModalProvider>
-          <LocationPickerProvider>
-            <Header />
-            <main>{children}</main>
-            <Footer />
-            <RouteImageRepaint />
-          </LocationPickerProvider>
+          <BookingModalProvider>
+            <LocationPickerProvider>
+              <Header />
+              <main>{children}</main>
+              <Footer />
+              <RouteImageRepaint />
+            </LocationPickerProvider>
+          </BookingModalProvider>
         </CareersModalProvider>
       </body>
     </html>
