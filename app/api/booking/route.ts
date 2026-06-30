@@ -60,6 +60,36 @@ const getBookingEnvStatus = () => ({
   TELEGRAM_BOOKING_CHAT_ZP_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim()),
 });
 
+const maskChatId = (value: string) => {
+  if (!value) return "";
+
+  const prefix = value.startsWith("-") ? "-" : "";
+  const normalized = prefix ? value.slice(1) : value;
+
+  if (normalized.length <= 7) {
+    return `${prefix}${normalized.slice(0, 2)}***${normalized.slice(-2)}`;
+  }
+
+  return `${prefix}${normalized.slice(0, 5)}******${normalized.slice(-3)}`;
+};
+
+const isNumericTelegramChatId = (value: string) => /^-?\d+$/.test(value);
+
+const getBookingChatDebugStatus = () => ({
+  TELEGRAM_BOOKING_CHAT_VV: {
+    maskedChatId: maskChatId(process.env.TELEGRAM_BOOKING_CHAT_VV?.trim() || ""),
+    isNumeric: isNumericTelegramChatId(process.env.TELEGRAM_BOOKING_CHAT_VV?.trim() || ""),
+  },
+  TELEGRAM_BOOKING_CHAT_RYNOK: {
+    maskedChatId: maskChatId(process.env.TELEGRAM_BOOKING_CHAT_RYNOK?.trim() || ""),
+    isNumeric: isNumericTelegramChatId(process.env.TELEGRAM_BOOKING_CHAT_RYNOK?.trim() || ""),
+  },
+  TELEGRAM_BOOKING_CHAT_ZP: {
+    maskedChatId: maskChatId(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim() || ""),
+    isNumeric: isNumericTelegramChatId(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim() || ""),
+  },
+});
+
 export async function POST(request: Request) {
   try {
     const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim() || "";
@@ -131,6 +161,14 @@ export async function POST(request: Request) {
     const locationConfig = bookingLocationById[payload.location];
     const chatId = process.env[locationConfig.envKey]?.trim() || "";
 
+    console.error("[Booking] Telegram booking chat debug", {
+      selectedLocation: payload.location,
+      selectedEnv: locationConfig.envKey,
+      selectedMaskedChatId: maskChatId(chatId),
+      selectedChatIdIsNumeric: isNumericTelegramChatId(chatId),
+      bookingChats: getBookingChatDebugStatus(),
+    });
+
     if (!chatId) {
       console.error(`Missing booking chat env for location: ${payload.location}`, {
         missingEnv: locationConfig.envKey,
@@ -140,6 +178,27 @@ export async function POST(request: Request) {
       });
       return NextResponse.json(
         { ok: false, message: friendlyError, ...devDetails({ location: payload.location, missingEnv: locationConfig.envKey }) },
+        { status: 503 },
+      );
+    }
+
+    if (!isNumericTelegramChatId(chatId)) {
+      console.error("[Booking] Booking chat id must be numeric, not username", {
+        location: payload.location,
+        chatEnv: locationConfig.envKey,
+        maskedChatId: maskChatId(chatId),
+        startsWithAt: chatId.startsWith("@"),
+      });
+      return NextResponse.json(
+        {
+          ok: false,
+          message: friendlyError,
+          ...devDetails({
+            location: payload.location,
+            chatEnv: locationConfig.envKey,
+            reason: "Booking chat id must be numeric, not @username.",
+          }),
+        },
         { status: 503 },
       );
     }
@@ -187,6 +246,8 @@ export async function POST(request: Request) {
         statusText: telegramResponse.statusText,
         location: locationConfig.displayName,
         chatEnv: locationConfig.envKey,
+        maskedChatId: maskChatId(chatId),
+        chatIdIsNumeric: isNumericTelegramChatId(chatId),
         body: telegramBody.body,
       });
       return NextResponse.json(
