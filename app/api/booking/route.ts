@@ -115,7 +115,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, message: "Вкажіть коректну кількість гостей." }, { status: 400 });
     }
 
-    console.log("[Booking] Selected location value", { location: payload.location });
+    console.log("[booking] location key:", payload.location);
 
     if (!isBookingLocationId(payload.location)) {
       console.error("[Booking] Unknown booking location", { location: payload.location });
@@ -127,6 +127,9 @@ export async function POST(request: Request) {
 
     const locationConfig = bookingLocationById[payload.location];
     const chatId = process.env[locationConfig.envKey]?.trim() || "";
+
+    console.log("[booking] env variable:", locationConfig.envKey);
+    console.log("[booking] has chat id:", Boolean(chatId));
 
     console.log("[Booking] Resolved booking chat env", {
       location: payload.location,

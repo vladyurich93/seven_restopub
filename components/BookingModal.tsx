@@ -157,6 +157,29 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     return Object.keys(nextErrors).length === 0;
   };
 
+  const validateSubmit = () => {
+    const nextErrors: Partial<Record<keyof BookingForm, string>> = {};
+
+    if (!form.locationId) nextErrors.locationId = "Оберіть заклад.";
+    if (!form.date) nextErrors.date = "Оберіть дату.";
+    if (!form.time) nextErrors.time = "Оберіть час.";
+    if (!form.guests || Number(form.guests) < 1) nextErrors.guests = "Вкажіть кількість гостей.";
+    if (!form.name) nextErrors.name = "Вкажіть імʼя.";
+    if (!form.phone) {
+      nextErrors.phone = "Вкажіть телефон.";
+    } else if (!isValidUkrainianPhone(form.phone)) {
+      nextErrors.phone = "Вкажіть український номер у форматі 0XX XXX XX XX або +380 XX XXX XX XX.";
+    }
+
+    setErrors(nextErrors);
+
+    if (nextErrors.locationId) setStep(0);
+    else if (nextErrors.date || nextErrors.time || nextErrors.guests) setStep(1);
+    else if (nextErrors.name || nextErrors.phone) setStep(2);
+
+    return Object.keys(nextErrors).length === 0;
+  };
+
   const goNext = () => {
     if (!validateStep(step)) {
       return;
@@ -179,7 +202,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   const submitBooking = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!validateStep(2)) {
+    if (!validateSubmit()) {
       return;
     }
 
@@ -307,7 +330,12 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                             }`}
                             onClick={() => updateField("locationId", location.id)}
                           >
-                            <MapPinned className={`mb-5 ${form.locationId === location.id ? "text-seven-green" : "text-seven-terracotta"}`} size={24} />
+                            <div className="mb-5 flex items-center justify-between gap-3">
+                              <MapPinned className={form.locationId === location.id ? "text-seven-green" : "text-seven-terracotta"} size={24} />
+                              {form.locationId === location.id ? (
+                                <CheckCircle2 className="text-seven-green" size={22} strokeWidth={2.2} />
+                              ) : null}
+                            </div>
                             <span className="block font-display text-3xl font-black leading-none text-white">{location.label}</span>
                             <span className={`mt-3 block text-sm font-semibold uppercase tracking-[0.14em] ${form.locationId === location.id ? "text-seven-cream" : "text-seven-muted"}`}>{location.city}</span>
                             {form.locationId === location.id ? (
