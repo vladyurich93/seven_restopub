@@ -54,7 +54,7 @@ const devDetails = (details: Record<string, unknown>) => (process.env.NODE_ENV !
 const getTelegramEnvKeys = () => Object.keys(process.env).filter((key) => key.startsWith("TELEGRAM_")).sort();
 
 const getBookingEnvStatus = () => ({
-  TELEGRAM_BOT_TOKEN_EXISTS: Boolean(process.env.TELEGRAM_BOT_TOKEN?.trim()),
+  TELEGRAM_BOOKING_BOT_TOKEN_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_BOT_TOKEN?.trim()),
   TELEGRAM_BOOKING_CHAT_VV_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_VV?.trim()),
   TELEGRAM_BOOKING_CHAT_RYNOK_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_RYNOK?.trim()),
   TELEGRAM_BOOKING_CHAT_ZP_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim()),
@@ -77,10 +77,10 @@ const isNumericTelegramChatId = (value: string) => /^-?\d+$/.test(value);
 
 export async function POST(request: Request) {
   try {
-    const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim() || "";
+    const botToken = process.env.TELEGRAM_BOOKING_BOT_TOKEN?.trim() || "";
 
     if (!botToken) {
-      console.error("[Booking] Missing TELEGRAM_BOT_TOKEN", {
+      console.error("[Booking] Missing TELEGRAM_BOOKING_BOT_TOKEN", {
         telegramEnvKeys: getTelegramEnvKeys(),
         envStatus: getBookingEnvStatus(),
       });
