@@ -8,30 +8,38 @@ export type BookingLocation = {
   envKey: "TELEGRAM_BOOKING_CHAT_RYNOK" | "TELEGRAM_BOOKING_CHAT_VV" | "TELEGRAM_BOOKING_CHAT_ZP";
 };
 
-export const bookingLocations = [
-  {
+const bookingLocationRynok = {
     id: "rynok",
     label: "Львів — Площа Ринок",
-    displayName: "Seven Restopub Львів – Площа Ринок",
+    displayName: "Seven Restopub Львів — Площа Ринок",
     city: "Львів",
     envKey: "TELEGRAM_BOOKING_CHAT_RYNOK",
-  },
-  {
+  } as const satisfies BookingLocation;
+
+const bookingLocationVv = {
     id: "vv",
     label: "Львів — Володимира Великого",
-    displayName: "Seven Restopub Львів – Володимира Великого",
+    displayName: "Seven Restopub Львів — Володимира Великого",
     city: "Львів",
     envKey: "TELEGRAM_BOOKING_CHAT_VV",
-  },
-  {
+  } as const satisfies BookingLocation;
+
+const bookingLocationZp = {
     id: "zp",
     label: "Запоріжжя",
     displayName: "Seven Restopub Запоріжжя",
     city: "Запоріжжя",
     envKey: "TELEGRAM_BOOKING_CHAT_ZP",
-  },
-] as const satisfies readonly BookingLocation[];
+  } as const satisfies BookingLocation;
 
-export const bookingLocationById = Object.fromEntries(
-  bookingLocations.map((location) => [location.id, location]),
-) as Record<BookingLocationId, BookingLocation>;
+export const bookingLocationById: Record<BookingLocationId, BookingLocation> = {
+  rynok: bookingLocationRynok,
+  vv: bookingLocationVv,
+  zp: bookingLocationZp,
+};
+
+export const bookingLocations = [
+  bookingLocationRynok,
+  bookingLocationVv,
+  bookingLocationZp,
+] as const satisfies readonly BookingLocation[];
