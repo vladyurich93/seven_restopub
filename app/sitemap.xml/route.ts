@@ -1,5 +1,7 @@
 const baseUrl = "https://sevenrestopub.com.ua";
 
+export const dynamic = "force-dynamic";
+
 const routes = [
   "/",
   "/menu",
