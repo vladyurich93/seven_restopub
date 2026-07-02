@@ -4,6 +4,7 @@ import { createContext, type FormEvent, type ReactNode, useContext, useEffect, u
 import { createPortal } from "react-dom";
 import { CalendarDays, CheckCircle2, ChevronDown, ChevronLeft, Clock3, MapPinned, Minus, Plus, Send, UserRound, X } from "lucide-react";
 import { bookingLocations, type BookingLocationId } from "@/data/bookingConfig";
+import { useLanguage } from "@/lib/i18n";
 
 type BookingForm = {
   locationId: BookingLocationId | "";
@@ -79,6 +80,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<Partial<Record<keyof BookingForm, string>>>({});
   const [timePickerOpen, setTimePickerOpen] = useState(false);
+  const { t, tv } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
@@ -281,16 +283,16 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
         <header className="relative z-10 border-b border-white/10 px-4 py-4 md:px-8">
           <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-seven-green">Book a Table</p>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-seven-green">{t.common.bookTable}</p>
               <h2 id="booking-modal-title" className="mt-1 font-display text-3xl font-black leading-none text-white md:text-5xl">
-                Бронювання столу
+                {t.common.bookTable}
               </h2>
             </div>
             <button
               type="button"
               className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-[var(--shadow-button)] transition hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/45"
               onClick={() => setOpen(false)}
-              aria-label="Закрити бронювання"
+              aria-label={t.forms.close}
             >
               <X size={24} />
             </button>
@@ -306,8 +308,8 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-seven-green/12 text-seven-green premium-border shadow-glow">
                       <CheckCircle2 size={34} strokeWidth={1.8} />
                     </div>
-                    <p className="mt-6 text-xs font-black uppercase tracking-[0.24em] text-seven-green">Бронювання отримано</p>
-                    <h3 className="mt-3 font-display text-5xl font-black leading-none text-white">Дякуємо!</h3>
+                    <p className="mt-6 text-xs font-black uppercase tracking-[0.24em] text-seven-green">{t.common.bookTable}</p>
+                    <h3 className="mt-3 font-display text-5xl font-black leading-none text-white">{t.forms.successTitle}</h3>
                     <p className="mt-5 text-lg leading-8 text-seven-muted">
                       {message || "Ваше бронювання вже отримав адміністратор. Ми скоро звʼяжемося з вами."}
                     </p>
@@ -316,14 +318,14 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                       className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-8 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] premium-lift button-press hover:bg-seven-cream hover:text-seven-background"
                       onClick={() => setOpen(false)}
                     >
-                      Закрити
+                      {t.forms.close}
                     </button>
                   </div>
                 </div>
               ) : (
                 <form onSubmit={submitBooking}>
                   <div className="mb-7 grid gap-2 sm:grid-cols-3">
-                    {["Локація", "Деталі", "Контакти"].map((label, index) => (
+                    {[t.forms.location, t.forms.details, t.forms.contacts].map((label, index) => (
                       <div key={label} className={`rounded-full px-4 py-2 text-center text-xs font-black uppercase tracking-[0.16em] premium-border ${step === index ? "bg-seven-green/12 text-seven-green" : "bg-white/5 text-seven-muted"}`}>
                         {label}
                       </div>
@@ -332,7 +334,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
 
                   {step === 0 ? (
                     <div className="grid gap-4">
-                      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-seven-muted">Оберіть заклад</p>
+                      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-seven-muted">{t.common.chooseVenue}</p>
                       <div className="grid gap-4 md:grid-cols-3">
                         {bookingLocations.map((location) => (
                           <button
@@ -351,14 +353,14 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                                 <CheckCircle2 className="text-seven-green" size={22} strokeWidth={2.2} />
                               ) : null}
                             </div>
-                            <span className="block font-display text-3xl font-black leading-none text-white">{location.label}</span>
+                            <span className="block font-display text-3xl font-black leading-none text-white">{tv(location.label)}</span>
                             {form.locationId === location.id ? (
                               <span className="mt-5 inline-flex rounded-full bg-seven-green px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-seven-background">
                                 <CheckCircle2 size={13} />
-                                <span className="ml-1.5">ОБРАНО</span>
+                                <span className="ml-1.5">{t.common.selected}</span>
                               </span>
                             ) : null}
-                            <span className={`mt-auto block pt-6 text-[11px] font-black uppercase tracking-[0.18em] ${form.locationId === location.id ? "text-seven-cream" : "text-seven-muted"}`}>{location.city}</span>
+                            <span className={`mt-auto block pt-6 text-[11px] font-black uppercase tracking-[0.18em] ${form.locationId === location.id ? "text-seven-cream" : "text-seven-muted"}`}>{tv(location.city)}</span>
                           </button>
                         ))}
                       </div>
@@ -511,7 +513,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
               <div className="mt-6 space-y-5 text-sm leading-6 text-seven-muted">
                 <p className="flex gap-3">
                   <MapPinned className="mt-0.5 shrink-0 text-seven-terracotta" size={18} />
-                  <span>{selectedLocation?.displayName || "Оберіть локацію Seven"}</span>
+                  <span>{selectedLocation ? tv(selectedLocation.displayName) : t.common.chooseVenue}</span>
                 </p>
                 <p className="flex gap-3">
                   <CalendarDays className="mt-0.5 shrink-0 text-seven-terracotta" size={18} />

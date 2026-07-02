@@ -9,6 +9,7 @@ import { LocationPickerProvider } from "@/components/LocationPicker";
 import { RouteImageRepaint } from "@/components/RouteImageRepaint";
 import { StructuredData } from "@/components/StructuredData";
 import { siteConfig } from "@/data/siteConfig";
+import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -62,17 +63,19 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html lang="uk" className={`${montserrat.variable} ${oswald.variable}`}>
       <body className="font-sans antialiased">
-        <CareersModalProvider>
-          <BookingModalProvider>
-            <LocationPickerProvider>
-              <Header />
-              <main>{children}</main>
-              <Footer />
-              <StructuredData />
-              <RouteImageRepaint />
-            </LocationPickerProvider>
-          </BookingModalProvider>
-        </CareersModalProvider>
+        <LanguageProvider>
+          <CareersModalProvider>
+            <BookingModalProvider>
+              <LocationPickerProvider>
+                <Header />
+                <main>{children}</main>
+                <Footer />
+                <StructuredData />
+                <RouteImageRepaint />
+              </LocationPickerProvider>
+            </BookingModalProvider>
+          </CareersModalProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

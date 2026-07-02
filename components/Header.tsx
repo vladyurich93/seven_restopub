@@ -5,31 +5,35 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
+import { LanguageSwitcher, useLanguage } from "@/lib/i18n";
 import { BookingButton } from "./BookingModal";
 import { useCareersModal } from "./CareersModal";
 import { LocationPickerButton } from "./LocationPicker";
 
+type NavKey = "home" | "locations" | "menu" | "careers" | "events" | "banquets" | "about" | "contacts";
+
 type NavItem = {
   href?: string;
-  label: string;
+  key: NavKey;
   action?: "careers";
 };
 
 const navItems: NavItem[] = [
-  { href: "/", label: "Головна" },
-  { href: "/locations", label: "Локації" },
-  { href: "/menu", label: "Меню" },
-  { label: "Кар'єра", action: "careers" },
-  { href: "/events", label: "Події" },
-  { href: "/banquets", label: "Банкети" },
-  { href: "/about", label: "Про нас" },
-  { href: "/contacts", label: "Контакти" },
+  { href: "/", key: "home" },
+  { href: "/locations", key: "locations" },
+  { href: "/menu", key: "menu" },
+  { key: "careers", action: "careers" },
+  { href: "/events", key: "events" },
+  { href: "/banquets", key: "banquets" },
+  { href: "/about", key: "about" },
+  { href: "/contacts", key: "contacts" },
 ];
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { openCareersModal } = useCareersModal();
+  const { t } = useLanguage();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -52,30 +56,31 @@ export function Header() {
 
             return item.action === "careers" ? (
               <button
-                key={item.label}
+                key={item.key}
                 type="button"
                 className="nav-link whitespace-nowrap text-[13px] font-semibold text-seven-muted transition duration-500 min-[1281px]:text-sm"
                 onClick={openCareersModal}
               >
-                {item.label}
+                {t.nav[item.key]}
               </button>
             ) : (
               <Link key={item.href} href={item.href ?? "/"} aria-current={active ? "page" : undefined} className={`nav-link whitespace-nowrap text-[13px] font-semibold transition duration-500 min-[1281px]:text-sm ${active ? "is-active text-seven-cream" : "text-seven-muted"}`}>
-                {item.label}
+                {t.nav[item.key]}
               </Link>
             );
           })}
         </nav>
 
-        <div className="hidden md:block">
-          <BookingButton className="px-5 text-xs min-[900px]:px-6 min-[1201px]:text-sm" label="Забронювати" />
+        <div className="hidden items-center gap-3 md:flex">
+          <LanguageSwitcher className="hidden min-[960px]:inline-flex" />
+          <BookingButton className="px-5 text-xs min-[900px]:px-6 min-[1201px]:text-sm" label={t.common.book} />
         </div>
 
         <button
           type="button"
           className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 min-[1201px]:hidden"
           onClick={() => setOpen((value) => !value)}
-          aria-label="Відкрити меню"
+          aria-label={t.nav.openMenu}
           aria-expanded={open}
         >
           {open ? <X size={22} /> : <Menu size={22} />}
@@ -90,7 +95,7 @@ export function Header() {
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
             onClick={() => setOpen(false)}
-            aria-label="Закрити меню"
+            aria-label={t.nav.closeMenu}
           >
             <X size={20} />
           </button>
@@ -99,7 +104,7 @@ export function Header() {
           {navItems.map((item) => (
             item.action === "careers" ? (
               <button
-                key={item.label}
+                key={item.key}
                 type="button"
                 className="rounded-[8px] px-4 py-3 text-left font-display text-2xl font-black uppercase text-white transition hover:bg-seven-terracotta hover:text-white"
                 onClick={() => {
@@ -107,7 +112,7 @@ export function Header() {
                   openCareersModal();
                 }}
               >
-                {item.label}
+                {t.nav[item.key]}
               </button>
             ) : (
               <Link
@@ -116,14 +121,15 @@ export function Header() {
                 className="rounded-[8px] px-4 py-3 font-display text-2xl font-black uppercase text-white transition hover:bg-seven-terracotta hover:text-white"
                 onClick={() => setOpen(false)}
               >
-                {item.label}
+                {t.nav[item.key]}
               </Link>
             )
           ))}
         </nav>
         <div className="mt-auto border-t border-white/10 p-5">
           <div className="grid gap-3">
-            <BookingButton className="w-full" label="Забронювати" onOpen={() => setOpen(false)} />
+            <LanguageSwitcher className="justify-self-start" />
+            <BookingButton className="w-full" label={t.common.book} onOpen={() => setOpen(false)} />
             <LocationPickerButton className="w-full" onOpen={() => setOpen(false)} />
           </div>
         </div>

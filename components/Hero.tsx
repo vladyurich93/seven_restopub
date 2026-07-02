@@ -1,8 +1,11 @@
 import { siteConfig } from "@/data/siteConfig";
+import { useLanguage } from "@/lib/i18n";
 import { BookingButton } from "./BookingModal";
 import { LocationPickerButton } from "./LocationPicker";
 
 export function Hero() {
+  const { t } = useLanguage();
+
   return (
     <section className="hero-section relative min-h-[100svh] overflow-hidden bg-seven-background md:min-h-[760px] min-[1201px]:min-h-[100svh]">
       <img
@@ -19,15 +22,15 @@ export function Hero() {
       <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-seven-background via-seven-background/70 to-transparent md:h-44" />
       <div className="container-shell relative z-10 grid min-h-[100svh] items-center gap-8 pb-14 pt-24 md:min-h-[760px] md:items-end md:pb-16 md:pt-28 min-[1201px]:min-h-[100svh] min-[1201px]:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.72fr)] min-[1201px]:items-center min-[1201px]:gap-10 min-[1201px]:pb-14 min-[1201px]:pt-28 xl:grid-cols-[minmax(0,0.9fr)_minmax(420px,0.76fr)] xl:gap-14 [@media_(min-width:1024px)_and_(max-height:780px)]:gap-7 [@media_(min-width:1024px)_and_(max-height:780px)]:pb-8 [@media_(min-width:1024px)_and_(max-height:780px)]:pt-24">
         <div className="hero-copy min-w-0">
-          <p className="hero-eyebrow mb-5 inline-flex rounded-full bg-black/28 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-seven-green premium-border md:text-sm md:tracking-[0.28em] [@media_(min-width:1024px)_and_(max-height:780px)]:mb-3 [@media_(min-width:1024px)_and_(max-height:780px)]:py-1.5 [@media_(min-width:1024px)_and_(max-height:780px)]:text-xs">Modern Ukrainian Restopub</p>
+          <p className="hero-eyebrow mb-5 inline-flex rounded-full bg-black/28 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-seven-green premium-border md:text-sm md:tracking-[0.28em] [@media_(min-width:1024px)_and_(max-height:780px)]:mb-3 [@media_(min-width:1024px)_and_(max-height:780px)]:py-1.5 [@media_(min-width:1024px)_and_(max-height:780px)]:text-xs">{t.hero.eyebrow}</p>
           <h1 className="hero-title hero-title-responsive luxury-hero-title font-display font-black tracking-[0.006em] text-white">
-            Місце для зустрічей, смаку та живих емоцій
+            {t.hero.title}
           </h1>
           <p className="hero-subtitle mt-6 max-w-2xl text-lg leading-8 text-seven-cream/78 md:text-xl [@media_(min-width:1024px)_and_(max-height:780px)]:mt-4 [@media_(min-width:1024px)_and_(max-height:780px)]:max-w-xl [@media_(min-width:1024px)_and_(max-height:780px)]:text-base [@media_(min-width:1024px)_and_(max-height:780px)]:leading-7">
-            Друзі, футбол, український крафт, comfort food, коктейлі, тераса, музика і теплі вечори без зайвого приводу.
+            {t.hero.description}
           </p>
           <div className="hero-tags mt-7 flex flex-wrap gap-2 [@media_(min-width:1024px)_and_(max-height:780px)]:mt-5">
-            {["Крафт", "Футбол", "Бургери", "Коктейлі", "Кальян", "Тераса"].map((item, index) => (
+            {t.hero.tags.map((item, index) => (
               <span
                 key={item}
                 className="hero-chip rounded-full bg-black/28 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-white premium-border [@media_(min-width:1024px)_and_(max-height:780px)]:px-3 [@media_(min-width:1024px)_and_(max-height:780px)]:py-1.5"
@@ -38,14 +41,14 @@ export function Hero() {
             ))}
           </div>
           <div className="hero-actions mt-9 flex flex-col gap-4 sm:flex-row [@media_(min-width:1024px)_and_(max-height:780px)]:mt-6">
-            <BookingButton className="min-h-14 px-8 text-base [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-12 [@media_(min-width:1024px)_and_(max-height:780px)]:px-7 [@media_(min-width:1024px)_and_(max-height:780px)]:text-sm" />
-            <LocationPickerButton className="min-h-14 bg-black/30 px-8 text-base premium-border hover:bg-seven-green hover:text-seven-background [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-12 [@media_(min-width:1024px)_and_(max-height:780px)]:px-7 [@media_(min-width:1024px)_and_(max-height:780px)]:text-sm" />
+            <BookingButton className="min-h-14 px-8 text-base [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-12 [@media_(min-width:1024px)_and_(max-height:780px)]:px-7 [@media_(min-width:1024px)_and_(max-height:780px)]:text-sm" label={t.common.bookTable} />
+            <LocationPickerButton className="min-h-14 bg-black/30 px-8 text-base premium-border hover:bg-seven-green hover:text-seven-background [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-12 [@media_(min-width:1024px)_and_(max-height:780px)]:px-7 [@media_(min-width:1024px)_and_(max-height:780px)]:text-sm" label={t.common.chooseVenue} />
           </div>
         </div>
         <div className="hero-card group relative hidden min-h-[460px] overflow-hidden rounded-[8px] premium-border shadow-[0_28px_80px_rgba(0,0,0,0.38)] min-[1201px]:block xl:min-h-[580px] [@media_(min-width:1201px)_and_(max-height:780px)]:min-h-[430px] [@media_(min-width:1201px)_and_(max-height:680px)]:min-h-[360px]">
           <img
             src="/images/hero/hero-02.jpg"
-            alt="Гості на терасі Seven Restopub"
+            alt={t.hero.terraceAlt}
             sizes="38vw"
             loading="eager"
             className="absolute inset-0 block h-full w-full object-cover object-[52%_38%]"

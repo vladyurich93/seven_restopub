@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { MapPinned, Navigation, Phone, X } from "lucide-react";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
+import { useLanguage } from "@/lib/i18n";
 
 const LOCATION_PICKER_ROOT = "seven-location-picker-root";
 
@@ -117,6 +118,8 @@ export function LocationPickerProvider({ children }: LocationPickerProviderProps
 }
 
 function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { t, tv } = useLanguage();
+
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.log("[LocationPicker] mount");
@@ -147,15 +150,15 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
         onClick={(event) => event.stopPropagation()}
       >
         <div className="sticky top-0 z-20 border-b border-white/10 bg-seven-background px-5 pb-5 pt-7 md:px-7 md:pb-6 md:pt-7">
-          <p className="mb-3 text-xs font-black uppercase tracking-[0.24em] text-seven-green">Locations</p>
+          <p className="mb-3 text-xs font-black uppercase tracking-[0.24em] text-seven-green">{t.home.locationsEyebrow}</p>
           <h2 id="location-picker-title" className="max-w-[calc(100%-68px)] font-display text-4xl font-black leading-none text-white md:max-w-none md:text-5xl">
-            Оберіть Seven
+            {t.common.chooseVenue}
           </h2>
           <button
             type="button"
             className="absolute right-4 top-6 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition duration-300 hover:bg-seven-cream hover:text-seven-background md:right-7 md:top-7 md:h-12 md:w-12"
             onClick={onClose}
-            aria-label="Закрити"
+            aria-label={t.forms.close}
           >
             <X size={24} />
           </button>
@@ -165,9 +168,9 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
             <article key={location.id} className="flex min-h-full flex-col rounded-[8px] bg-seven-card p-5 premium-border transition-colors duration-300 hover:border-seven-terracotta/50">
               <p className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-seven-green">
                 <MapPinned size={17} />
-                Seven {location.name.replace("Seven Restopub ", "")}
+                {tv(location.name)}
               </p>
-              <p className="min-h-12 text-sm leading-6 text-seven-muted">{location.address}</p>
+              <p className="min-h-12 text-sm leading-6 text-seven-muted">{tv(location.address)}</p>
               <a className="mt-5 flex items-center gap-3 font-display text-3xl font-black text-white transition hover:text-seven-cream" href={phoneHref(location.phone)}>
                 <Phone size={24} className="text-seven-oak" />
                 {location.phone}
@@ -178,7 +181,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
                   className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-terracotta px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white transition duration-300 hover:bg-seven-cream hover:text-seven-background"
                 >
                   <Phone size={17} />
-                  Зателефонувати
+                  {t.locationCard.call}
                 </a>
                 <a
                   href={location.menuLink}
@@ -186,7 +189,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
                   rel="noreferrer"
                   className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-cream px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-seven-background transition duration-300 hover:bg-white"
                 >
-                  Меню
+                  {t.locationCard.menu}
                 </a>
                 <a
                   href={location.googleMaps}
@@ -195,7 +198,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
                   className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white/5 px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-border transition duration-300 hover:bg-seven-green hover:text-seven-background"
                 >
                   <Navigation size={17} />
-                  Побудувати маршрут
+                  {t.locationCard.route}
                 </a>
               </div>
             </article>
@@ -207,8 +210,9 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
   );
 }
 
-export function LocationPickerButton({ className = "", label = "Обрати заклад", onOpen }: LocationPickerButtonProps) {
+export function LocationPickerButton({ className = "", label, onOpen }: LocationPickerButtonProps) {
   const picker = useContext(LocationPickerContext);
+  const { t } = useLanguage();
 
   return (
     <button
@@ -219,7 +223,7 @@ export function LocationPickerButton({ className = "", label = "Обрати з�
         picker?.openPicker();
       }}
     >
-      {label}
+      {label ?? t.common.chooseVenue}
     </button>
   );
 }

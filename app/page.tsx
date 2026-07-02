@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
@@ -13,10 +15,12 @@ import { MenuCategoryCard } from "@/components/MenuCategoryCard";
 import { SectionTitle } from "@/components/SectionTitle";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
+import { useLanguage } from "@/lib/i18n";
 
 export default function HomePage() {
   const upcomingLocation = siteConfig.upcomingLocation;
   const snookball = siteConfig.snookball;
+  const { t, tv } = useLanguage();
 
   return (
     <>
@@ -25,9 +29,9 @@ export default function HomePage() {
       <section className="bg-black py-24 md:py-28 min-[1281px]:py-32">
         <AnimatedSection className="container-shell">
           <div className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <SectionTitle eyebrow="Locations" title="Три Seven — три настрої" description="Тераса, центр Львова або перший Seven у Запоріжжі — оберіть простір під свій вечір." />
+            <SectionTitle eyebrow={t.home.locationsEyebrow} title={t.home.locationsTitle} description={t.home.locationsDescription} />
             <Link href="/locations" className="inline-flex items-center gap-2 font-semibold text-seven-accent transition hover:text-white">
-              Всі локації <ArrowRight size={18} />
+              {t.common.allLocations} <ArrowRight size={18} />
             </Link>
           </div>
           <div className="grid items-stretch gap-7 md:grid-cols-1 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
@@ -47,22 +51,22 @@ export default function HomePage() {
             <div className="relative z-10 grid gap-10 p-6 md:p-10 min-[1201px]:grid-cols-[1.05fr_0.95fr] min-[1201px]:p-16">
               <div>
                 <p className="mb-6 inline-flex rounded-full bg-seven-green/15 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-seven-green premium-border">
-                  {upcomingLocation.badge}
+                  {tv(upcomingLocation.badge)}
                 </p>
                 <h2 className="max-w-3xl font-display text-[clamp(3rem,12vw,5.2rem)] font-black leading-[0.9] text-white md:leading-[0.86]">
-                  Готуємо найбільший Seven у Львові
+                  {tv(upcomingLocation.title)}
                 </h2>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-seven-muted md:text-xl">
-                  {upcomingLocation.text}
+                  {tv(upcomingLocation.text)}
                 </p>
                 <div className="mt-8 inline-flex flex-col gap-1 rounded-[8px] bg-black/45 p-5 premium-border sm:min-w-80">
-                  <span className="text-sm font-black uppercase tracking-[0.22em] text-seven-terracotta">{upcomingLocation.address}</span>
-                  <span className="font-display text-5xl font-black text-seven-green md:text-6xl">{upcomingLocation.area}</span>
+                  <span className="text-sm font-black uppercase tracking-[0.22em] text-seven-terracotta">{tv(upcomingLocation.address)}</span>
+                  <span className="font-display text-5xl font-black text-seven-green md:text-6xl">{tv(upcomingLocation.area)}</span>
                 </div>
                 <div className="mt-8 flex flex-wrap gap-3">
                   {upcomingLocation.counters.map((counter) => (
                     <span key={counter} className="rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-white premium-border">
-                      {counter}
+                      {tv(counter)}
                     </span>
                   ))}
                 </div>
@@ -73,13 +77,13 @@ export default function HomePage() {
                   {upcomingLocation.features.map((feature) => (
                     <article key={feature.title} className="rounded-[8px] bg-seven-card/85 p-5 premium-border premium-lift hover:shadow-glow">
                       <span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-seven-terracotta/20 text-2xl">{feature.icon}</span>
-                      <h3 className="font-display text-3xl font-black leading-none text-white">{feature.title}</h3>
+                      <h3 className="font-display text-3xl font-black leading-none text-white">{tv(feature.title)}</h3>
                     </article>
                   ))}
                 </div>
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-                  <Button href={upcomingLocation.ctaLink} className="min-h-14 px-8 text-base">{upcomingLocation.ctaLabel}</Button>
-                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-seven-green">{upcomingLocation.note}</p>
+                  <Button href={upcomingLocation.ctaLink} className="min-h-14 px-8 text-base">{tv(upcomingLocation.ctaLabel)}</Button>
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-seven-green">{tv(upcomingLocation.note)}</p>
                 </div>
               </div>
             </div>
@@ -95,11 +99,11 @@ export default function HomePage() {
           <div>
             <SectionTitle
               eyebrow="About Seven"
-              title="Вечір, у який хочеться повернутися"
-              description="Seven — це місце для вечорів, які не хочеться завершувати. Тут дивляться футбол, зустрічаються з друзями, пробують український крафт, вечеряють сім’ями, слухають живу музику і залишаються довше, ніж планували."
+              title={t.home.aboutTitle}
+              description={t.home.aboutDescription}
             />
             <div className="mt-8 grid gap-3 sm:grid-cols-2 min-[1201px]:grid-cols-4">
-              {["4 локації", "Крафтове пиво", "Події щотижня", "Атмосфера restopub"].map((item) => (
+              {t.home.aboutFacts.map((item) => (
                 <div key={item} className="rounded-full bg-seven-green/12 px-4 py-3 text-center text-xs font-black uppercase tracking-[0.14em] text-seven-green premium-border">
                   {item}
                 </div>
@@ -112,9 +116,9 @@ export default function HomePage() {
       <section className="bg-seven-background py-24 md:py-28">
         <AnimatedSection className="container-shell">
           <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <SectionTitle eyebrow="Menu" title="Що знайдеться у нас" description="Крафт, закуски, бургери, піца, коктейлі, кальян і ланчі — усе для вечора без зайвих планів." />
+            <SectionTitle eyebrow={t.home.menuEyebrow} title={t.home.menuTitle} description={t.home.menuDescription} />
             <Link href="/menu" className="inline-flex items-center gap-2 font-semibold text-seven-accent transition hover:text-white">
-              Меню <ArrowRight size={18} />
+              {t.common.menu} <ArrowRight size={18} />
             </Link>
           </div>
           <div className="grid gap-6 md:grid-cols-2 min-[1201px]:grid-cols-4">
@@ -127,7 +131,7 @@ export default function HomePage() {
 
       <section className="bg-black py-24 md:py-28">
         <AnimatedSection className="container-shell">
-          <SectionTitle eyebrow="Events" title="Живі вечори Seven" description="Футбол, музика, DJ, стендап і спеціальні події — коротко, гучно, по-Seven." />
+          <SectionTitle eyebrow={t.home.eventsEyebrow} title={t.home.eventsTitle} description={t.home.eventsDescription} />
           <div className="mt-12 grid items-stretch gap-6 md:grid-cols-2 min-[1281px]:grid-cols-5">
             {siteConfig.events.map((event) => (
               <EventCard key={event.id} event={event} />
@@ -150,27 +154,27 @@ export default function HomePage() {
             <div className="flex flex-col justify-center p-6 md:p-10 min-[1201px]:p-12">
               <div className="flex flex-wrap gap-3">
                 <span className="rounded-full bg-seven-green/12 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-seven-green premium-border">
-                  {snookball.badge}
+                  {tv(snookball.badge)}
                 </span>
                 <span className="rounded-full bg-seven-terracotta/20 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-white premium-border">
-                  {snookball.bookingBadge}
+                  {tv(snookball.bookingBadge)}
                 </span>
               </div>
               <h2 className="mt-7 font-display text-5xl font-black leading-[0.92] text-white md:text-7xl">
-                {snookball.title}
+                {tv(snookball.title)}
               </h2>
               <p className="mt-5 text-2xl font-semibold leading-8 text-seven-green">
-                {snookball.subtitle}
+                {tv(snookball.subtitle)}
               </p>
               <p className="mt-6 text-lg leading-8 text-seven-muted">
-                {snookball.text}
+                {tv(snookball.text)}
               </p>
               <p className="mt-5 text-sm leading-6 text-seven-muted">
-                {snookball.seoText}
+                {tv(snookball.seoText)}
               </p>
               <div className="mt-8">
                 <Button href={phoneHref(snookball.phone)} className="min-h-14 px-8 text-base">
-                  {snookball.ctaLabel}
+                  {tv(snookball.ctaLabel)}
                 </Button>
               </div>
             </div>
@@ -180,7 +184,7 @@ export default function HomePage() {
 
       <section className="bg-seven-background py-24 md:py-28">
         <AnimatedSection className="container-shell">
-          <SectionTitle eyebrow="Gallery" title="Атмосфера Seven" description="Футбол на екранах, крафтове пиво, друзі за великим столом, тераса, музика і вечори, які хочеться повторити." />
+          <SectionTitle eyebrow={t.home.galleryEyebrow} title={t.home.galleryTitle} description={t.home.galleryDescription} />
           <div className="mt-10">
             <AtmosphereCarousel images={siteConfig.galleryImages} />
           </div>
