@@ -34,9 +34,9 @@ export type MenuCategory = {
 
 export const siteConfig = {
   brandName: "Seven Restopub",
-  siteUrl: "https://seven-restopub.vercel.app",
+  siteUrl: "https://sevenrestopub.com.ua",
   slogan: "Місце для зустрічей, смаку та живих емоцій",
-  description: "Крафтове пиво, комфорт-фуд, спортивні трансляції, кальяни, жива музика та атмосфера справжнього відпочинку.",
+  description: "Seven Restopub - мережа сучасних рестопабів у Львові та Запоріжжі. Крафтове пиво, піца, бургери, коктейлі, кальян, спортивні трансляції, жива музика та онлайн-бронювання столів",
   logo: "/images/logo/seven-logo.svg",
   favicon: "/images/logo/seven-logo.svg",
   ogImage: "/images/hero/hero-02.jpg",
