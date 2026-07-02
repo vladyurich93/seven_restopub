@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/:path*",
+        source: "/((?!sitemap.xml|robots.txt).*)",
         headers: [
           {
             key: "Cache-Control",
