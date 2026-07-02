@@ -173,6 +173,52 @@ a {
   text-shadow:
     0 2px 0 rgba(0, 0, 0, 0.14),
     0 24px 80px rgba(0, 0, 0, 0.42);
+  text-wrap: balance;
+}
+
+.hero-eyebrow,
+.hero-title,
+.hero-subtitle,
+.hero-tags,
+.hero-actions,
+.hero-card {
+  animation: heroFadeUp 960ms var(--ease-premium) both;
+}
+
+.hero-eyebrow {
+  animation-delay: 80ms;
+}
+
+.hero-title {
+  animation-delay: 150ms;
+}
+
+.hero-subtitle {
+  animation-delay: 240ms;
+}
+
+.hero-tags {
+  animation-delay: 320ms;
+}
+
+.hero-actions {
+  animation-delay: 400ms;
+}
+
+.hero-card {
+  animation-delay: 460ms;
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .wood-grain {
@@ -303,6 +349,10 @@ a {
     width: min(1120px, calc(100% - 48px));
   }
 
+  .luxury-hero-title {
+    line-height: 1;
+  }
+
   .site-header,
   .site-header.is-scrolled {
     background: rgba(17, 17, 17, 0.94);
@@ -340,5 +390,14 @@ a {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .hero-eyebrow,
+  .hero-title,
+  .hero-subtitle,
+  .hero-tags,
+  .hero-actions,
+  .hero-card {
+    animation: none !important;
   }
 }
