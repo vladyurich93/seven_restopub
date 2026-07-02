@@ -1,15 +1,15 @@
-const baseUrl = "https://sevenrestopub.com.ua";
+const siteUrl = "https://sevenrestopub.com.ua";
 
 export const dynamic = "force-dynamic";
 
-const routes = [
-  "/",
-  "/menu",
-  "/locations",
-  "/events",
-  "/banquets",
-  "/about",
-  "/contacts",
+const pages = [
+  { path: "/", changeFrequency: "weekly", priority: "1.0" },
+  { path: "/menu", changeFrequency: "monthly", priority: "0.8" },
+  { path: "/locations", changeFrequency: "monthly", priority: "0.8" },
+  { path: "/events", changeFrequency: "monthly", priority: "0.8" },
+  { path: "/banquets", changeFrequency: "monthly", priority: "0.8" },
+  { path: "/about", changeFrequency: "monthly", priority: "0.8" },
+  { path: "/contacts", changeFrequency: "monthly", priority: "0.8" },
 ] as const;
 
 const escapeXml = (value: string) =>
@@ -22,25 +22,31 @@ const escapeXml = (value: string) =>
 
 export function GET() {
   const lastModified = new Date().toISOString();
-  const urls = routes
-    .map((route) => {
-      const isHome = route === "/";
-      const url = isHome ? `${baseUrl}/` : `${baseUrl}${route}`;
+  const urlEntries = pages
+    .map(({ path, changeFrequency, priority }) => {
+      const url = path === "/" ? `${siteUrl}/` : `${siteUrl}${path}`;
 
       return [
-        "<url>",
-        `<loc>${escapeXml(url)}</loc>`,
-        `<lastmod>${lastModified}</lastmod>`,
-        `<changefreq>${isHome ? "weekly" : "monthly"}</changefreq>`,
-        `<priority>${isHome ? "1" : "0.8"}</priority>`,
-        "</url>",
-      ].join("");
+        "  <url>",
+        `    <loc>${escapeXml(url)}</loc>`,
+        `    <lastmod>${lastModified}</lastmod>`,
+        `    <changefreq>${changeFrequency}</changefreq>`,
+        `    <priority>${priority}</priority>`,
+        "  </url>",
+      ].join("\n");
     })
-    .join("");
+    .join("\n");
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`;
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    urlEntries,
+    "</urlset>",
+    "",
+  ].join("\n");
 
   return new Response(xml, {
+    status: 200,
     headers: {
       "Content-Type": "application/xml; charset=utf-8",
       "Cache-Control": "public, max-age=0, must-revalidate",
