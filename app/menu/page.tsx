@@ -7,6 +7,9 @@ import { siteConfig } from "@/data/siteConfig";
 export const metadata: Metadata = {
   title: "Меню",
   description: "Огляд категорій меню Seven Restopub: крафтове пиво, закуски, бургери, піца, основні страви, коктейлі, кальян і бізнес-ланчі.",
+  alternates: {
+    canonical: "/menu",
+  },
   openGraph: {
     title: "Меню Seven Restopub",
     description: "Візуальні категорії меню Seven Restopub.",

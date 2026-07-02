@@ -6,6 +6,9 @@ import { siteConfig } from "@/data/siteConfig";
 export const metadata: Metadata = {
   title: "Події",
   description: "Спортивні трансляції, жива музика, стендап, імпровізація та DJ-вечори в Seven Restopub.",
+  alternates: {
+    canonical: "/events",
+  },
   openGraph: {
     title: "Події Seven Restopub",
     description: "Актуальні події Seven Restopub.",

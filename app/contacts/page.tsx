@@ -6,6 +6,9 @@ import { siteConfig } from "@/data/siteConfig";
 export const metadata: Metadata = {
   title: "Контакти",
   description: "Контакти Seven Restopub: адреси, телефони, Instagram і маршрути.",
+  alternates: {
+    canonical: "/contacts",
+  },
   openGraph: {
     title: "Контакти Seven Restopub",
     description: "Адреси, телефони та маршрути до Seven Restopub.",

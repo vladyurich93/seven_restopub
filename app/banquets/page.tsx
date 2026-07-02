@@ -7,6 +7,9 @@ import { siteConfig } from "@/data/siteConfig";
 export const metadata: Metadata = {
   title: "Банкети",
   description: "Банкети від 10 гостей у Seven Restopub: депозит, сервісний збір і cork fee.",
+  alternates: {
+    canonical: "/banquets",
+  },
   openGraph: {
     title: "Банкети Seven Restopub",
     description: "Обговоріть банкет у Seven Restopub.",

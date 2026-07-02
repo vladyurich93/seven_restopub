@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LocationPickerProvider } from "@/components/LocationPicker";
 import { RouteImageRepaint } from "@/components/RouteImageRepaint";
+import { StructuredData } from "@/components/StructuredData";
 import { siteConfig } from "@/data/siteConfig";
 import "./globals.css";
 
@@ -22,9 +23,6 @@ const oswald = Oswald({
   display: "swap",
 });
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
@@ -32,6 +30,9 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.brandName}`,
   },
   description: siteConfig.description,
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: siteConfig.favicon,
     apple: siteConfig.favicon,
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
               <Header />
               <main>{children}</main>
               <Footer />
+              <StructuredData />
               <RouteImageRepaint />
             </LocationPickerProvider>
           </BookingModalProvider>

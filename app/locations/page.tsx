@@ -6,6 +6,9 @@ import { siteConfig } from "@/data/siteConfig";
 export const metadata: Metadata = {
   title: "Локації",
   description: "Локації Seven Restopub у Львові та Запоріжжі: телефони, адреси, Instagram, маршрути та графік роботи.",
+  alternates: {
+    canonical: "/locations",
+  },
   openGraph: {
     title: "Локації Seven Restopub",
     description: "Оберіть найближчий Seven Restopub.",
