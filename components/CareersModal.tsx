@@ -4,6 +4,7 @@ import { createContext, type FormEvent, type ReactNode, useContext, useEffect, u
 import { createPortal } from "react-dom";
 import { CheckCircle2, FileText, Instagram, Send, X } from "lucide-react";
 import { siteConfig } from "@/data/siteConfig";
+import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 
 type FormState = {
@@ -404,6 +405,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-green hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
+                onClick={() => trackEvent("instagram_click", { link_url: instagramHref, location: submittedLocation || "fallback" })}
               >
                 <Instagram size={17} />
                 {instagramLabel}
@@ -413,6 +415,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-white/5 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
+                onClick={() => trackEvent("telegram_click", { link_url: "https://t.me/Hrsevengroup", source: "hr_success" })}
               >
                 {t.forms.writeHr}
               </a>
@@ -483,6 +486,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
                 target="_blank"
                 rel="noreferrer"
                 className="rounded-full px-1 text-sm font-bold text-seven-green underline underline-offset-4 md:col-span-2"
+                onClick={() => trackEvent("telegram_click", { link_url: "https://t.me/Hrsevengroup", source: "hr_error" })}
               >
                 {t.forms.writeHrTelegram}
               </a>

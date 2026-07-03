@@ -3,6 +3,7 @@
 import { MapPinned, Phone } from "lucide-react";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
+import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 import { AnimatedSection } from "./AnimatedSection";
 import { Button } from "./Button";
@@ -26,7 +27,11 @@ export function ContactSection() {
               <h3 className="font-display text-2xl font-black">{tv(location.name)}</h3>
               <div className="mt-5 space-y-3 text-seven-muted">
                 <p className="flex gap-3"><MapPinned className="mt-1 shrink-0 text-seven-oak" size={18} />{tv(location.address)}</p>
-                <a className="flex gap-3 transition hover:text-white" href={phoneHref(location.phone)}>
+                <a
+                  className="flex gap-3 transition hover:text-white"
+                  href={phoneHref(location.phone)}
+                  onClick={() => trackEvent("phone_click", { location_id: location.id, phone: location.phone })}
+                >
                   <Phone className="mt-1 shrink-0 text-seven-oak" size={18} />{location.phone}
                 </a>
                 <InstagramPicker className="flex gap-3 text-seven-muted hover:text-white [&>svg]:mt-1" label="Instagram" />

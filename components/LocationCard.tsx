@@ -3,6 +3,7 @@
 import { MapPinned, Phone } from "lucide-react";
 import { phoneHref } from "@/data/phone";
 import type { Location } from "@/data/siteConfig";
+import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 import { Button } from "./Button";
 import { ImageFrame } from "./ImageFrame";
@@ -25,7 +26,11 @@ export function LocationCard({ location }: LocationCardProps) {
           <MapPinned className="mt-1 shrink-0 text-seven-oak" size={20} />
           {tv(location.address)}
         </p>
-        <a className="mt-5 flex items-center gap-3 font-display text-3xl font-black text-white transition hover:text-seven-cream min-[900px]:text-[1.85rem] min-[1201px]:text-3xl" href={phoneHref(location.phone)}>
+        <a
+          className="mt-5 flex items-center gap-3 font-display text-3xl font-black text-white transition hover:text-seven-cream min-[900px]:text-[1.85rem] min-[1201px]:text-3xl"
+          href={phoneHref(location.phone)}
+          onClick={() => trackEvent("phone_click", { location_id: location.id, phone: location.phone })}
+        >
           <Phone className="shrink-0 text-seven-oak" size={24} />
           {location.phone}
         </a>

@@ -4,6 +4,7 @@ import { createContext, type FormEvent, type ReactNode, useContext, useEffect, u
 import { createPortal } from "react-dom";
 import { CalendarDays, CheckCircle2, ChevronDown, ChevronLeft, Clock3, MapPinned, Minus, Plus, Send, UserRound, X } from "lucide-react";
 import { bookingLocations, type BookingLocationId } from "@/data/bookingConfig";
+import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 
 type BookingForm = {
@@ -549,6 +550,7 @@ export function BookingButton({ className = "", label, locationId, onOpen }: Boo
       type="button"
       className={`inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] premium-lift button-press hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/45 ${className}`}
       onClick={() => {
+        trackEvent("book_table", { location_id: locationId ?? "not_selected" });
         onOpen?.();
         openBookingModal(locationId);
       }}

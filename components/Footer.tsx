@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
+import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 import { AnimatedSection } from "./AnimatedSection";
 import { InstagramPicker } from "./InstagramPicker";
@@ -33,7 +34,12 @@ export function Footer() {
             <p className="mb-4 text-sm font-semibold uppercase tracking-[0.24em] text-seven-accent">{t.footer.contact}</p>
             <div className="space-y-3 text-sm leading-6 text-seven-muted">
               {siteConfig.phones.map((phone) => (
-                <a key={phone} href={phoneHref(phone)} className="block transition duration-300 hover:text-white">
+                <a
+                  key={phone}
+                  href={phoneHref(phone)}
+                  className="block transition duration-300 hover:text-white"
+                  onClick={() => trackEvent("phone_click", { phone })}
+                >
                   {phone}
                 </a>
               ))}
@@ -41,7 +47,12 @@ export function Footer() {
               <div className="pt-2">
                 <InstagramPicker className="flex items-center gap-2 text-seven-muted hover:text-white [&>svg]:text-seven-oak" />
               </div>
-              <Link href={siteConfig.tiktok} className="flex items-center gap-2 text-seven-muted transition duration-300 hover:text-white" target="_blank" rel="noreferrer">
+              <Link
+                href={siteConfig.tiktok}
+                className="flex items-center gap-2 text-seven-muted transition duration-300 hover:text-white"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <TikTokIcon className="shrink-0 text-seven-oak" />
                 {t.common.tiktok}
               </Link>

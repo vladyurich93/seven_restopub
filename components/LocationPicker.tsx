@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { MapPinned, Navigation, Phone, X } from "lucide-react";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
+import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 
 const LOCATION_PICKER_ROOT = "seven-location-picker-root";
@@ -171,7 +172,11 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
                 {tv(location.name)}
               </p>
               <p className="min-h-12 text-sm leading-6 text-seven-muted">{tv(location.address)}</p>
-              <a className="mt-5 flex items-center gap-3 font-display text-3xl font-black text-white transition hover:text-seven-cream" href={phoneHref(location.phone)}>
+              <a
+                className="mt-5 flex items-center gap-3 font-display text-3xl font-black text-white transition hover:text-seven-cream"
+                href={phoneHref(location.phone)}
+                onClick={() => trackEvent("phone_click", { location_id: location.id, phone: location.phone })}
+              >
                 <Phone size={24} className="text-seven-oak" />
                 {location.phone}
               </a>
@@ -179,6 +184,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
                 <a
                   href={phoneHref(location.phone)}
                   className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-terracotta px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white transition duration-300 hover:bg-seven-cream hover:text-seven-background"
+                  onClick={() => trackEvent("phone_click", { location_id: location.id, phone: location.phone })}
                 >
                   <Phone size={17} />
                   {t.locationCard.call}
@@ -188,6 +194,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-cream px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-seven-background transition duration-300 hover:bg-white"
+                  onClick={() => trackEvent("menu_open", { location_id: location.id, link_url: location.menuLink })}
                 >
                   {t.locationCard.menu}
                 </a>
@@ -196,6 +203,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white/5 px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-border transition duration-300 hover:bg-seven-green hover:text-seven-background"
+                  onClick={() => trackEvent("route_click", { location_id: location.id, link_url: location.googleMaps })}
                 >
                   <Navigation size={17} />
                   {t.locationCard.route}

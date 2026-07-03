@@ -3,6 +3,7 @@
 import { Instagram, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
+import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 
 type InstagramPickerProps = {
@@ -92,6 +93,7 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
                   target="_blank"
                   rel="noreferrer"
                   className="group rounded-[8px] bg-seven-card p-5 premium-border premium-lift hover:border-seven-terracotta/70 hover:shadow-glow"
+                  onClick={() => trackEvent("instagram_click", { location_id: location.id, link_url: location.instagram })}
                 >
                   <span className="mb-3 inline-flex rounded-full bg-seven-green/15 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-seven-green">
                     Instagram

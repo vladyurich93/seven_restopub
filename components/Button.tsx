@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import type { AnchorHTMLAttributes, ReactNode } from "react";
+import { getAnalyticsEventForHref, trackEvent } from "@/lib/analytics";
 
 type ButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
@@ -16,17 +19,25 @@ const variants = {
 export function Button({ href, children, variant = "primary", className = "", ...props }: ButtonProps) {
   const external = href.startsWith("http") || href.startsWith("tel:");
   const classes = `inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 text-sm font-black uppercase tracking-[0.16em] premium-lift button-press focus:outline-none focus:ring-2 focus:ring-seven-green/45 ${variants[variant]} ${className}`;
+  const analyticsEvent = getAnalyticsEventForHref(href);
+  const handleClick: AnchorHTMLAttributes<HTMLAnchorElement>["onClick"] = (event) => {
+    if (analyticsEvent) {
+      trackEvent(analyticsEvent, { link_url: href });
+    }
+
+    props.onClick?.(event);
+  };
 
   if (external) {
     return (
-      <a href={href} className={classes} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined} {...props}>
+      <a href={href} className={classes} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined} {...props} onClick={handleClick}>
         {children}
       </a>
     );
   }
 
   return (
-    <Link href={href} className={classes} {...props}>
+    <Link href={href} className={classes} {...props} onClick={handleClick}>
       {children}
     </Link>
   );
