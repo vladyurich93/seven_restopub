@@ -2,6 +2,7 @@
 
 import { createContext, type FormEvent, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import { CalendarDays, CheckCircle2, ChevronDown, ChevronLeft, Clock3, MapPinned, Minus, Plus, Send, UserRound, X } from "lucide-react";
 import { bookingLocations, type BookingLocationId } from "@/data/bookingConfig";
 import { trackEvent } from "@/lib/analytics";
@@ -269,9 +270,12 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
         className="relative flex h-dvh w-full flex-col overflow-hidden bg-seven-background"
         onClick={(event) => event.stopPropagation()}
       >
-        <img
+        <Image
           src="/images/gallery/gallery-20.jpg"
           alt=""
+          fill
+          sizes="100vw"
+          quality={72}
           className="absolute inset-0 h-full w-full object-cover opacity-22"
           aria-hidden="true"
         />

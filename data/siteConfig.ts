@@ -10,6 +10,10 @@ export type Location = {
   workingHours: string;
   image: string;
   features: string[];
+  geo?: {
+    latitude: number;
+    longitude: number;
+  };
 };
 
 export type EventItem = {
@@ -36,9 +40,9 @@ export const siteConfig = {
   brandName: "Seven Restopub",
   siteUrl: "https://sevenrestopub.com.ua",
   slogan: "Місце для зустрічей, смаку та живих емоцій",
-  description: "Seven Restopub - мережа сучасних рестопабів у Львові та Запоріжжі. Крафтове пиво, піца, бургери, коктейлі, кальян, спортивні трансляції, жива музика та онлайн-бронювання столів",
+  description: "Seven Restopub — мережа сучасних рестопабів України. Піца, бургери, кальяни, крафтове пиво, коктейлі, спортивні трансляції, дитячі кімнати та тераси.",
   logo: "/images/logo/seven-logo.svg",
-  favicon: "/images/logo/seven-logo.svg",
+  favicon: "/favicon.ico",
   ogImage: "/images/hero/hero-02.jpg",
   instagram: "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
   tiktok: "https://www.tiktok.com/@seven_restopub",
@@ -76,6 +80,7 @@ export const siteConfig = {
       menuLink: "https://seven-restopub-lviv.choiceqr.com/menu",
       workingHours: "Щодня з 12:00 до 23:00",
       image: "/images/locations/location-vv-01.jpg",
+      // TODO: add verified geo coordinates when available.
       features: ["Дитяча кімната", "Велика тераса", "Бізнес-ланчі", "Жива музика", "⚽ Snookball"],
     },
     {
@@ -89,6 +94,7 @@ export const siteConfig = {
       menuLink: "https://mytsi.choiceqr.com/",
       workingHours: "Щодня з 12:00 до 23:00",
       image: "/images/locations/location-rynok-01.jpg",
+      // TODO: add verified geo coordinates when available.
       features: ["Центр Львова", "Кальян", "Коктейлі", "Дитяча кімната", "Туристична локація"],
     },
     {
@@ -102,6 +108,7 @@ export const siteConfig = {
       menuLink: "https://seven-restopub.choiceqr.com/",
       workingHours: "Щодня з 12:00 до 23:00",
       image: "/images/locations/location-zaporizhzhia-01.jpg",
+      // TODO: add verified geo coordinates when available.
       features: ["Перший Seven", "Великий вибір крафтового пива", "Спортивні трансляції", "Класична пабна атмосфера"],
     },
   ] satisfies Location[],

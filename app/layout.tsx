@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Montserrat, Oswald } from "next/font/google";
 import Script from "next/script";
@@ -30,19 +30,31 @@ const oswald = Oswald({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
-    default: "Seven Restopub | Львів та Запоріжжя",
+    default: "Seven Restopub — мережа сучасних рестопабів України",
     template: `%s | ${siteConfig.brandName}`,
   },
   description: siteConfig.description,
   alternates: {
-    canonical: "/",
+    canonical: `${siteConfig.siteUrl}/`,
+    languages: {
+      "uk-UA": "/",
+      "x-default": "/",
+    },
   },
   icons: {
-    icon: siteConfig.favicon,
-    apple: siteConfig.favicon,
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
+  manifest: "/site.webmanifest",
   openGraph: {
-    title: "Seven Restopub | Львів та Запоріжжя",
+    title: "Seven Restopub — мережа сучасних рестопабів України",
     description: siteConfig.description,
     url: siteConfig.siteUrl,
     siteName: siteConfig.brandName,
@@ -52,7 +64,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Seven Restopub | Львів та Запоріжжя",
+    title: "Seven Restopub — мережа сучасних рестопабів України",
     description: siteConfig.description,
     images: [siteConfig.ogImage],
   },
@@ -60,6 +72,10 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

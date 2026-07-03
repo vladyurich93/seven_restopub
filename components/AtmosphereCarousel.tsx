@@ -45,7 +45,6 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
               alt={image.alt}
               className="aspect-[4/5] rounded-[8px] md:aspect-[3/4]"
               sizes="(min-width: 1280px) 24vw, (min-width: 1024px) 31vw, (min-width: 640px) 48vw, 86vw"
-              priority={index < 4}
             />
           </article>
         ))}
