@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint .",
+    "lint": "NODE_OPTIONS=--no-warnings ESLINT_USE_FLAT_CONFIG=false eslint .",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

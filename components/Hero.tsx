@@ -27,7 +27,7 @@ export function Hero() {
       <div className="container-shell relative z-10 grid min-h-[100svh] items-center gap-8 pb-14 pt-24 md:min-h-[760px] md:items-end md:pb-16 md:pt-28 min-[1201px]:min-h-[100svh] min-[1201px]:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.72fr)] min-[1201px]:items-center min-[1201px]:gap-10 min-[1201px]:pb-14 min-[1201px]:pt-28 xl:grid-cols-[minmax(0,0.9fr)_minmax(420px,0.76fr)] xl:gap-14 [@media_(min-width:1024px)_and_(max-height:780px)]:gap-7 [@media_(min-width:1024px)_and_(max-height:780px)]:pb-8 [@media_(min-width:1024px)_and_(max-height:780px)]:pt-24">
         <div className="hero-copy min-w-0">
           <p className="hero-eyebrow mb-5 inline-flex rounded-full bg-black/28 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-seven-green premium-border md:text-sm md:tracking-[0.28em] [@media_(min-width:1024px)_and_(max-height:780px)]:mb-3 [@media_(min-width:1024px)_and_(max-height:780px)]:py-1.5 [@media_(min-width:1024px)_and_(max-height:780px)]:text-xs">{t.hero.eyebrow}</p>
-          <h1 className="hero-title hero-title-responsive luxury-hero-title font-display font-black tracking-[0.006em] text-white">
+          <h1 className="hero-title hero-title-responsive luxury-hero-title font-display font-black text-white">
             {t.hero.title}
           </h1>
           <p className="hero-subtitle mt-6 max-w-2xl text-lg leading-8 text-seven-cream/78 md:text-xl [@media_(min-width:1024px)_and_(max-height:780px)]:mt-4 [@media_(min-width:1024px)_and_(max-height:780px)]:max-w-xl [@media_(min-width:1024px)_and_(max-height:780px)]:text-base [@media_(min-width:1024px)_and_(max-height:780px)]:leading-7">
