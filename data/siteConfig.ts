@@ -157,7 +157,7 @@ export const siteConfig = {
     },
     {
       title: "Основні страви",
-      description: "Comfort food у стилі Seven.",
+      description: "Затишна їжа у стилі Seven.",
       image: "/images/menu/menu-main-01.jpg",
     },
     {
@@ -188,7 +188,7 @@ export const siteConfig = {
     {
       id: "live-music",
       title: "Жива музика",
-      category: "Live",
+      category: "Живий звук",
       description: "Живий звук, тепле світло і вечори без поспіху.",
       date: "П'ятниця та субота",
       image: "/images/events/event-live-music-04.jpg",
@@ -196,7 +196,7 @@ export const siteConfig = {
     {
       id: "dj",
       title: "DJ вечори",
-      category: "Weekend",
+      category: "Вихідні",
       description: "Ритм вихідних, коктейлі й міська енергія.",
       date: "За афішею",
       image: "/images/events/event-dj-02.jpg",
@@ -204,7 +204,7 @@ export const siteConfig = {
     {
       id: "standup",
       title: "Стендап",
-      category: "Comedy",
+      category: "Комедія",
       description: "Сміх, імпровізація і легкий вечір з друзями.",
       date: "За афішею",
       image: "/images/events/event-standup-03.jpg",
@@ -212,7 +212,7 @@ export const siteConfig = {
     {
       id: "special",
       title: "Спеціальні події",
-      category: "Weekend Events",
+      category: "Вікенд-події",
       description: "Тематичні вечори та формати для великих компаній.",
       date: "За попереднім бронюванням",
       image: "/images/events/event-special-03.jpg",

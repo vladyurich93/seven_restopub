@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import type { GalleryImage } from "@/data/siteConfig";
+import { useLanguage } from "@/lib/i18n";
 import { ImageFrame } from "./ImageFrame";
 
 type AtmosphereCarouselProps = {
@@ -11,6 +12,7 @@ type AtmosphereCarouselProps = {
 
 export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   const scroll = (direction: "prev" | "next") => {
     const track = trackRef.current;
@@ -30,7 +32,7 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
       <div
         ref={trackRef}
         className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        aria-label="Галерея атмосфери Seven"
+        aria-label={t.home.galleryTitle}
       >
         {images.map((image, index) => (
           <article
@@ -54,7 +56,7 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
           type="button"
           className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white premium-border premium-lift hover:bg-seven-terracotta"
           onClick={() => scroll("prev")}
-          aria-label="Попередні фото"
+          aria-label={t.common.previousPhotos}
         >
           <ChevronLeft size={22} />
         </button>
@@ -62,7 +64,7 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
           type="button"
           className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-seven-terracotta text-white premium-lift hover:bg-seven-cream hover:text-seven-background"
           onClick={() => scroll("next")}
-          aria-label="Наступні фото"
+          aria-label={t.common.nextPhotos}
         >
           <ChevronRight size={22} />
         </button>

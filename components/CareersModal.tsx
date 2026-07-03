@@ -4,6 +4,7 @@ import { createContext, type FormEvent, type ReactNode, useContext, useEffect, u
 import { createPortal } from "react-dom";
 import { CheckCircle2, FileText, Instagram, Send, X } from "lucide-react";
 import { siteConfig } from "@/data/siteConfig";
+import { useLanguage } from "@/lib/i18n";
 
 type FormState = {
   name: string;
@@ -62,7 +63,6 @@ const initialFormState: FormState = {
   comment: "",
 };
 
-const fallbackMessage = "Заявку не вдалося відправити. Спробуйте ще раз або напишіть нам у Telegram.";
 const maxCvSizeBytes = 10 * 1024 * 1024;
 const allowedCvTypes = [
   "application/pdf",
@@ -111,14 +111,16 @@ function SelectField({
   onChange: (field: keyof FormState, value: string) => void;
   options: string[];
 }) {
+  const { t, tv } = useLanguage();
+
   return (
     <label htmlFor={id} className="text-sm font-semibold text-white">
       {label}
       <select id={id} name={id} className={fieldClass} value={value} onChange={(event) => onChange(id, event.target.value)}>
-        <option value="">Оберіть варіант</option>
+        <option value="">{t.forms.chooseOption}</option>
         {options.map((option) => (
           <option key={option} value={option}>
-            {option}
+            {tv(option)}
           </option>
         ))}
       </select>
@@ -175,6 +177,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
   const [cvError, setCvError] = useState("");
   const [locationError, setLocationError] = useState("");
   const [submittedLocation, setSubmittedLocation] = useState("");
+  const { t } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
@@ -269,13 +272,13 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
 
     if (!allowedCvTypes.includes(file.type)) {
       setCvFile(null);
-      setCvError("Додайте файл у форматі PDF, DOC, DOCX, JPG або PNG.");
+      setCvError(t.forms.cvTypeError);
       return;
     }
 
     if (file.size > maxCvSizeBytes) {
       setCvFile(null);
-      setCvError("Файл має бути до 10 MB.");
+      setCvError(t.forms.cvSizeError);
       return;
     }
 
@@ -292,7 +295,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
 
     if (!isValidUkrainianPhone(form.phone)) {
       setStatus("idle");
-      setPhoneError("Вкажіть український номер у форматі 0XX XXX XX XX або +380 XX XXX XX XX.");
+      setPhoneError(t.forms.phoneFormatError);
       return;
     }
 
@@ -300,7 +303,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
 
     if (form.location && !availableLocations.includes(form.location)) {
       setStatus("idle");
-      setLocationError("Оберіть заклад, який відповідає вибраному місту.");
+      setLocationError(t.forms.locationCityError);
       return;
     }
 
@@ -323,7 +326,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
 
       if (!response.ok) {
         setStatus("error");
-        setMessage(result.message || fallbackMessage);
+        setMessage(result.message || t.forms.hrFallback);
         return;
       }
 
@@ -331,16 +334,16 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
       setSubmittedLocation(form.location);
       setForm(initialFormState);
       setCvFile(null);
-      setMessage(result.message || "Дякуємо! Ми отримали вашу заявку. HR Seven звʼяжеться з вами найближчим часом.");
+      setMessage(result.message || t.forms.hrSuccess);
     } catch {
       setStatus("error");
-      setMessage(fallbackMessage);
+      setMessage(t.forms.hrFallback);
     }
   };
 
   const selectedInstagramLink = submittedLocation ? locationInstagramLinks[submittedLocation] : undefined;
   const instagramHref = selectedInstagramLink || siteConfig.instagram;
-  const instagramLabel = selectedInstagramLink ? "Instagram закладу" : "Instagram Seven";
+  const instagramLabel = selectedInstagramLink ? t.forms.instagramVenue : t.forms.instagramSeven;
   const locationOptions = form.city ? locationOptionsByCity[form.city] ?? [] : [];
 
   const modal = open ? (
@@ -357,16 +360,16 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
       >
         <div className="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-white/10 bg-seven-background p-4 md:px-5 md:py-4">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-seven-green">Команда Seven</p>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-seven-green">{t.hr.eyebrow}</p>
             <h2 id="careers-modal-title" className="mt-1.5 font-display text-3xl font-black leading-none text-white md:text-4xl">
-              Анкета кандидата
+              {t.forms.candidateForm}
             </h2>
           </div>
           <button
             type="button"
             className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white transition hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
             onClick={() => setOpen(false)}
-            aria-label="Закрити анкету"
+            aria-label={t.forms.close}
           >
             <X size={22} />
           </button>
@@ -377,16 +380,16 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-seven-green/12 text-seven-green premium-border shadow-glow">
               <CheckCircle2 size={34} strokeWidth={1.8} />
             </div>
-            <p className="mt-5 text-xs font-black uppercase tracking-[0.2em] text-seven-green">Анкета в Telegram</p>
-            <h3 className="mt-2 font-display text-4xl font-black leading-none text-white md:text-5xl">Заявку отримано!</h3>
+            <p className="mt-5 text-xs font-black uppercase tracking-[0.2em] text-seven-green">{t.forms.applicationInTelegram}</p>
+            <h3 className="mt-2 font-display text-4xl font-black leading-none text-white md:text-5xl">{t.forms.applicationReceived}</h3>
             <p className="mx-auto mt-4 max-w-xl text-lg font-semibold leading-7 text-seven-cream">
-              Дякуємо, що хочете стати частиною команди Seven.
+              {t.forms.applicationThanks}
             </p>
             <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-seven-muted md:text-base">
-              HR-команда вже отримала вашу анкету в Telegram. Ми переглянемо її та звʼяжемося з вами найближчим часом.
+              {t.forms.applicationBody}
             </p>
             <p className="mx-auto mt-5 max-w-lg text-xs font-semibold uppercase tracking-[0.14em] text-seven-muted">
-              Поки очікуєте відповідь — можете подивитися атмосферу саме того Seven, який обрали в анкеті.
+              {t.forms.instagramNote}
             </p>
             <div className="mt-7 grid gap-3 sm:grid-cols-3">
               <button
@@ -394,7 +397,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
                 onClick={() => setOpen(false)}
               >
-                Закрити
+                {t.forms.close}
               </button>
               <a
                 href={instagramHref}
@@ -411,7 +414,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
                 rel="noreferrer"
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-white/5 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
               >
-                Написати HR
+                {t.forms.writeHr}
               </a>
             </div>
             <button
@@ -419,16 +422,16 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
               className="mt-5 text-sm font-bold text-seven-green underline underline-offset-4 transition hover:text-seven-cream"
               onClick={resetApplicationForm}
             >
-              Заповнити ще одну анкету
+              {t.forms.fillAnother}
             </button>
           </div>
         ) : (
           <form className="grid gap-3.5 p-4 md:grid-cols-2 md:p-5" onSubmit={submitApplication}>
-            <TextField id="name" label="Імʼя" value={form.name} onChange={updateField} required autoComplete="name" />
+            <TextField id="name" label={t.forms.name} value={form.name} onChange={updateField} required autoComplete="name" />
             <div>
               <TextField
                 id="phone"
-                label="Телефон"
+                label={t.forms.phone}
                 value={form.phone}
                 onChange={updateField}
                 required
@@ -438,22 +441,22 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
               />
               {phoneError ? <p className="mt-2 text-xs font-semibold text-seven-terracotta">{phoneError}</p> : null}
             </div>
-            <SelectField id="city" label="Місто" value={form.city} onChange={updateField} options={cityOptions} />
+            <SelectField id="city" label={t.forms.city} value={form.city} onChange={updateField} options={cityOptions} />
             <div>
-              <SelectField id="location" label="Заклад" value={form.location} onChange={updateField} options={locationOptions} />
-              {!form.city ? <p className="mt-2 text-xs font-semibold text-seven-muted">Спочатку оберіть місто.</p> : null}
+              <SelectField id="location" label={t.forms.venue} value={form.location} onChange={updateField} options={locationOptions} />
+              {!form.city ? <p className="mt-2 text-xs font-semibold text-seven-muted">{t.forms.cityFirst}</p> : null}
               {locationError ? <p className="mt-2 text-xs font-semibold text-seven-terracotta">{locationError}</p> : null}
             </div>
-            <SelectField id="position" label="Посада" value={form.position} onChange={updateField} options={positionOptions} />
-            <TextField id="startDate" label="Коли готові почати" value={form.startDate} onChange={updateField} placeholder="Наприклад: з наступного тижня" />
-            <TextAreaField id="experience" label="Досвід роботи" value={form.experience} onChange={updateField} placeholder="Коротко про попередній досвід" />
-            <TextAreaField id="comment" label="Коментар" value={form.comment} onChange={updateField} placeholder="Що ще нам варто знати?" />
+            <SelectField id="position" label={t.forms.position} value={form.position} onChange={updateField} options={positionOptions} />
+            <TextField id="startDate" label={t.forms.startDate} value={form.startDate} onChange={updateField} placeholder={t.forms.startPlaceholder} />
+            <TextAreaField id="experience" label={t.forms.experience} value={form.experience} onChange={updateField} placeholder={t.forms.experiencePlaceholder} />
+            <TextAreaField id="comment" label={t.forms.comment} value={form.comment} onChange={updateField} placeholder={t.forms.commentPlaceholder} />
 
             <label htmlFor="cv" className="rounded-[8px] border border-dashed border-white/15 bg-white/[0.03] p-3 text-sm font-semibold text-white transition hover:border-seven-green/50 md:col-span-2">
               <span className="flex items-center gap-2">
                 <FileText size={17} className="text-seven-green" />
-                CV / Резюме
-                <span className="font-normal text-seven-muted">(необовʼязково)</span>
+                {t.forms.cvResume}
+                <span className="font-normal text-seven-muted">{t.forms.optional}</span>
               </span>
               <input
                 id="cv"
@@ -463,7 +466,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png"
                 onChange={(event) => updateCvFile(event.target.files?.[0] ?? null)}
               />
-              <span className="mt-2 block text-xs font-medium leading-5 text-seven-muted">PDF, DOC, DOCX, JPG або PNG до 10 MB.</span>
+              <span className="mt-2 block text-xs font-medium leading-5 text-seven-muted">{t.forms.cvHelp}</span>
               {cvFile ? <span className="mt-1 block text-xs font-bold text-seven-green">{cvFile.name}</span> : null}
               {cvError ? <span className="mt-1 block text-xs font-semibold text-seven-terracotta">{cvError}</span> : null}
             </label>
@@ -481,7 +484,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
                 rel="noreferrer"
                 className="rounded-full px-1 text-sm font-bold text-seven-green underline underline-offset-4 md:col-span-2"
               >
-                Написати HR у Telegram
+                {t.forms.writeHrTelegram}
               </a>
             ) : null}
 
@@ -492,7 +495,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
                 disabled={status === "loading"}
               >
                 <Send size={17} />
-                {status === "loading" ? "Відправляємо..." : "Відправити анкету"}
+                {status === "loading" ? t.forms.sendingApplication : t.forms.sendApplication}
               </button>
             </div>
           </form>

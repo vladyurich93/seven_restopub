@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { LocationCard } from "@/components/LocationCard";
-import { SectionTitle } from "@/components/SectionTitle";
+import { LocationsPageContent } from "@/components/PageContent";
 import { siteConfig } from "@/data/siteConfig";
 
 export const metadata: Metadata = {
@@ -19,15 +18,6 @@ export const metadata: Metadata = {
 
 export default function LocationsPage() {
   return (
-    <section className="bg-seven-background pb-24 pt-32 md:pb-28 md:pt-40">
-      <div className="container-shell">
-        <SectionTitle eyebrow="Locations" title="Оберіть Seven" description="Три заклади, три настрої, одна атмосфера Seven." />
-        <div className="mt-12 grid items-stretch gap-7 md:grid-cols-1 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
-          {siteConfig.locations.map((location) => (
-            <LocationCard key={location.id} location={location} />
-          ))}
-        </div>
-      </div>
-    </section>
+    <LocationsPageContent />
   );
 }

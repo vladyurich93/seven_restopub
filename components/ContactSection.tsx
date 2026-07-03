@@ -4,6 +4,7 @@ import { MapPinned, Phone } from "lucide-react";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 import { useLanguage } from "@/lib/i18n";
+import { AnimatedSection } from "./AnimatedSection";
 import { Button } from "./Button";
 import { InstagramPicker } from "./InstagramPicker";
 import { PhoneBookingButton } from "./PhoneBookingButton";
@@ -14,12 +15,12 @@ export function ContactSection() {
 
   return (
     <section className="bg-black py-24 md:py-28">
-      <div className="container-shell">
+      <AnimatedSection className="container-shell">
         <div className="mb-12 max-w-3xl">
-          <p className="mb-5 text-xs font-black uppercase tracking-[0.34em] text-seven-terracotta">Contacts</p>
+          <p className="mb-5 text-xs font-black uppercase tracking-[0.34em] text-seven-terracotta">{t.pages.contactsEyebrow}</p>
           <h2 className="font-display text-[clamp(2.65rem,8.5vw,4.85rem)] font-black leading-[0.9] text-white">{t.contact.title}</h2>
         </div>
-        <div className="grid items-stretch gap-6 md:grid-cols-1 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
+        <div className="stagger-reveal grid items-stretch gap-6 md:grid-cols-1 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
           {siteConfig.locations.map((location) => (
             <article key={location.id} className="flex h-full min-w-0 flex-col rounded-[8px] bg-[linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0)_40%),#1b1b1b] p-6 shadow-[0_18px_54px_rgba(0,0,0,0.22)] premium-border premium-lift hover:shadow-glow">
               <h3 className="font-display text-2xl font-black">{tv(location.name)}</h3>
@@ -43,10 +44,10 @@ export function ContactSection() {
           <InstagramPicker className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-lift hover:bg-seven-green hover:text-seven-background [&>svg]:text-seven-oak" />
           <Button href={siteConfig.tiktok} variant="ghost" className="gap-2">
             <TikTokIcon className="shrink-0 text-seven-oak" />
-            TikTok
+            {t.common.tiktok}
           </Button>
         </div>
-      </div>
+      </AnimatedSection>
     </section>
   );
 }

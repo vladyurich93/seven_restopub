@@ -144,6 +144,39 @@ a {
   transform: translateY(0);
 }
 
+.stagger-reveal > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 780ms var(--ease-premium),
+    transform 780ms var(--ease-premium);
+}
+
+.section-reveal.is-visible .stagger-reveal > *:nth-child(1) {
+  transition-delay: 80ms;
+}
+
+.section-reveal.is-visible .stagger-reveal > *:nth-child(2) {
+  transition-delay: 150ms;
+}
+
+.section-reveal.is-visible .stagger-reveal > *:nth-child(3) {
+  transition-delay: 220ms;
+}
+
+.section-reveal.is-visible .stagger-reveal > *:nth-child(4) {
+  transition-delay: 290ms;
+}
+
+.section-reveal.is-visible .stagger-reveal > *:nth-child(5) {
+  transition-delay: 360ms;
+}
+
+.section-reveal.is-visible .stagger-reveal > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @keyframes sectionFadeUp {
   from {
     opacity: 0;
@@ -478,9 +511,16 @@ a {
   }
 
   .section-reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 720ms var(--ease-premium),
+      transform 720ms var(--ease-premium);
+  }
+
+  .section-reveal.is-visible {
     opacity: 1;
     transform: none;
-    transition: opacity 420ms var(--ease-premium);
   }
 
   .location-card,

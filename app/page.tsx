@@ -34,7 +34,7 @@ export default function HomePage() {
               {t.common.allLocations} <ArrowRight size={18} />
             </Link>
           </div>
-          <div className="grid items-stretch gap-7 md:grid-cols-1 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
+          <div className="stagger-reveal grid items-stretch gap-7 md:grid-cols-1 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
             {siteConfig.locations.map((location) => (
               <LocationCard key={location.id} location={location} />
             ))}
@@ -73,7 +73,7 @@ export default function HomePage() {
               </div>
 
               <div className="flex flex-col justify-end">
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="stagger-reveal grid gap-3 sm:grid-cols-2">
                   {upcomingLocation.features.map((feature) => (
                     <article key={feature.title} className="rounded-[8px] bg-seven-card/85 p-5 premium-border premium-lift hover:shadow-glow">
                       <span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-seven-terracotta/20 text-2xl">{feature.icon}</span>
@@ -98,11 +98,11 @@ export default function HomePage() {
           </div>
           <div>
             <SectionTitle
-              eyebrow="About Seven"
+              eyebrow={t.home.aboutEyebrow}
               title={t.home.aboutTitle}
               description={t.home.aboutDescription}
             />
-            <div className="mt-8 grid gap-3 sm:grid-cols-2 min-[1201px]:grid-cols-4">
+            <div className="stagger-reveal mt-8 grid gap-3 sm:grid-cols-2 min-[1201px]:grid-cols-4">
               {t.home.aboutFacts.map((item) => (
                 <div key={item} className="rounded-full bg-seven-green/12 px-4 py-3 text-center text-xs font-black uppercase tracking-[0.14em] text-seven-green premium-border">
                   {item}
@@ -121,7 +121,7 @@ export default function HomePage() {
               {t.common.menu} <ArrowRight size={18} />
             </Link>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 min-[1201px]:grid-cols-4">
+          <div className="stagger-reveal grid gap-6 md:grid-cols-2 min-[1201px]:grid-cols-4">
             {siteConfig.menuCategories.map((category, index) => (
               <MenuCategoryCard key={category.title} category={category} index={index} />
             ))}
@@ -132,7 +132,7 @@ export default function HomePage() {
       <section className="bg-black py-24 md:py-28">
         <AnimatedSection className="container-shell">
           <SectionTitle eyebrow={t.home.eventsEyebrow} title={t.home.eventsTitle} description={t.home.eventsDescription} />
-          <div className="mt-12 grid items-stretch gap-6 md:grid-cols-2 min-[1281px]:grid-cols-5">
+          <div className="stagger-reveal mt-12 grid items-stretch gap-6 md:grid-cols-2 min-[1281px]:grid-cols-5">
             {siteConfig.events.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}

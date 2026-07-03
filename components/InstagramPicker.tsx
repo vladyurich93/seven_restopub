@@ -3,6 +3,7 @@
 import { Instagram, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
+import { useLanguage } from "@/lib/i18n";
 
 type InstagramPickerProps = {
   className?: string;
@@ -11,6 +12,7 @@ type InstagramPickerProps = {
 
 export function InstagramPicker({ className = "", label = "Instagram" }: InstagramPickerProps) {
   const [open, setOpen] = useState(false);
+  const { t, tv } = useLanguage();
 
   useEffect(() => {
     if (!open) {
@@ -71,13 +73,13 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
           >
             <div className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-seven-background p-4 md:p-6">
               <h2 id="instagram-picker-title" className="pr-4 font-display text-3xl font-black text-white md:text-4xl">
-                Оберіть Instagram локації
+                {t.instagram.choose}
               </h2>
               <button
                 type="button"
                 className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-seven-terracotta text-white shadow-lg shadow-black/30 transition duration-500 hover:bg-seven-cream hover:text-seven-background"
                 onClick={() => setOpen(false)}
-                aria-label="Закрити"
+                aria-label={t.forms.close}
               >
                 <X size={24} />
               </button>
@@ -96,11 +98,11 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
                   </span>
                   <span className="flex items-center justify-between gap-4">
                     <span className="font-display text-3xl font-black leading-none text-white">
-                      Seven {location.name.replace("Seven Restopub ", "")}
+                      {tv(location.name)}
                     </span>
                     <Instagram className="shrink-0 text-seven-terracotta transition group-hover:text-seven-green" size={24} />
                   </span>
-                  <span className="mt-3 block text-sm leading-6 text-seven-muted">{location.address}</span>
+                  <span className="mt-3 block text-sm leading-6 text-seven-muted">{tv(location.address)}</span>
                 </a>
               ))}
             </div>

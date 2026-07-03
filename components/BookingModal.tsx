@@ -152,21 +152,21 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     const nextErrors: Partial<Record<keyof BookingForm, string>> = {};
 
     if (targetStep === 0 && !form.locationId) {
-      nextErrors.locationId = "Оберіть заклад.";
+      nextErrors.locationId = t.forms.chooseVenueError;
     }
 
     if (targetStep === 1) {
-      if (!form.date) nextErrors.date = "Оберіть дату.";
-      if (!form.time) nextErrors.time = "Оберіть час.";
-      if (!form.guests || Number(form.guests) < 1) nextErrors.guests = "Вкажіть кількість гостей.";
+      if (!form.date) nextErrors.date = t.forms.chooseDateError;
+      if (!form.time) nextErrors.time = t.forms.chooseTimeError;
+      if (!form.guests || Number(form.guests) < 1) nextErrors.guests = t.forms.guestsError;
     }
 
     if (targetStep === 2) {
-      if (!form.name) nextErrors.name = "Вкажіть імʼя.";
+      if (!form.name) nextErrors.name = t.forms.nameError;
       if (!form.phone) {
-        nextErrors.phone = "Вкажіть телефон.";
+        nextErrors.phone = t.forms.phoneRequiredError;
       } else if (!isValidUkrainianPhone(form.phone)) {
-        nextErrors.phone = "Вкажіть український номер у форматі 0XX XXX XX XX або +380 XX XXX XX XX.";
+        nextErrors.phone = t.forms.phoneFormatError;
       }
     }
 
@@ -177,15 +177,15 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   const validateSubmit = () => {
     const nextErrors: Partial<Record<keyof BookingForm, string>> = {};
 
-    if (!form.locationId) nextErrors.locationId = "Оберіть заклад.";
-    if (!form.date) nextErrors.date = "Оберіть дату.";
-    if (!form.time) nextErrors.time = "Оберіть час.";
-    if (!form.guests || Number(form.guests) < 1) nextErrors.guests = "Вкажіть кількість гостей.";
-    if (!form.name) nextErrors.name = "Вкажіть імʼя.";
+    if (!form.locationId) nextErrors.locationId = t.forms.chooseVenueError;
+    if (!form.date) nextErrors.date = t.forms.chooseDateError;
+    if (!form.time) nextErrors.time = t.forms.chooseTimeError;
+    if (!form.guests || Number(form.guests) < 1) nextErrors.guests = t.forms.guestsError;
+    if (!form.name) nextErrors.name = t.forms.nameError;
     if (!form.phone) {
-      nextErrors.phone = "Вкажіть телефон.";
+      nextErrors.phone = t.forms.phoneRequiredError;
     } else if (!isValidUkrainianPhone(form.phone)) {
-      nextErrors.phone = "Вкажіть український номер у форматі 0XX XXX XX XX або +380 XX XXX XX XX.";
+      nextErrors.phone = t.forms.phoneFormatError;
     }
 
     setErrors(nextErrors);
@@ -244,18 +244,15 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
 
       if (!response.ok) {
         setStatus("error");
-        setMessage(result.message || "Бронювання поки не відправилось. Будь ласка, зателефонуйте в заклад.");
+        setMessage(result.message || t.forms.bookingFailed);
         return;
       }
 
       setStatus("success");
-      setMessage(
-        result.message ||
-          "Дякуємо! Ваше бронювання вже отримав адміністратор. Ми скоро звʼяжемося з вами.",
-      );
+      setMessage(result.message || t.forms.bookingSuccess);
     } catch {
       setStatus("error");
-      setMessage("Бронювання поки не відправилось. Будь ласка, зателефонуйте в заклад.");
+      setMessage(t.forms.bookingFailed);
     }
   };
 
@@ -311,7 +308,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                     <p className="mt-6 text-xs font-black uppercase tracking-[0.24em] text-seven-green">{t.common.bookTable}</p>
                     <h3 className="mt-3 font-display text-5xl font-black leading-none text-white">{t.forms.successTitle}</h3>
                     <p className="mt-5 text-lg leading-8 text-seven-muted">
-                      {message || "Ваше бронювання вже отримав адміністратор. Ми скоро звʼяжемося з вами."}
+                      {message || t.forms.bookingSuccess}
                     </p>
                     <button
                       type="button"
@@ -371,12 +368,12 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                   {step === 1 ? (
                     <div className="grid gap-5 md:grid-cols-3">
                       <label className="text-sm font-semibold text-white">
-                        Дата <span className="text-seven-green">*</span>
+                        {t.forms.date} <span className="text-seven-green">*</span>
                         <input type="date" min={today()} className={`${fieldClass} ${form.date ? activeFieldClass : ""}`} value={form.date} onChange={(event) => updateField("date", event.target.value)} required />
                         {errors.date ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.date}</span> : null}
                       </label>
                       <label className="text-sm font-semibold text-white">
-                        Час <span className="text-seven-green">*</span>
+                        {t.forms.time} <span className="text-seven-green">*</span>
                         <div className="relative">
                           <button
                             type="button"
@@ -385,14 +382,14 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                             aria-haspopup="listbox"
                             aria-expanded={timePickerOpen}
                           >
-                            <span className={form.time ? "text-white" : "text-seven-muted/65"}>{form.time || "Оберіть час"}</span>
+                            <span className={form.time ? "text-white" : "text-seven-muted/65"}>{form.time || t.forms.chooseTime}</span>
                             <ChevronDown size={18} className={`text-seven-green transition ${timePickerOpen ? "rotate-180" : ""}`} />
                           </button>
                           {timePickerOpen ? (
                             <div
                               className="absolute left-0 right-0 top-[calc(100%+8px)] z-30 max-h-64 overflow-y-auto rounded-[8px] border border-white/10 bg-seven-card p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] [-webkit-overflow-scrolling:touch]"
                               role="listbox"
-                              aria-label="Оберіть час бронювання"
+                              aria-label={t.forms.chooseTimeBooking}
                             >
                               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-2">
                                 {timeOptions.map((time) => {
@@ -422,9 +419,9 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                         {errors.time ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.time}</span> : null}
                       </label>
                       <label className="text-sm font-semibold text-white">
-                        Кількість гостей <span className="text-seven-green">*</span>
+                        {t.forms.guestsCount} <span className="text-seven-green">*</span>
                         <div className={`mt-2 flex min-h-12 items-center rounded-[8px] border border-white/10 bg-black/30 transition ${form.guests ? activeFieldClass : ""}`}>
-                          <button type="button" className="grid h-12 w-12 place-items-center text-seven-green" onClick={() => changeGuests(-1)} aria-label="Зменшити кількість гостей">
+                          <button type="button" className="grid h-12 w-12 place-items-center text-seven-green" onClick={() => changeGuests(-1)} aria-label={t.forms.decreaseGuests}>
                             <Minus size={18} />
                           </button>
                           <input
@@ -436,7 +433,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                             onChange={(event) => updateField("guests", event.target.value)}
                             required
                           />
-                          <button type="button" className="grid h-12 w-12 place-items-center text-seven-green" onClick={() => changeGuests(1)} aria-label="Збільшити кількість гостей">
+                          <button type="button" className="grid h-12 w-12 place-items-center text-seven-green" onClick={() => changeGuests(1)} aria-label={t.forms.increaseGuests}>
                             <Plus size={18} />
                           </button>
                         </div>
@@ -448,22 +445,22 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                   {step === 2 ? (
                     <div className="grid gap-5 md:grid-cols-2">
                       <label className="text-sm font-semibold text-white">
-                        Імʼя <span className="text-seven-green">*</span>
+                        {t.forms.name} <span className="text-seven-green">*</span>
                         <input className={fieldClass} value={form.name} onChange={(event) => updateField("name", event.target.value)} autoComplete="name" required />
                         {errors.name ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.name}</span> : null}
                       </label>
                       <label className="text-sm font-semibold text-white">
-                        Телефон <span className="text-seven-green">*</span>
+                        {t.forms.phone} <span className="text-seven-green">*</span>
                         <input type="tel" className={fieldClass} value={form.phone} onChange={(event) => updateField("phone", event.target.value)} placeholder="+380 XX XXX XX XX" autoComplete="tel" required />
                         {errors.phone ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.phone}</span> : null}
                       </label>
                       <label className="text-sm font-semibold text-white md:col-span-2">
-                        Коментар
+                        {t.forms.comment}
                         <textarea
                           className={`${fieldClass} min-h-28 resize-y`}
                           value={form.comment}
                           onChange={(event) => updateField("comment", event.target.value)}
-                          placeholder="Побажання щодо столу, дитячої кімнати або події"
+                          placeholder={t.forms.tableWishes}
                         />
                       </label>
                     </div>
@@ -483,7 +480,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                       disabled={step === 0 || status === "loading"}
                     >
                       <ChevronLeft size={17} />
-                      Назад
+                      {t.forms.back}
                     </button>
                     {step < 2 ? (
                       <button
@@ -491,7 +488,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                         className="inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-8 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] premium-lift button-press hover:bg-seven-cream hover:text-seven-background"
                         onClick={goNext}
                       >
-                        Далі
+                        {t.forms.next}
                       </button>
                     ) : (
                       <button
@@ -500,7 +497,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                         disabled={status === "loading"}
                       >
                         {status === "loading" ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/35 border-t-white" /> : <Send size={17} />}
-                        {status === "loading" ? "Надсилаємо бронювання..." : "Забронювати"}
+                        {status === "loading" ? t.forms.sendingBooking : t.forms.bookAction}
                       </button>
                     )}
                   </div>
@@ -509,7 +506,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
             </div>
 
             <aside className="rounded-[8px] bg-black/30 p-5 premium-border md:p-6">
-              <p className="text-xs font-black uppercase tracking-[0.22em] text-seven-green">Ваш вечір</p>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-seven-green">{t.forms.yourEvening}</p>
               <div className="mt-6 space-y-5 text-sm leading-6 text-seven-muted">
                 <p className="flex gap-3">
                   <MapPinned className="mt-0.5 shrink-0 text-seven-terracotta" size={18} />
@@ -517,15 +514,15 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                 </p>
                 <p className="flex gap-3">
                   <CalendarDays className="mt-0.5 shrink-0 text-seven-terracotta" size={18} />
-                  <span>{form.date || "Дата"} · {form.time || "Час"}</span>
+                  <span>{form.date || t.forms.datePlaceholder} · {form.time || t.forms.timePlaceholder}</span>
                 </p>
                 <p className="flex gap-3">
                   <UserRound className="mt-0.5 shrink-0 text-seven-terracotta" size={18} />
-                  <span>{form.guests || "0"} гостей</span>
+                  <span>{form.guests || "0"} {t.forms.guests}</span>
                 </p>
                 <p className="flex gap-3">
                   <Clock3 className="mt-0.5 shrink-0 text-seven-terracotta" size={18} />
-                  <span>Після заявки адміністратор підтвердить бронювання.</span>
+                  <span>{t.forms.confirmationNote}</span>
                 </p>
               </div>
             </aside>
@@ -543,8 +540,9 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function BookingButton({ className = "", label = "Забронювати стіл", locationId, onOpen }: BookingButtonProps) {
+export function BookingButton({ className = "", label, locationId, onOpen }: BookingButtonProps) {
   const { openBookingModal } = useBookingModal();
+  const { t } = useLanguage();
 
   return (
     <button
@@ -555,7 +553,7 @@ export function BookingButton({ className = "", label = "Забронювати 
         openBookingModal(locationId);
       }}
     >
-      {label}
+      {label ?? t.common.bookTable}
     </button>
   );
 }
