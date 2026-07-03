@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
@@ -17,7 +18,7 @@ export function Footer() {
       <AnimatedSection className="container-shell">
         <div className="grid gap-10 md:grid-cols-[1.15fr_1fr_1fr] lg:gap-14">
           <div className="space-y-5">
-            <img src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={220} height={106} loading="eager" className="block h-auto w-40 max-w-full md:w-48" />
+            <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={220} height={106} className="block h-auto w-40 max-w-full md:w-48" />
             <p className="max-w-sm text-sm leading-7 text-seven-muted md:text-base">{t.hero.title}</p>
           </div>
 

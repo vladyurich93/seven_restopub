@@ -20,7 +20,9 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [360, 430, 640, 768, 1024, 1200, 1440, 1920],
+    imageSizes: [96, 128, 256, 384, 512],
   },
 };
 

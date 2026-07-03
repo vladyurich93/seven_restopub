@@ -1,20 +1,14 @@
 import type { Metadata } from "next";
 import { EventsPageContent } from "@/components/PageContent";
 import { siteConfig } from "@/data/siteConfig";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Події",
   description: "Спортивні трансляції, жива музика, стендап, імпровізація та DJ-вечори в Seven Restopub.",
-  alternates: {
-    canonical: "/events",
-  },
-  openGraph: {
-    title: "Події Seven Restopub",
-    description: "Актуальні події Seven Restopub.",
-    type: "website",
-    images: [{ url: siteConfig.events[0].image }],
-  },
-};
+  path: "/events",
+  image: siteConfig.events[0].image,
+});
 
 export default function EventsPage() {
   return (

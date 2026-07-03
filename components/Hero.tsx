@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { siteConfig } from "@/data/siteConfig";
 import { useLanguage } from "@/lib/i18n";
 import { BookingButton } from "./BookingModal";
@@ -8,11 +9,14 @@ export function Hero() {
 
   return (
     <section className="hero-section relative min-h-[100svh] overflow-hidden bg-seven-background md:min-h-[760px] min-[1201px]:min-h-[100svh]">
-      <img
+      <Image
         src="/images/gallery/gallery-20.jpg"
         alt={siteConfig.slogan}
+        fill
         sizes="100vw"
-        loading="eager"
+        priority
+        fetchPriority="high"
+        quality={86}
         className="hero-bg-image absolute inset-0 block h-full w-full object-cover object-[54%_44%] opacity-95 sm:object-[52%_45%] md:object-[58%_45%] min-[1201px]:object-[72%_45%]"
       />
       <div className="hero-side-overlay absolute inset-0 bg-[linear-gradient(90deg,rgba(15,15,15,0.82)_0%,rgba(15,15,15,0.54)_44%,rgba(15,15,15,0.12)_100%)] min-[1201px]:bg-[linear-gradient(90deg,rgba(15,15,15,0.86)_0%,rgba(15,15,15,0.58)_32%,rgba(15,15,15,0.16)_58%,rgba(15,15,15,0.02)_100%)]" />
@@ -46,11 +50,13 @@ export function Hero() {
           </div>
         </div>
         <div className="hero-card group relative hidden min-h-[460px] overflow-hidden rounded-[8px] premium-border shadow-[0_28px_80px_rgba(0,0,0,0.38)] min-[1201px]:block xl:min-h-[580px] [@media_(min-width:1201px)_and_(max-height:780px)]:min-h-[430px] [@media_(min-width:1201px)_and_(max-height:680px)]:min-h-[360px]">
-          <img
+          <Image
             src="/images/hero/hero-02.jpg"
             alt={t.hero.terraceAlt}
+            fill
             sizes="38vw"
-            loading="eager"
+            priority
+            quality={82}
             className="absolute inset-0 block h-full w-full object-cover object-[52%_38%]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0),rgba(17,17,17,0.04)_64%,rgba(17,17,17,0.16))]" />
