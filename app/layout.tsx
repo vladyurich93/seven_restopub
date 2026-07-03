@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Montserrat, Oswald } from "next/font/google";
+import { Analytics } from "@/components/Analytics";
 import { BookingModalProvider } from "@/components/BookingModal";
 import { CareersModalProvider } from "@/components/CareersModal";
 import { Footer } from "@/components/Footer";
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
                 <Footer />
                 <StructuredData />
                 <RouteImageRepaint />
+                <Analytics />
               </LocationPickerProvider>
             </BookingModalProvider>
           </CareersModalProvider>

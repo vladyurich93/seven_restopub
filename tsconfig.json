@@ -19,6 +19,7 @@
       }
     ],
     "paths": {
+      "@next/third-parties/google": ["./lib/third-parties/google"],
       "@/*": ["./*"]
     }
   },
