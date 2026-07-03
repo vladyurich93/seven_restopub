@@ -30,7 +30,7 @@ const oswald = Oswald({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
-    default: "Seven Restopub — мережа сучасних рестопабів України",
+    default: "Seven Restopub — мережа сучасних рестопабів | Крафтове пиво, піца, бургери",
     template: `%s | ${siteConfig.brandName}`,
   },
   description: siteConfig.description,
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "Seven Restopub — мережа сучасних рестопабів України",
+    title: "Seven Restopub — мережа сучасних рестопабів | Крафтове пиво, піца, бургери",
     description: siteConfig.description,
     url: siteConfig.siteUrl,
     siteName: siteConfig.brandName,
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Seven Restopub — мережа сучасних рестопабів України",
+    title: "Seven Restopub — мережа сучасних рестопабів | Крафтове пиво, піца, бургери",
     description: siteConfig.description,
     images: [siteConfig.ogImage],
   },

@@ -214,9 +214,10 @@ a {
 }
 
 .hero-title-responsive {
-  max-width: min(100%, 11.8ch);
-  font-size: clamp(2.55rem, 10.2vw, 3.85rem);
-  line-height: 1.08;
+  max-width: min(100%, 13.4ch);
+  font-size: clamp(2.35rem, 9.4vw, 3.55rem);
+  line-height: 1.18;
+  letter-spacing: 0;
 }
 
 .site-header {
@@ -306,9 +307,9 @@ a {
   }
 
   .hero-title-responsive {
-    max-width: min(100%, 12.6ch);
-    font-size: clamp(2.85rem, 9.2vw, 4.35rem);
-    line-height: 1.06;
+    max-width: min(100%, 13.8ch);
+    font-size: clamp(2.65rem, 8.4vw, 4rem);
+    line-height: 1.16;
   }
 }
 
@@ -318,17 +319,17 @@ a {
   }
 
   .hero-title-responsive {
-    max-width: min(100%, 13.7ch);
-    font-size: clamp(3.15rem, 6vw, 4.35rem);
-    line-height: 1.04;
+    max-width: min(100%, 14.6ch);
+    font-size: clamp(3rem, 5.4vw, 4.25rem);
+    line-height: 1.14;
   }
 }
 
 @media (min-width: 1024px) {
   .hero-title-responsive {
-    max-width: min(100%, 14.8ch);
-    font-size: clamp(3.35rem, 5.2vw, 4.9rem);
-    line-height: 1.01;
+    max-width: min(100%, 15.2ch);
+    font-size: clamp(3.2rem, 4.7vw, 4.65rem);
+    line-height: 1.12;
   }
 }
 
@@ -338,16 +339,16 @@ a {
   }
 
   .hero-title-responsive {
-    max-width: min(100%, 15ch);
-    font-size: clamp(4.25rem, 6.05vw, 6.35rem);
-    line-height: 0.96;
+    max-width: min(100%, 15.8ch);
+    font-size: clamp(3.9rem, 5.45vw, 6rem);
+    line-height: 1.08;
   }
 }
 
 @media (min-width: 1024px) and (max-height: 780px) {
   .hero-title-responsive {
-    font-size: clamp(3.25rem, 4.55vw, 4.75rem);
-    line-height: 0.99;
+    font-size: clamp(3rem, 4.15vw, 4.35rem);
+    line-height: 1.12;
   }
 }
 
@@ -499,7 +500,7 @@ a {
   }
 
   .hero-title-responsive {
-    line-height: 1.04;
+    line-height: 1.14;
   }
 
   .site-header,
@@ -540,7 +541,7 @@ a {
 
 @media (min-width: 1024px) and (max-width: 1200px) {
   .hero-title-responsive {
-    line-height: 1.01;
+    line-height: 1.12;
   }
 }
 

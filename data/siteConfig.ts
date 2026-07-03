@@ -40,7 +40,7 @@ export const siteConfig = {
   brandName: "Seven Restopub",
   siteUrl: "https://sevenrestopub.com.ua",
   slogan: "Місце для зустрічей, смаку та живих емоцій",
-  description: "Seven Restopub — мережа сучасних рестопабів України. Піца, бургери, кальяни, крафтове пиво, коктейлі, спортивні трансляції, дитячі кімнати та тераси.",
+  description: "Seven Restopub — мережа сучасних рестопабів. Крафтове пиво, піца, бургери, коктейлі, кальяни, спортивні трансляції, дитячі кімнати, літні тераси та бронювання столиків.",
   logo: "/images/logo/seven-logo.svg",
   favicon: "/favicon.ico",
   ogImage: "/images/hero/hero-02.jpg",

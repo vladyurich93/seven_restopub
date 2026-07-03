@@ -98,7 +98,7 @@ export const dictionary = {
       route: "Маршрут",
     },
     contact: {
-      title: "Оберіть свій Seven.",
+      title: "Оберіть свій Seven",
       description: "Телефони, маршрути і меню для кожної локації.",
     },
     hr: {

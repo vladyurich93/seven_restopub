@@ -9,8 +9,7 @@ const socialLinks = Array.from(
   ]),
 );
 const locations = siteConfig.locations as readonly Location[];
-const organizationDescription =
-  "Seven Restopub — мережа сучасних рестопабів України: піца, бургери, крафтове пиво, коктейлі, кальяни, спортивні трансляції, дитячі кімнати та літні тераси.";
+const organizationDescription = siteConfig.description;
 
 const addressParts: Record<string, { city: string; streetAddress: string }> = {
   "lviv-vv": {
