@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Montserrat, Oswald } from "next/font/google";
-import { Analytics } from "@/components/Analytics";
+import Script from "next/script";
 import { BookingModalProvider } from "@/components/BookingModal";
 import { CareersModalProvider } from "@/components/CareersModal";
 import { Footer } from "@/components/Footer";
@@ -12,6 +12,8 @@ import { StructuredData } from "@/components/StructuredData";
 import { siteConfig } from "@/data/siteConfig";
 import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
+
+const googleAnalyticsId = "G-B89HZRMLG5";
 
 const montserrat = Montserrat({
   subsets: ["latin", "cyrillic"],
@@ -73,7 +75,19 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
                 <Footer />
                 <StructuredData />
                 <RouteImageRepaint />
-                <Analytics />
+                {process.env.NODE_ENV === "production" ? (
+                  <>
+                    <Script src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} strategy="afterInteractive" />
+                    <Script id="google-analytics-4" strategy="afterInteractive">
+                      {`
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+                        gtag('config', '${googleAnalyticsId}');
+                      `}
+                    </Script>
+                  </>
+                ) : null}
               </LocationPickerProvider>
             </BookingModalProvider>
           </CareersModalProvider>
