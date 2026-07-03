@@ -143,13 +143,13 @@ export const siteConfig = {
   },
   menuCategories: [
     {
-      title: "Крафтове пиво",
+      title: "Крафт",
       description: "Український крафт і ротація кранів.",
       image: "/images/menu/menu-beer-01.jpg",
     },
     {
-      title: "Закуски до пива",
-      description: "Для великого столу й пива.",
+      title: "Закуски",
+      description: "Ідеально для великого столу та компанії.",
       image: "/images/menu/menu-snacks-01.jpg",
     },
     {
@@ -173,8 +173,8 @@ export const siteConfig = {
       image: "/images/menu/menu-cocktail-01.jpg",
     },
     {
-      title: "Кальян",
-      description: "Вечірній ритуал після матчу.",
+      title: "Димний",
+      description: "Особлива атмосфера для вечірнього відпочинку.",
       image: "/images/menu/menu-hookah-01.jpg",
     },
     {
