@@ -13,7 +13,7 @@ import { siteConfig } from "@/data/siteConfig";
 import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
 
-const googleAnalyticsId = "G-B89HZRMLG5";
+const googleAnalyticsId = "G-B89HZRMLGS";
 
 const montserrat = Montserrat({
   subsets: ["latin", "cyrillic"],
