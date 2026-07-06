@@ -40,7 +40,7 @@ const locationOptionsByCity: Record<string, string[]> = {
   Львів: ["Seven Restopub Володимира Великого", "Seven Restopub Площа Ринок"],
   Запоріжжя: ["Seven Restopub Запоріжжя"],
 };
-const positionOptions = ["Офіціант", "Бармен", "Кухар", "Кальянщик", "Адміністратор", "Інше"];
+const positionOptions = ["Офіціант", "Майстер напоїв", "Кухар", "Майстер димного формату", "Адміністратор", "Інше"];
 const locationInstagramLinks: Record<string, string> = {
   "Seven Restopub Запоріжжя": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
   "Seven Restopub Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
