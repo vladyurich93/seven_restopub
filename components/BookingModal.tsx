@@ -8,11 +8,14 @@ import { bookingLocations, type BookingLocationId } from "@/data/bookingConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 
+type BookingZone = "non_smoking" | "smoking" | "no_preference";
+
 type BookingForm = {
   locationId: BookingLocationId | "";
   date: string;
   time: string;
   guests: string;
+  zone: BookingZone | "";
   name: string;
   phone: string;
   comment: string;
@@ -38,6 +41,7 @@ const initialBookingForm: BookingForm = {
   date: "",
   time: "",
   guests: "2",
+  zone: "",
   name: "",
   phone: "",
   comment: "",
@@ -55,6 +59,12 @@ const timeOptions = Array.from({ length: 20 }, (_, index) => {
 
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 });
+
+const bookingZones = [
+  { id: "non_smoking", labelKey: "zoneNonSmoking" },
+  { id: "smoking", labelKey: "zoneSmoking" },
+  { id: "no_preference", labelKey: "zoneNoPreference" },
+] as const satisfies readonly { id: BookingZone; labelKey: keyof ReturnType<typeof useLanguage>["t"]["forms"] }[];
 
 const isValidUkrainianPhone = (phone: string) => {
   const digits = phone.replace(/\D/g, "");
@@ -161,6 +171,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
       if (!form.date) nextErrors.date = t.forms.chooseDateError;
       if (!form.time) nextErrors.time = t.forms.chooseTimeError;
       if (!form.guests || Number(form.guests) < 1) nextErrors.guests = t.forms.guestsError;
+      if (!form.zone) nextErrors.zone = t.forms.chooseZoneError;
     }
 
     if (targetStep === 2) {
@@ -183,6 +194,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     if (!form.date) nextErrors.date = t.forms.chooseDateError;
     if (!form.time) nextErrors.time = t.forms.chooseTimeError;
     if (!form.guests || Number(form.guests) < 1) nextErrors.guests = t.forms.guestsError;
+    if (!form.zone) nextErrors.zone = t.forms.chooseZoneError;
     if (!form.name) nextErrors.name = t.forms.nameError;
     if (!form.phone) {
       nextErrors.phone = t.forms.phoneRequiredError;
@@ -194,6 +206,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
 
     if (nextErrors.locationId) setStep(0);
     else if (nextErrors.date || nextErrors.time || nextErrors.guests) setStep(1);
+    else if (nextErrors.zone) setStep(1);
     else if (nextErrors.name || nextErrors.phone) setStep(2);
 
     return Object.keys(nextErrors).length === 0;
@@ -237,6 +250,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
           name: form.name,
           phone: form.phone,
           guests: form.guests,
+          zone: form.zone,
           date: form.date,
           time: form.time,
           comment: form.comment,
@@ -315,6 +329,24 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                     <p className="mt-5 text-lg leading-8 text-seven-muted">
                       {message || t.forms.bookingSuccess}
                     </p>
+                    <div className="mt-6 grid gap-3 rounded-[8px] bg-white/5 p-4 text-left text-sm leading-6 text-seven-muted premium-border">
+                      <p>
+                        <span className="font-black text-white">{t.common.chooseVenue}: </span>
+                        {selectedLocation ? tv(selectedLocation.displayName) : t.common.chooseVenue}
+                      </p>
+                      <p>
+                        <span className="font-black text-white">{t.forms.date}: </span>
+                        {form.date} · {form.time}
+                      </p>
+                      <p>
+                        <span className="font-black text-white">{t.forms.guestsCount}: </span>
+                        {form.guests}
+                      </p>
+                      <p>
+                        <span className="font-black text-white">{t.forms.chooseZone}: </span>
+                        {form.zone ? t.forms[bookingZones.find((zone) => zone.id === form.zone)?.labelKey ?? "chooseZone"] : t.forms.chooseZone}
+                      </p>
+                    </div>
                     <button
                       type="button"
                       className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-8 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] premium-lift button-press hover:bg-seven-cream hover:text-seven-background"
@@ -444,6 +476,37 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                         </div>
                         {errors.guests ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.guests}</span> : null}
                       </label>
+                      <fieldset className="md:col-span-3">
+                        <legend className="text-sm font-semibold text-white">
+                          {t.forms.chooseZone} <span className="text-seven-green">*</span>
+                        </legend>
+                        <div className="mt-3 grid gap-3 sm:grid-cols-3" role="radiogroup" aria-label={t.forms.chooseZone}>
+                          {bookingZones.map((zone) => {
+                            const selected = form.zone === zone.id;
+
+                            return (
+                              <button
+                                key={zone.id}
+                                type="button"
+                                className={`flex min-h-14 items-center justify-center rounded-[8px] px-4 py-3 text-center text-sm font-black uppercase tracking-[0.12em] transition duration-300 premium-border ${
+                                  selected
+                                    ? "border-seven-terracotta bg-seven-terracotta/18 text-white shadow-[0_0_0_1px_rgba(201,113,74,0.34),0_14px_34px_rgba(201,113,74,0.14)]"
+                                    : "bg-black/30 text-seven-muted hover:border-seven-terracotta/45 hover:text-white"
+                                }`}
+                                onClick={() => {
+                                  updateField("zone", zone.id);
+                                  trackEvent("booking_zone_selected", { zone: zone.id });
+                                }}
+                                role="radio"
+                                aria-checked={selected}
+                              >
+                                {t.forms[zone.labelKey]}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        {errors.zone ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.zone}</span> : null}
+                      </fieldset>
                     </div>
                   ) : null}
 
@@ -524,6 +587,14 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                 <p className="flex gap-3">
                   <UserRound className="mt-0.5 shrink-0 text-seven-terracotta" size={18} />
                   <span>{form.guests || "0"} {t.forms.guests}</span>
+                </p>
+                <p className="flex gap-3">
+                  <MapPinned className="mt-0.5 shrink-0 text-seven-terracotta" size={18} />
+                  <span>
+                    {form.zone
+                      ? t.forms[bookingZones.find((zone) => zone.id === form.zone)?.labelKey ?? "chooseZone"]
+                      : t.forms.chooseZone}
+                  </span>
                 </p>
                 <p className="flex gap-3">
                   <Clock3 className="mt-0.5 shrink-0 text-seven-terracotta" size={18} />

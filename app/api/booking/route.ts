@@ -5,12 +5,14 @@ type BookingPayload = {
   name: string;
   phone: string;
   guests: string;
+  zone: string;
   date: string;
   time: string;
   comment: string;
 };
 
 type BookingLocationKey = "rynok" | "vv" | "zp";
+type BookingZoneKey = "non_smoking" | "smoking" | "no_preference";
 
 type BookingRouteConfig = {
   displayName: string;
@@ -81,6 +83,15 @@ const getTelegramDescription = (body: unknown) =>
 const isBookingLocationKey = (value: string): value is BookingLocationKey =>
   value === "rynok" || value === "vv" || value === "zp";
 
+const isBookingZoneKey = (value: string): value is BookingZoneKey =>
+  value === "non_smoking" || value === "smoking" || value === "no_preference";
+
+const bookingZoneLabels: Record<BookingZoneKey, string> = {
+  non_smoking: "Некуряща зона",
+  smoking: "Зона для гостей, які курять",
+  no_preference: "Неважливо",
+};
+
 const devDetails = (details: Record<string, unknown>) => (process.env.NODE_ENV !== "production" ? details : {});
 
 const getTelegramEnvKeys = () => Object.keys(process.env).filter((key) => key.startsWith("TELEGRAM_")).sort();
@@ -134,6 +145,7 @@ export async function POST(request: Request) {
       name: clean(raw.name),
       phone: clean(raw.phone),
       guests: clean(raw.guests),
+      zone: clean(raw.zone),
       date: clean(raw.date),
       time: clean(raw.time),
       comment: clean(raw.comment),
@@ -144,6 +156,7 @@ export async function POST(request: Request) {
       name: payload.name,
       phone: payload.phone,
       guests: payload.guests,
+      zone: payload.zone,
       date: payload.date,
       time: payload.time,
     })
@@ -171,6 +184,13 @@ export async function POST(request: Request) {
       console.error("[Booking] Unknown booking location", { location: payload.location });
       return NextResponse.json(
         { ok: false, message: "Оберіть коректний заклад для бронювання.", ...devDetails({ location: payload.location }) },
+        { status: 400 },
+      );
+    }
+
+    if (!isBookingZoneKey(payload.zone)) {
+      return NextResponse.json(
+        { ok: false, message: "Оберіть коректну зону для бронювання.", ...devDetails({ zone: payload.zone }) },
         { status: 400 },
       );
     }
@@ -261,6 +281,9 @@ export async function POST(request: Request) {
       "",
       "👥 <b>Гостей:</b>",
       formatValue(payload.guests),
+      "",
+      "🪑 <b>Зона:</b>",
+      formatValue(bookingZoneLabels[payload.zone]),
       "",
       "📅 <b>Дата:</b>",
       formatValue(payload.date),
