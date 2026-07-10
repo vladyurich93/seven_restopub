@@ -7,6 +7,7 @@ import { CareersModalProvider } from "@/components/CareersModal";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LocationPickerProvider } from "@/components/LocationPicker";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { RouteImageRepaint } from "@/components/RouteImageRepaint";
 import { StructuredData } from "@/components/StructuredData";
 import { siteConfig } from "@/data/siteConfig";
@@ -87,8 +88,9 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
             <BookingModalProvider>
               <LocationPickerProvider>
                 <Header />
-                <main>{children}</main>
+                <main className="pb-[calc(96px+env(safe-area-inset-bottom))] md:pb-0">{children}</main>
                 <Footer />
+                <MobileBottomNav />
                 <StructuredData />
                 <RouteImageRepaint />
                 {process.env.NODE_ENV === "production" ? (

@@ -118,6 +118,16 @@ export function LocationPickerProvider({ children }: LocationPickerProviderProps
   );
 }
 
+export function useLocationPicker() {
+  const context = useContext(LocationPickerContext);
+
+  if (!context) {
+    throw new Error("useLocationPicker must be used within LocationPickerProvider");
+  }
+
+  return context;
+}
+
 function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t, tv } = useLanguage();
 
