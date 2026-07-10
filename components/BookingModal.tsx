@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, type FormEvent, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, type FormEvent, type ReactNode, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { CalendarDays, CheckCircle2, ChevronDown, ChevronLeft, Clock3, MapPinned, Minus, Plus, Send, UserRound, X } from "lucide-react";
@@ -93,6 +93,8 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<Partial<Record<keyof BookingForm, string>>>({});
   const [timePickerOpen, setTimePickerOpen] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const locationCardRefs = useRef<Partial<Record<BookingLocationId, HTMLDivElement | null>>>({});
   const { t, tv } = useLanguage();
 
   useEffect(() => {
@@ -142,6 +144,45 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     () => bookingLocations.find((location) => location.id === form.locationId),
     [form.locationId],
   );
+
+  const isStepReady = useMemo(() => {
+    if (step === 0) {
+      return Boolean(form.locationId);
+    }
+
+    if (step === 1) {
+      return Boolean(form.date && form.time && form.guests && Number(form.guests) >= 1 && form.zone);
+    }
+
+    return Boolean(form.name && isValidUkrainianPhone(form.phone));
+  }, [form.date, form.guests, form.locationId, form.name, form.phone, form.time, form.zone, step]);
+
+  const resetModalScroll = () => {
+    requestAnimationFrame(() => {
+      scrollContainerRef.current?.scrollTo({ top: 0, behavior: "instant" });
+    });
+  };
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    resetModalScroll();
+  }, [open, status, step]);
+
+  useEffect(() => {
+    if (!open || step !== 0 || !form.locationId) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      locationCardRefs.current[form.locationId as BookingLocationId]?.scrollIntoView({
+        block: "nearest",
+        behavior: "smooth",
+      });
+    });
+  }, [form.locationId, open, step]);
 
   const updateField = (field: keyof BookingForm, value: string) => {
     setErrors((current) => ({ ...current, [field]: "" }));
@@ -220,11 +261,13 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
       return;
     }
 
+    setTimePickerOpen(false);
     setStep((current) => Math.min(current + 1, 2) as Step);
   };
 
   const goBack = () => {
     setErrors({});
+    setTimePickerOpen(false);
     setStep((current) => Math.max(current - 1, 0) as Step);
   };
 
@@ -319,6 +362,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
         </header>
 
         <div
+          ref={scrollContainerRef}
           className="relative z-10 flex-1 overflow-y-auto px-4 py-6 [-webkit-overflow-scrolling:touch] md:px-8 md:py-10"
           style={{ paddingBottom: "max(32px, calc(32px + env(safe-area-inset-bottom)))" }}
         >
@@ -363,7 +407,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                   </div>
                 </div>
               ) : (
-                <form onSubmit={submitBooking}>
+                <form id="booking-form" onSubmit={submitBooking}>
                   <div className="mb-7 grid gap-2 sm:grid-cols-3">
                     {[t.forms.location, t.forms.details, t.forms.contacts].map((label, index) => (
                       <div key={label} className={`rounded-full px-4 py-2 text-center text-xs font-black uppercase tracking-[0.16em] premium-border ${step === index ? "bg-seven-green/12 text-seven-green" : "bg-white/5 text-seven-muted"}`}>
@@ -372,36 +416,53 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                     ))}
                   </div>
 
+                  <div key={step} className="booking-step-panel">
                   {step === 0 ? (
                     <div className="grid gap-4">
                       <p className="text-sm font-semibold uppercase tracking-[0.18em] text-seven-muted">{t.common.chooseVenue}</p>
                       <div className="grid gap-4 md:grid-cols-3">
                         {bookingLocations.map((location) => (
-                          <button
+                          <div
                             key={location.id}
-                            type="button"
-                            className={`flex min-h-48 flex-col rounded-[8px] p-5 text-left transition duration-500 premium-border premium-lift ${
-                              form.locationId === location.id
-                                ? "border-seven-terracotta bg-seven-terracotta/18 shadow-[0_0_0_1px_rgba(201,113,74,0.35),0_22px_54px_rgba(201,113,74,0.18)]"
-                                : "bg-seven-card/75 hover:border-seven-terracotta/50"
-                            }`}
-                            onClick={() => updateField("locationId", location.id)}
+                            ref={(node) => {
+                              locationCardRefs.current[location.id] = node;
+                            }}
+                            className="grid gap-3"
                           >
-                            <div className="mb-5 flex items-center justify-between gap-3">
-                              <MapPinned className={form.locationId === location.id ? "text-seven-green" : "text-seven-terracotta"} size={24} />
+                            <button
+                              type="button"
+                              className={`flex min-h-48 flex-col rounded-[8px] p-5 text-left transition duration-300 active:scale-[0.98] premium-border premium-lift ${
+                                form.locationId === location.id
+                                  ? "border-seven-green bg-seven-green/10 shadow-[0_0_0_1px_rgba(183,225,77,0.34),0_22px_54px_rgba(183,225,77,0.12)]"
+                                  : "bg-seven-card/75 hover:border-seven-terracotta/50"
+                              }`}
+                              onClick={() => updateField("locationId", location.id)}
+                            >
+                              <div className="mb-5 flex items-center justify-between gap-3">
+                                <MapPinned className={form.locationId === location.id ? "text-seven-green" : "text-seven-terracotta"} size={24} />
+                                {form.locationId === location.id ? (
+                                  <CheckCircle2 className="text-seven-green" size={22} strokeWidth={2.2} />
+                                ) : null}
+                              </div>
+                              <span className="block font-display text-3xl font-black leading-none text-white">{tv(location.label)}</span>
                               {form.locationId === location.id ? (
-                                <CheckCircle2 className="text-seven-green" size={22} strokeWidth={2.2} />
+                                <span className="mt-5 inline-flex rounded-full bg-seven-green px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-seven-background">
+                                  <CheckCircle2 size={13} />
+                                  <span className="ml-1.5">{t.common.selected}</span>
+                                </span>
                               ) : null}
-                            </div>
-                            <span className="block font-display text-3xl font-black leading-none text-white">{tv(location.label)}</span>
+                              <span className={`mt-auto block pt-6 text-[11px] font-black uppercase tracking-[0.18em] ${form.locationId === location.id ? "text-seven-cream" : "text-seven-muted"}`}>{tv(location.city)}</span>
+                            </button>
                             {form.locationId === location.id ? (
-                              <span className="mt-5 inline-flex rounded-full bg-seven-green px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-seven-background">
-                                <CheckCircle2 size={13} />
-                                <span className="ml-1.5">{t.common.selected}</span>
-                              </span>
+                              <button
+                                type="button"
+                                className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-seven-terracotta px-8 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] transition duration-150 active:scale-[0.98] button-press hover:bg-seven-cream hover:text-seven-background"
+                                onClick={goNext}
+                              >
+                                {t.forms.next}
+                              </button>
                             ) : null}
-                            <span className={`mt-auto block pt-6 text-[11px] font-black uppercase tracking-[0.18em] ${form.locationId === location.id ? "text-seven-cream" : "text-seven-muted"}`}>{tv(location.city)}</span>
-                          </button>
+                          </div>
                         ))}
                       </div>
                       {errors.locationId ? <p className="text-sm font-semibold text-seven-terracotta">{errors.locationId}</p> : null}
@@ -539,6 +600,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                       </label>
                     </div>
                   ) : null}
+                  </div>
 
                   {status === "error" && message ? (
                     <div className="mt-6 rounded-[8px] bg-seven-terracotta/15 p-4 text-sm leading-6 text-white premium-border" role="status" aria-live="polite">
@@ -546,35 +608,43 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                     </div>
                   ) : null}
 
-                  <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <button
-                      type="button"
-                      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white/5 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-border premium-lift hover:bg-white/10 disabled:pointer-events-none disabled:opacity-35"
-                      onClick={goBack}
-                      disabled={step === 0 || status === "loading"}
+                  {step > 0 ? (
+                    <div
+                      className="sticky bottom-0 z-20 mt-8 -mx-4 border-t border-white/10 bg-seven-background/95 px-4 pt-4 shadow-[0_-18px_50px_rgba(0,0,0,0.32)] md:-mx-7 md:px-7"
+                      style={{ paddingBottom: "calc(16px + env(safe-area-inset-bottom))" }}
                     >
-                      <ChevronLeft size={17} />
-                      {t.forms.back}
-                    </button>
-                    {step < 2 ? (
-                      <button
-                        type="button"
-                        className="inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-8 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] premium-lift button-press hover:bg-seven-cream hover:text-seven-background"
-                        onClick={goNext}
-                      >
-                        {t.forms.next}
-                      </button>
-                    ) : (
-                      <button
-                        type="submit"
-                        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-seven-terracotta px-8 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] premium-lift button-press hover:bg-seven-cream hover:text-seven-background disabled:cursor-not-allowed disabled:opacity-60"
-                        disabled={status === "loading"}
-                      >
-                        {status === "loading" ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/35 border-t-white" /> : <Send size={17} />}
-                        {status === "loading" ? t.forms.sendingBooking : t.forms.bookAction}
-                      </button>
-                    )}
-                  </div>
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <button
+                          type="button"
+                          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white/5 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white transition duration-150 active:scale-[0.98] premium-border premium-lift hover:bg-white/10 disabled:pointer-events-none disabled:opacity-35"
+                          onClick={goBack}
+                          disabled={status === "loading"}
+                        >
+                          <ChevronLeft size={17} />
+                          {t.forms.back}
+                        </button>
+                        {step < 2 ? (
+                          <button
+                            type="button"
+                            className="inline-flex min-h-12 items-center justify-center rounded-full bg-seven-terracotta px-8 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] transition duration-150 active:scale-[0.98] button-press hover:bg-seven-cream hover:text-seven-background disabled:cursor-not-allowed disabled:opacity-45"
+                            onClick={goNext}
+                            disabled={!isStepReady}
+                          >
+                            {t.forms.next}
+                          </button>
+                        ) : (
+                          <button
+                            type="submit"
+                            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-seven-terracotta px-8 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] transition duration-150 active:scale-[0.98] button-press hover:bg-seven-cream hover:text-seven-background disabled:cursor-not-allowed disabled:opacity-60"
+                            disabled={status === "loading" || !isStepReady}
+                          >
+                            {status === "loading" ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/35 border-t-white" /> : <Send size={17} />}
+                            {status === "loading" ? t.forms.sendingBooking : t.forms.bookAction}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ) : null}
                 </form>
               )}
             </div>
