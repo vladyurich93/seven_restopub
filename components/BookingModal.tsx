@@ -48,7 +48,7 @@ const fieldClass =
 
 const activeFieldClass = "border-seven-terracotta bg-seven-terracotta/12 shadow-[0_0_0_1px_rgba(201,113,74,0.32),0_14px_34px_rgba(201,113,74,0.14)]";
 
-const timeOptions = Array.from({ length: 23 }, (_, index) => {
+const timeOptions = Array.from({ length: 20 }, (_, index) => {
   const totalMinutes = 12 * 60 + index * 30;
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
