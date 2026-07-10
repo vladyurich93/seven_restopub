@@ -107,7 +107,7 @@ export const siteConfig = {
       instagram: "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
       menuLink: "https://seven-restopub.choiceqr.com/",
       workingHours: "Щодня з 12:00 до 23:00",
-      image: "/images/locations/location-zaporizhzhia-01.jpg",
+      image: "/images/locations/seven-zaporizhzhia-location.jpg",
       // TODO: add verified geo coordinates when available.
       features: ["Перший Seven", "Великий вибір крафту", "Спортивні трансляції", "Класична restopub атмосфера"],
     },
