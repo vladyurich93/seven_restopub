@@ -6,6 +6,7 @@ import { CheckCircle2, FileText, Instagram, Send, X } from "lucide-react";
 import { siteConfig } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
+import { registerModalVisibility } from "@/lib/modalVisibility";
 
 type FormState = {
   name: string;
@@ -201,6 +202,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     document.body.style.width = "100%";
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
+    const unregisterModalVisibility = registerModalVisibility();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -212,6 +214,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
 
     return () => {
       window.removeEventListener("keydown", onKeyDown);
+      unregisterModalVisibility();
       document.body.style.position = originalBodyPosition;
       document.body.style.top = originalBodyTop;
       document.body.style.width = originalBodyWidth;
@@ -356,7 +359,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
       onClick={() => setOpen(false)}
     >
       <div
-        className="max-h-[90vh] max-h-[90dvh] w-full max-w-3xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
+        className="max-h-[calc(100dvh-24px)] w-full max-w-3xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-white/10 bg-seven-background p-4 md:px-5 md:py-4">
@@ -429,7 +432,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
             </button>
           </div>
         ) : (
-          <form className="grid gap-3.5 p-4 md:grid-cols-2 md:p-5" onSubmit={submitApplication}>
+          <form className="grid gap-3.5 p-4 md:grid-cols-2 md:p-5" style={{ paddingBottom: "max(20px, calc(20px + env(safe-area-inset-bottom)))" }} onSubmit={submitApplication}>
             <TextField id="name" label={t.forms.name} value={form.name} onChange={updateField} required autoComplete="name" />
             <div>
               <TextField

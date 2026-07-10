@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
+import { registerModalVisibility } from "@/lib/modalVisibility";
 
 type InstagramPickerProps = {
   className?: string;
@@ -25,11 +26,14 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
     const originalBodyTop = document.body.style.top;
     const originalBodyWidth = document.body.style.width;
     const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
 
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollY}px`;
     document.body.style.width = "100%";
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    const unregisterModalVisibility = registerModalVisibility();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -41,10 +45,12 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
 
     return () => {
       window.removeEventListener("keydown", onKeyDown);
+      unregisterModalVisibility();
       document.body.style.position = originalBodyPosition;
       document.body.style.top = originalBodyTop;
       document.body.style.width = originalBodyWidth;
       document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalHtmlOverflow;
       window.scrollTo(0, scrollY);
     };
   }, [open]);
@@ -69,7 +75,7 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
           onClick={() => setOpen(false)}
         >
           <div
-            className="max-h-[90vh] max-h-[90dvh] w-full max-w-xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
+            className="max-h-[calc(100dvh-24px)] w-full max-w-xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-seven-background p-4 md:p-6">
@@ -85,7 +91,7 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
                 <X size={24} />
               </button>
             </div>
-            <div className="grid gap-3 p-4 pb-6 md:p-6">
+            <div className="grid gap-3 p-4 md:p-6" style={{ paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))" }}>
               {siteConfig.locations.map((location) => (
                 <a
                   key={location.id}

@@ -7,6 +7,7 @@ import { CalendarDays, CheckCircle2, ChevronDown, ChevronLeft, Clock3, MapPinned
 import { bookingLocations, type BookingLocationId } from "@/data/bookingConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
+import { registerModalVisibility } from "@/lib/modalVisibility";
 
 type BookingZone = "non_smoking" | "smoking" | "no_preference";
 
@@ -115,6 +116,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     document.body.style.width = "100%";
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
+    const unregisterModalVisibility = registerModalVisibility();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -126,6 +128,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
 
     return () => {
       window.removeEventListener("keydown", onKeyDown);
+      unregisterModalVisibility();
       document.body.style.position = originalBodyPosition;
       document.body.style.top = originalBodyTop;
       document.body.style.width = originalBodyWidth;
@@ -151,7 +154,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   };
 
   const openBookingModal = (locationId?: BookingLocationId) => {
-    setStep(0);
+    setStep(locationId ? 1 : 0);
     setStatus("idle");
     setMessage("");
     setErrors({});
@@ -274,14 +277,14 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
 
   const modal = open ? (
     <div
-      className="fixed inset-0 z-[135] flex bg-black/82"
+      className="fixed inset-0 z-[135] flex bg-black/82 p-0 sm:p-3"
       role="dialog"
       aria-modal="true"
       aria-labelledby="booking-modal-title"
       onClick={() => setOpen(false)}
     >
       <div
-        className="relative flex h-dvh w-full flex-col overflow-hidden bg-seven-background"
+        className="relative flex h-[100dvh] max-h-[100dvh] w-full flex-col overflow-hidden bg-seven-background sm:max-h-[calc(100dvh-24px)] sm:rounded-[8px] sm:premium-border"
         onClick={(event) => event.stopPropagation()}
       >
         <Image
@@ -315,7 +318,10 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
           </div>
         </header>
 
-        <div className="relative z-10 flex-1 overflow-y-auto px-4 py-6 [-webkit-overflow-scrolling:touch] md:px-8 md:py-10">
+        <div
+          className="relative z-10 flex-1 overflow-y-auto px-4 py-6 [-webkit-overflow-scrolling:touch] md:px-8 md:py-10"
+          style={{ paddingBottom: "max(32px, calc(32px + env(safe-area-inset-bottom)))" }}
+        >
           <div className="mx-auto grid w-full max-w-6xl gap-6 min-[1000px]:grid-cols-[0.72fr_0.28fr]">
             <div className="rounded-[8px] bg-black/38 p-4 shadow-[0_24px_80px_rgba(0,0,0,0.32)] premium-border md:p-7">
               {status === "success" ? (

@@ -7,6 +7,7 @@ import { phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
+import { registerModalVisibility } from "@/lib/modalVisibility";
 
 const LOCATION_PICKER_ROOT = "seven-location-picker-root";
 
@@ -90,6 +91,7 @@ export function LocationPickerProvider({ children }: LocationPickerProviderProps
     document.body.style.width = "100%";
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
+    const unregisterModalVisibility = registerModalVisibility();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -101,6 +103,7 @@ export function LocationPickerProvider({ children }: LocationPickerProviderProps
 
     return () => {
       window.removeEventListener("keydown", onKeyDown);
+      unregisterModalVisibility();
       document.body.style.position = originalBodyPosition;
       document.body.style.top = originalBodyTop;
       document.body.style.width = originalBodyWidth;
@@ -151,13 +154,14 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
     <div
       data-modal-root={LOCATION_PICKER_ROOT}
       className="fixed inset-0 z-[140] flex items-end justify-center bg-black/78 p-3 sm:items-center sm:p-4"
+      style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="location-picker-title"
       onClick={onClose}
     >
       <div
-        className="relative max-h-[90vh] max-h-[90dvh] w-full max-w-5xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
+        className="relative max-h-[calc(100dvh-24px)] w-full max-w-5xl touch-pan-y overflow-y-auto overscroll-contain rounded-[8px] bg-seven-background premium-border shadow-2xl shadow-black/70 [-webkit-overflow-scrolling:touch]"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="sticky top-0 z-20 border-b border-white/10 bg-seven-background px-5 pb-5 pt-7 md:px-7 md:pb-6 md:pt-7">
@@ -174,7 +178,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
             <X size={24} />
           </button>
         </div>
-        <div className="grid gap-4 p-4 pb-6 md:grid-cols-1 md:p-7 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
+        <div className="grid gap-4 p-4 md:grid-cols-1 md:p-7 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3" style={{ paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))" }}>
           {siteConfig.locations.map((location) => (
             <article key={location.id} className="flex min-h-full flex-col rounded-[8px] bg-seven-card p-5 premium-border transition-colors duration-300 hover:border-seven-terracotta/50">
               <p className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-seven-green">

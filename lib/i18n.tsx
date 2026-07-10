@@ -11,6 +11,7 @@ export const dictionary = {
     common: {
       book: "Забронювати",
       bookTable: "Забронювати стіл",
+      reserveTable: "Забронювати",
       chooseVenue: "Обрати заклад",
       call: "Подзвонити",
       menu: "Меню",
@@ -187,6 +188,7 @@ export const dictionary = {
     common: {
       book: "Book",
       bookTable: "Book a table",
+      reserveTable: "Reserve a table",
       chooseVenue: "Choose a venue",
       call: "Call",
       menu: "Menu",
