@@ -1,11 +1,13 @@
 "use client";
 
 import { MapPinned, Phone } from "lucide-react";
+import type { BookingLocationId } from "@/data/bookingConfig";
 import { phoneHref } from "@/data/phone";
 import type { Location } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 import { Button } from "./Button";
+import { BookingButton } from "./BookingModal";
 import { ImageFrame } from "./ImageFrame";
 import { PhoneBookingButton } from "./PhoneBookingButton";
 
@@ -13,8 +15,15 @@ type LocationCardProps = {
   location: Location;
 };
 
+const bookingLocationBySiteLocationId: Record<string, BookingLocationId> = {
+  "lviv-vv": "vv",
+  "lviv-rynok": "rynok",
+  zaporizhzhia: "zp",
+};
+
 export function LocationCard({ location }: LocationCardProps) {
   const { t, tv } = useLanguage();
+  const bookingLocationId = bookingLocationBySiteLocationId[location.id];
 
   return (
     <article className="location-card group flex h-full min-h-[560px] min-w-0 flex-col overflow-hidden rounded-[8px] bg-[linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0)_38%),#1b1b1b] shadow-[0_18px_54px_rgba(0,0,0,0.22)] premium-border premium-lift hover:shadow-glow md:min-h-[660px] min-[900px]:min-h-[640px] min-[1201px]:min-h-[620px] min-[1281px]:min-h-0">
@@ -43,6 +52,13 @@ export function LocationCard({ location }: LocationCardProps) {
         </div>
         <p className="mt-5 text-sm font-semibold uppercase tracking-[0.16em] text-seven-muted">{tv(location.workingHours)}</p>
         <div className="mt-auto grid gap-3 pt-7">
+          {bookingLocationId ? (
+            <BookingButton
+              locationId={bookingLocationId}
+              label={t.common.bookTable}
+              className="min-h-14 w-full text-base shadow-[0_18px_48px_rgba(201,113,74,0.26)]"
+            />
+          ) : null}
           <PhoneBookingButton location={location} label={t.locationCard.call} className="min-h-14 text-base" />
           <Button href={location.menuLink} variant="secondary" className="min-h-14 text-base">{t.locationCard.menu}</Button>
           <Button href={location.googleMaps} variant="ghost" className="min-h-14 text-base">{t.locationCard.route}</Button>

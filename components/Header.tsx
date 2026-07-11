@@ -12,7 +12,7 @@ import { BookingButton } from "./BookingModal";
 import { useCareersModal } from "./CareersModal";
 import { LocationPickerButton } from "./LocationPicker";
 
-type NavKey = "home" | "locations" | "menu" | "careers" | "events" | "banquets" | "about" | "contacts";
+type NavKey = "home" | "locations" | "menu" | "careers" | "events" | "banquets" | "about";
 
 type NavItem = {
   href?: string;
@@ -28,7 +28,6 @@ const navItems: NavItem[] = [
   { href: "/events", key: "events" },
   { href: "/banquets", key: "banquets" },
   { href: "/about", key: "about" },
-  { href: "/contacts", key: "contacts" },
 ];
 
 export function Header() {

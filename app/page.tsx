@@ -5,7 +5,6 @@ import { ArrowRight } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { AtmosphereCarousel } from "@/components/AtmosphereCarousel";
 import { Button } from "@/components/Button";
-import { ContactSection } from "@/components/ContactSection";
 import { EventCard } from "@/components/EventCard";
 import { Hero } from "@/components/Hero";
 import { HRSection } from "@/components/HRSection";
@@ -191,7 +190,6 @@ export default function HomePage() {
         </AnimatedSection>
       </section>
 
-      <ContactSection />
       <HRSection />
     </>
   );
