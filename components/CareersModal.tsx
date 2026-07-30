@@ -38,7 +38,7 @@ const CareersModalContext = createContext<CareersModalContextValue | null>(null)
 
 const cityOptions = ["Запоріжжя", "Львів"];
 const locationOptionsByCity: Record<string, string[]> = {
-  Львів: ["Seven Restopub Володимира Великого", "Seven Restopub Площа Ринок"],
+  Львів: ["Seven Restopub Володимира Великого", "Seven Restopub Площа Ринок", "Seven Restopub Хімічна"],
   Запоріжжя: ["Seven Restopub Запоріжжя"],
 };
 const positionOptions = ["Офіціант", "Майстер напоїв", "Кухар", "Майстер димного формату", "Адміністратор", "Інше"];
@@ -46,12 +46,15 @@ const locationInstagramLinks: Record<string, string> = {
   "Seven Restopub Запоріжжя": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
   "Seven Restopub Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
   "Seven Restopub Площа Ринок": "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
+  "Seven Restopub Хімічна": "https://www.instagram.com/seven.himichna?igsh=MWh3aHRtejBmcXNyaA==",
   "Seven Запоріжжя": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
   "Seven Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
   "Seven Площа Ринок": "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
+  "Seven Хімічна": "https://www.instagram.com/seven.himichna?igsh=MWh3aHRtejBmcXNyaA==",
   Запоріжжя: "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
   "Львів Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
   "Львів Площа Ринок": "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
+  "Львів Хімічна": "https://www.instagram.com/seven.himichna?igsh=MWh3aHRtejBmcXNyaA==",
 };
 
 const initialFormState: FormState = {

@@ -19,6 +19,7 @@ type LocationCardProps = {
 const bookingLocationBySiteLocationId: Record<string, BookingLocationId> = {
   "lviv-vv": "vv",
   "lviv-rynok": "rynok",
+  khimichna: "khimichna",
   zaporizhzhia: "zp",
 };
 
@@ -101,8 +102,12 @@ export function LocationCard({ location }: LocationCardProps) {
             />
           ) : null}
           <PhoneBookingButton location={location} label={t.locationCard.call} className="min-h-14 text-base" />
-          <Button href={location.menuLink} variant="secondary" className="min-h-14 text-base">{t.locationCard.menu}</Button>
-          <Button href={location.googleMaps} variant="ghost" className="min-h-14 text-base">{t.locationCard.route}</Button>
+          {location.menuLink ? (
+            <Button href={location.menuLink} variant="secondary" className="min-h-14 text-base">{t.locationCard.menu}</Button>
+          ) : null}
+          {location.googleMaps ? (
+            <Button href={location.googleMaps} variant="ghost" className="min-h-14 text-base">{t.locationCard.route}</Button>
+          ) : null}
           <a
             href={location.instagram}
             target="_blank"

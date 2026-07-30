@@ -293,6 +293,8 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           location: form.locationId,
+          locationId: form.locationId,
+          locationName: selectedLocation ? tv(selectedLocation.displayName) : "",
           name: form.name,
           phone: form.phone,
           guests: form.guests,
@@ -420,7 +422,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                   {step === 0 ? (
                     <div className="grid gap-4">
                       <p className="text-sm font-semibold uppercase tracking-[0.18em] text-seven-muted">{t.common.chooseVenue}</p>
-                      <div className="grid gap-4 md:grid-cols-3">
+                      <div className="grid gap-4 md:grid-cols-2">
                         {bookingLocations.map((location) => (
                           <div
                             key={location.id}

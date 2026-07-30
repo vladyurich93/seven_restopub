@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 type BookingPayload = {
   location: string;
+  locationId: string;
+  locationName: string;
   name: string;
   phone: string;
   guests: string;
@@ -11,12 +13,12 @@ type BookingPayload = {
   comment: string;
 };
 
-type BookingLocationKey = "rynok" | "vv" | "zp";
+type BookingLocationKey = "rynok" | "vv" | "khimichna" | "zp";
 type BookingZoneKey = "non_smoking" | "smoking" | "no_preference";
 
 type BookingRouteConfig = {
   displayName: string;
-  envKey: "TELEGRAM_BOOKING_CHAT_RYNOK" | "TELEGRAM_BOOKING_CHAT_VV" | "TELEGRAM_BOOKING_CHAT_ZP";
+  envKey?: "TELEGRAM_BOOKING_CHAT_RYNOK" | "TELEGRAM_BOOKING_CHAT_VV" | "TELEGRAM_BOOKING_CHAT_ZP";
 };
 
 const friendlyError = "Бронювання поки не відправилось. Будь ласка, зателефонуйте в заклад.";
@@ -33,6 +35,12 @@ const getBookingRouteConfig = (location: string): BookingRouteConfig | null => {
     return {
       displayName: "Seven Restopub Львів — Володимира Великого",
       envKey: "TELEGRAM_BOOKING_CHAT_VV",
+    };
+  }
+
+  if (location === "khimichna") {
+    return {
+      displayName: "Seven Restopub Хімічна",
     };
   }
 
@@ -81,7 +89,7 @@ const getTelegramDescription = (body: unknown) =>
     : friendlyError;
 
 const isBookingLocationKey = (value: string): value is BookingLocationKey =>
-  value === "rynok" || value === "vv" || value === "zp";
+  value === "rynok" || value === "vv" || value === "khimichna" || value === "zp";
 
 const isBookingZoneKey = (value: string): value is BookingZoneKey =>
   value === "non_smoking" || value === "smoking" || value === "no_preference";
@@ -142,6 +150,8 @@ export async function POST(request: Request) {
     const raw = (typeof body === "object" && body !== null ? body : {}) as Record<string, unknown>;
     const payload: BookingPayload = {
       location: clean(raw.location).toLowerCase(),
+      locationId: clean(raw.locationId).toLowerCase(),
+      locationName: clean(raw.locationName),
       name: clean(raw.name),
       phone: clean(raw.phone),
       guests: clean(raw.guests),
@@ -202,6 +212,25 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { ok: false, message: "Оберіть коректний заклад для бронювання.", ...devDetails({ location: payload.location }) },
         { status: 400 },
+      );
+    }
+
+    if (!locationConfig.envKey) {
+      console.error("[Booking] Telegram booking destination is not configured for this location yet", {
+        locationId: payload.locationId || payload.location,
+        locationName: payload.locationName || locationConfig.displayName,
+      });
+      return NextResponse.json(
+        {
+          ok: false,
+          message: friendlyError,
+          ...devDetails({
+            location: payload.location,
+            locationName: locationConfig.displayName,
+            reason: "Telegram booking destination is not configured for this location yet.",
+          }),
+        },
+        { status: 503 },
       );
     }
 

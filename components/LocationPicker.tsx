@@ -178,7 +178,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
             <X size={24} />
           </button>
         </div>
-        <div className="grid gap-4 p-4 md:grid-cols-1 md:p-7 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3" style={{ paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))" }}>
+        <div className="grid gap-4 p-4 md:grid-cols-1 md:p-7 min-[900px]:grid-cols-2" style={{ paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))" }}>
           {siteConfig.locations.map((location) => (
             <article key={location.id} className="flex min-h-full flex-col rounded-[8px] bg-seven-card p-5 premium-border transition-colors duration-300 hover:border-seven-terracotta/50">
               <p className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-seven-green">
@@ -203,25 +203,29 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
                   <Phone size={17} />
                   {t.locationCard.call}
                 </a>
-                <a
-                  href={location.menuLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-cream px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-seven-background transition duration-300 hover:bg-white"
-                  onClick={() => trackEvent("menu_open", { location_id: location.id, link_url: location.menuLink })}
-                >
-                  {t.locationCard.menu}
-                </a>
-                <a
-                  href={location.googleMaps}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white/5 px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-border transition duration-300 hover:bg-seven-green hover:text-seven-background"
-                  onClick={() => trackEvent("route_click", { location_id: location.id, link_url: location.googleMaps })}
-                >
-                  <Navigation size={17} />
-                  {t.locationCard.route}
-                </a>
+                {location.menuLink ? (
+                  <a
+                    href={location.menuLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-seven-cream px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-seven-background transition duration-300 hover:bg-white"
+                    onClick={() => trackEvent("menu_open", { location_id: location.id, link_url: location.menuLink })}
+                  >
+                    {t.locationCard.menu}
+                  </a>
+                ) : null}
+                {location.googleMaps ? (
+                  <a
+                    href={location.googleMaps}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white/5 px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-border transition duration-300 hover:bg-seven-green hover:text-seven-background"
+                    onClick={() => trackEvent("route_click", { location_id: location.id, link_url: location.googleMaps })}
+                  >
+                    <Navigation size={17} />
+                    {t.locationCard.route}
+                  </a>
+                ) : null}
               </div>
             </article>
           ))}

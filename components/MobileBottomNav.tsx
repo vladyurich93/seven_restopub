@@ -9,7 +9,7 @@ import { useLanguage } from "@/lib/i18n";
 import { useBookingModal } from "./BookingModal";
 import { useLocationPicker } from "./LocationPicker";
 
-const bookingLocationIds = ["rynok", "vv", "zp"] as const;
+const bookingLocationIds = ["rynok", "vv", "khimichna", "zp"] as const;
 
 function isBookingLocationId(value: string | null): value is BookingLocationId {
   return bookingLocationIds.includes(value as BookingLocationId);
@@ -28,6 +28,10 @@ function inferLocationId(pathname: string, searchLocation: string | null): Booki
 
   if (path.includes("vv") || path.includes("velykoho") || path.includes("volodymyra")) {
     return "vv";
+  }
+
+  if (path.includes("khimichna") || path.includes("himichna") || path.includes("chemical")) {
+    return "khimichna";
   }
 
   if (path.includes("zp") || path.includes("zaporizhzhia") || path.includes("zaporizhzhya")) {

@@ -20,6 +20,10 @@ const addressParts: Record<string, { city: string; streetAddress: string }> = {
     city: "Львів",
     streetAddress: "площа Ринок, 25",
   },
+  khimichna: {
+    city: "Львів",
+    streetAddress: "вул. Хімічна, 4",
+  },
   zaporizhzhia: {
     city: "Запоріжжя",
     streetAddress: "вул. Сталеварів, 30",
@@ -73,7 +77,7 @@ const jsonLd = {
       servesCuisine: ["Українська кухня", "Pub food", "Comfort food"],
       priceRange: "$$",
       sameAs: socialLinks,
-      hasMenu: siteConfig.locations.map((location) => location.menuLink),
+      hasMenu: siteConfig.locations.map((location) => location.menuLink).filter(Boolean),
       branchOf: {
         "@id": `${siteConfig.siteUrl}/#organization`,
       },
@@ -126,7 +130,7 @@ const jsonLd = {
           name: "Де є дитяча кімната?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Дитяча кімната є у Seven Restopub Володимира Великого та Seven Restopub Площа Ринок у Львові.",
+            text: "Дитяча кімната є у Seven Restopub Володимира Великого, Seven Restopub Площа Ринок та Seven Restopub Хімічна у Львові.",
           },
         },
       ],
@@ -183,8 +187,8 @@ const jsonLd = {
       servesCuisine: ["Українська кухня", "Pub food", "Comfort food"],
       priceRange: "$$",
       sameAs: [location.instagram],
-      hasMap: location.googleMaps,
-      hasMenu: location.menuLink,
+      ...(location.googleMaps ? { hasMap: location.googleMaps } : {}),
+      ...(location.menuLink ? { hasMenu: location.menuLink } : {}),
       parentOrganization: {
         "@id": `${siteConfig.siteUrl}/#organization`,
       },

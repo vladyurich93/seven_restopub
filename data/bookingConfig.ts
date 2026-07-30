@@ -1,11 +1,11 @@
-export type BookingLocationId = "rynok" | "vv" | "zp";
+export type BookingLocationId = "rynok" | "vv" | "khimichna" | "zp";
 
 export type BookingLocation = {
   id: BookingLocationId;
   label: string;
   displayName: string;
   city: string;
-  envKey: "TELEGRAM_BOOKING_CHAT_RYNOK" | "TELEGRAM_BOOKING_CHAT_VV" | "TELEGRAM_BOOKING_CHAT_ZP";
+  envKey?: "TELEGRAM_BOOKING_CHAT_RYNOK" | "TELEGRAM_BOOKING_CHAT_VV" | "TELEGRAM_BOOKING_CHAT_ZP";
 };
 
 const bookingLocationRynok = {
@@ -32,14 +32,23 @@ const bookingLocationZp = {
   envKey: "TELEGRAM_BOOKING_CHAT_ZP",
 } as const satisfies BookingLocation;
 
+const bookingLocationKhimichna = {
+  id: "khimichna",
+  label: "Seven Хімічна",
+  displayName: "Seven Restopub Хімічна",
+  city: "Львів",
+} as const satisfies BookingLocation;
+
 export const bookingLocationById: Record<BookingLocationId, BookingLocation> = {
   rynok: bookingLocationRynok,
   vv: bookingLocationVv,
+  khimichna: bookingLocationKhimichna,
   zp: bookingLocationZp,
 };
 
 export const bookingLocations = [
   bookingLocationRynok,
   bookingLocationVv,
+  bookingLocationKhimichna,
   bookingLocationZp,
 ] as const satisfies readonly BookingLocation[];

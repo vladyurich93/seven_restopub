@@ -17,7 +17,6 @@ import { siteConfig } from "@/data/siteConfig";
 import { useLanguage } from "@/lib/i18n";
 
 export default function HomePage() {
-  const upcomingLocation = siteConfig.upcomingLocation;
   const snookball = siteConfig.snookball;
   const { t, tv } = useLanguage();
 
@@ -33,59 +32,10 @@ export default function HomePage() {
               {t.common.allLocations} <ArrowRight size={18} />
             </Link>
           </div>
-          <div className="stagger-reveal grid items-stretch gap-7 md:grid-cols-1 min-[900px]:grid-cols-2 min-[1281px]:grid-cols-3">
+          <div className="stagger-reveal grid items-stretch gap-7 md:grid-cols-1 min-[900px]:grid-cols-2">
             {siteConfig.locations.map((location) => (
               <LocationCard key={location.id} location={location} />
             ))}
-          </div>
-        </AnimatedSection>
-      </section>
-
-      <section className="bg-seven-background py-24 md:py-28 min-[1281px]:py-32">
-        <AnimatedSection className="container-shell">
-          <div className="relative overflow-hidden rounded-[8px] bg-black premium-border">
-            <ImageFrame src={upcomingLocation.image} alt={upcomingLocation.title} className="absolute inset-0 h-full w-full" sizes="100vw" />
-            <div className="absolute inset-0 bg-black/70" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(183,225,77,0.24),transparent_30%),radial-gradient(circle_at_86%_78%,rgba(201,113,74,0.32),transparent_34%)]" />
-            <div className="relative z-10 grid gap-10 p-6 md:p-10 min-[1201px]:grid-cols-[1.05fr_0.95fr] min-[1201px]:p-16">
-              <div>
-                <p className="mb-6 inline-flex rounded-full bg-seven-green/15 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-seven-green premium-border">
-                  {tv(upcomingLocation.badge)}
-                </p>
-                <h2 className="max-w-3xl font-display text-[clamp(3rem,12vw,5.2rem)] font-black leading-[0.9] text-white md:leading-[0.86]">
-                  {tv(upcomingLocation.title)}
-                </h2>
-                <p className="mt-6 max-w-2xl text-lg leading-8 text-seven-muted md:text-xl">
-                  {tv(upcomingLocation.text)}
-                </p>
-                <div className="mt-8 inline-flex flex-col gap-1 rounded-[8px] bg-black/45 p-5 premium-border sm:min-w-80">
-                  <span className="text-sm font-black uppercase tracking-[0.22em] text-seven-terracotta">{tv(upcomingLocation.address)}</span>
-                  <span className="font-display text-5xl font-black text-seven-green md:text-6xl">{tv(upcomingLocation.area)}</span>
-                </div>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  {upcomingLocation.counters.map((counter) => (
-                    <span key={counter} className="rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-white premium-border">
-                      {tv(counter)}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex flex-col justify-end">
-                <div className="stagger-reveal grid gap-3 sm:grid-cols-2">
-                  {upcomingLocation.features.map((feature) => (
-                    <article key={feature.title} className="rounded-[8px] bg-seven-card/85 p-5 premium-border premium-lift hover:shadow-glow">
-                      <span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-seven-terracotta/20 text-2xl">{feature.icon}</span>
-                      <h3 className="font-display text-3xl font-black leading-none text-white">{tv(feature.title)}</h3>
-                    </article>
-                  ))}
-                </div>
-                <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-                  <Button href={upcomingLocation.ctaLink} className="min-h-14 px-8 text-base">{tv(upcomingLocation.ctaLabel)}</Button>
-                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-seven-green">{tv(upcomingLocation.note)}</p>
-                </div>
-              </div>
-            </div>
           </div>
         </AnimatedSection>
       </section>

@@ -4,9 +4,9 @@ export type Location = {
   city: string;
   phone: string;
   address: string;
-  googleMaps: string;
+  googleMaps?: string;
   instagram: string;
-  menuLink: string;
+  menuLink?: string;
   workingHours: string;
   image: string;
   features: string[];
@@ -53,10 +53,11 @@ export const siteConfig = {
     "/images/hero/hero-04.jpg",
     "/images/hero/hero-05.jpg",
   ],
-  phones: ["0 (98) 711 77 71", "0 (97) 777 73 25", "0 (68) 711 77 71"],
+  phones: ["0 (98) 711 77 71", "0 (97) 777 73 25", "0 (68) 711 77 71", "+380 (67) 777 07 44"],
   addresses: [
     "м. Львів, вул. Володимира Великого, 18",
     "м. Львів, площа Ринок, 25",
+    "м. Львів, вул. Хімічна, 4",
     "м. Запоріжжя, вул. Сталеварів, 30",
   ],
   workingHours: {
@@ -98,6 +99,17 @@ export const siteConfig = {
       features: ["Центр Львова", "Димний формат", "Авторські напої", "Дитяча кімната", "Туристична локація"],
     },
     {
+      id: "khimichna",
+      name: "Seven Restopub Хімічна",
+      city: "Львів",
+      phone: "+380 (67) 777 07 44",
+      address: "м. Львів, вул. Хімічна, 4",
+      instagram: "https://www.instagram.com/seven.himichna?igsh=MWh3aHRtejBmcXNyaA==",
+      workingHours: "Щодня з 12:00 до 23:00",
+      image: "/images/gallery/gallery-29.jpg",
+      features: ["Новий Seven", "Велика тераса", "Дитяча кімната", "Банкетна зала", "JOSPER", "1200 м²"],
+    },
+    {
       id: "zaporizhzhia",
       name: "Seven Restopub Запоріжжя",
       city: "Запоріжжя",
@@ -112,24 +124,6 @@ export const siteConfig = {
       features: ["Перший Seven", "Великий вибір крафту", "Спортивні трансляції", "Класична restopub атмосфера"],
     },
   ] satisfies Location[],
-  upcomingLocation: {
-    badge: "Скоро відкриття",
-    title: "Готуємо найбільший Seven у Львові",
-    text: "Ми відкриваємо новий Seven на вул. Хімічна, 4. Новий простір для зустрічей, сімейного відпочинку, подій та довгих вечорів з друзями.",
-    address: "м. Львів, вул. Хімічна, 4",
-    image: "/images/gallery/gallery-29.jpg",
-    area: "1200 м² простору",
-    note: "Відкриття вже незабаром.",
-    ctaLabel: "Слідкувати за відкриттям",
-    ctaLink: "https://www.tiktok.com/@seven_restopub",
-    counters: ["4 локації Seven", "3 працюють зараз", "1 відкривається незабаром"],
-    features: [
-      { icon: "👨‍👩‍👧", title: "Дитяча кімната" },
-      { icon: "🌿", title: "Велика літня тераса" },
-      { icon: "🎉", title: "Окрема зала для подій" },
-      { icon: "🍺", title: "Усе найкраще від Seven" },
-    ],
-  },
   snookball: {
     badge: "Лише у Seven Володимира Великого",
     bookingBadge: "За попереднім записом",
