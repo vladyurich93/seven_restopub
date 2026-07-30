@@ -14,13 +14,14 @@ type FormState = {
   city: string;
   location: string;
   position: string;
+  contactMethod: string;
   experience: string;
   startDate: string;
   comment: string;
 };
 
 type CareersModalContextValue = {
-  openCareersModal: () => void;
+  openCareersModal: (source?: string) => void;
 };
 
 type FieldProps = {
@@ -37,11 +38,20 @@ type FieldProps = {
 const CareersModalContext = createContext<CareersModalContextValue | null>(null);
 
 const cityOptions = ["Запоріжжя", "Львів"];
+const anyLocationOption = "Неважливо / готовий працювати в будь-якій локації";
 const locationOptionsByCity: Record<string, string[]> = {
-  Львів: ["Seven Restopub Володимира Великого", "Seven Restopub Площа Ринок", "Seven Restopub Хімічна"],
-  Запоріжжя: ["Seven Restopub Запоріжжя"],
+  Львів: ["Seven Restopub Володимира Великого", "Seven Restopub Площа Ринок", "Seven Restopub Хімічна", anyLocationOption],
+  Запоріжжя: ["Seven Restopub Запоріжжя", anyLocationOption],
 };
-const positionOptions = ["Офіціант", "Майстер напоїв", "Кухар", "Майстер димного формату", "Адміністратор", "Інше"];
+const allLocationOptions = [
+  "Seven Restopub Володимира Великого",
+  "Seven Restopub Площа Ринок",
+  "Seven Restopub Хімічна",
+  "Seven Restopub Запоріжжя",
+  anyLocationOption,
+];
+export const careerPositionOptions = ["Офіціант", "Майстер напоїв", "Кухар", "Майстер димного формату", "Адміністратор", "Інше"];
+const contactMethodOptions = ["Телефон", "Telegram", "Будь-який зручний спосіб"];
 const locationInstagramLinks: Record<string, string> = {
   "Seven Restopub Запоріжжя": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
   "Seven Restopub Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
@@ -63,6 +73,7 @@ const initialFormState: FormState = {
   city: "",
   location: "",
   position: "",
+  contactMethod: "",
   experience: "",
   startDate: "",
   comment: "",
@@ -181,8 +192,11 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [cvError, setCvError] = useState("");
   const [locationError, setLocationError] = useState("");
+  const [consentError, setConsentError] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [source, setSource] = useState("header");
   const [submittedLocation, setSubmittedLocation] = useState("");
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
@@ -250,12 +264,15 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     setForm((current) => ({ ...current, [field]: value }));
   };
 
-  const openCareersModal = () => {
+  const openCareersModal = (nextSource = "header") => {
     setStatus("idle");
     setMessage("");
     setPhoneError("");
     setCvError("");
     setLocationError("");
+    setConsentError("");
+    setSource(nextSource);
+    trackEvent("hr_form_start", { source: nextSource, language });
     setOpen(true);
   };
 
@@ -267,6 +284,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     setLocationError("");
     setForm(initialFormState);
     setCvFile(null);
+    setConsent(false);
   };
 
   const updateCvFile = (file: File | null) => {
@@ -299,6 +317,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
     setPhoneError("");
     setCvError("");
     setLocationError("");
+    setConsentError("");
 
     if (!isValidUkrainianPhone(form.phone)) {
       setStatus("idle");
@@ -306,9 +325,15 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const availableLocations = locationOptionsByCity[form.city] ?? [];
+    if (!consent) {
+      setStatus("idle");
+      setConsentError(t.forms.consentError);
+      return;
+    }
 
-    if (form.location && !availableLocations.includes(form.location)) {
+    const availableLocations = form.city ? locationOptionsByCity[form.city] ?? [] : allLocationOptions;
+
+    if (form.location && form.location !== anyLocationOption && !availableLocations.includes(form.location)) {
       setStatus("idle");
       setLocationError(t.forms.locationCityError);
       return;
@@ -320,10 +345,21 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
       Object.entries(form).forEach(([key, value]) => {
         payload.append(key, value);
       });
+      payload.append("source", source);
+      payload.append("language", language);
+      payload.append("timestamp", new Date().toISOString());
+      payload.append("consent", "accepted");
 
       if (cvFile) {
         payload.append("cv", cvFile);
       }
+
+      trackEvent("hr_form_submit", {
+        source,
+        location: form.location,
+        position: form.position,
+        language,
+      });
 
       const response = await fetch("/api/hr-application", {
         method: "POST",
@@ -341,7 +377,14 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
       setSubmittedLocation(form.location);
       setForm(initialFormState);
       setCvFile(null);
+      setConsent(false);
       setMessage(result.message || t.forms.hrSuccess);
+      trackEvent("hr_form_success", {
+        source,
+        location: form.location,
+        position: form.position,
+        language,
+      });
     } catch {
       setStatus("error");
       setMessage(t.forms.hrFallback);
@@ -351,7 +394,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
   const selectedInstagramLink = submittedLocation ? locationInstagramLinks[submittedLocation] : undefined;
   const instagramHref = selectedInstagramLink || siteConfig.instagram;
   const instagramLabel = selectedInstagramLink ? t.forms.instagramVenue : t.forms.instagramSeven;
-  const locationOptions = form.city ? locationOptionsByCity[form.city] ?? [] : [];
+  const locationOptions = form.city ? locationOptionsByCity[form.city] ?? [] : allLocationOptions;
 
   const modal = open ? (
     <div
@@ -436,7 +479,7 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
           </div>
         ) : (
           <form className="grid gap-3.5 p-4 md:grid-cols-2 md:p-5" style={{ paddingBottom: "max(20px, calc(20px + env(safe-area-inset-bottom)))" }} onSubmit={submitApplication}>
-            <TextField id="name" label={t.forms.name} value={form.name} onChange={updateField} required autoComplete="name" />
+            <TextField id="name" label={t.forms.candidateName} value={form.name} onChange={updateField} required autoComplete="name" />
             <div>
               <TextField
                 id="phone"
@@ -456,7 +499,8 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
               {!form.city ? <p className="mt-2 text-xs font-semibold text-seven-muted">{t.forms.cityFirst}</p> : null}
               {locationError ? <p className="mt-2 text-xs font-semibold text-seven-terracotta">{locationError}</p> : null}
             </div>
-            <SelectField id="position" label={t.forms.position} value={form.position} onChange={updateField} options={positionOptions} />
+            <SelectField id="position" label={t.forms.position} value={form.position} onChange={updateField} options={careerPositionOptions} />
+            <SelectField id="contactMethod" label={t.forms.contactMethod} value={form.contactMethod} onChange={updateField} options={contactMethodOptions} />
             <TextField id="startDate" label={t.forms.startDate} value={form.startDate} onChange={updateField} placeholder={t.forms.startPlaceholder} />
             <TextAreaField id="experience" label={t.forms.experience} value={form.experience} onChange={updateField} placeholder={t.forms.experiencePlaceholder} />
             <TextAreaField id="comment" label={t.forms.comment} value={form.comment} onChange={updateField} placeholder={t.forms.commentPlaceholder} />
@@ -478,6 +522,23 @@ export function CareersModalProvider({ children }: { children: ReactNode }) {
               <span className="mt-2 block text-xs font-medium leading-5 text-seven-muted">{t.forms.cvHelp}</span>
               {cvFile ? <span className="mt-1 block text-xs font-bold text-seven-green">{cvFile.name}</span> : null}
               {cvError ? <span className="mt-1 block text-xs font-semibold text-seven-terracotta">{cvError}</span> : null}
+            </label>
+
+            <label className="flex gap-3 rounded-[8px] bg-white/[0.035] p-3 text-sm font-semibold leading-6 text-seven-muted premium-border md:col-span-2">
+              <input
+                type="checkbox"
+                className="mt-1 h-4 w-4 shrink-0 rounded border-white/20 bg-black/40 accent-seven-terracotta"
+                checked={consent}
+                onChange={(event) => {
+                  setConsent(event.target.checked);
+                  setConsentError("");
+                }}
+                required
+              />
+              <span>
+                {t.forms.personalDataConsent} <span className="text-seven-green">*</span>
+                {consentError ? <span className="mt-1 block text-xs font-semibold text-seven-terracotta">{consentError}</span> : null}
+              </span>
             </label>
 
             {message ? (

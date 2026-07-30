@@ -40,6 +40,8 @@ export default function HomePage() {
         </AnimatedSection>
       </section>
 
+      <HRSection />
+
       <section className="wood-grain bg-seven-background py-24 md:py-28 min-[1281px]:py-32">
         <AnimatedSection className="container-shell grid gap-14 min-[1201px]:grid-cols-[1.05fr_0.95fr] min-[1201px]:items-center">
           <div className="group overflow-hidden rounded-[8px] premium-border">
@@ -140,7 +142,6 @@ export default function HomePage() {
         </AnimatedSection>
       </section>
 
-      <HRSection />
     </>
   );
 }

@@ -6,9 +6,14 @@ type HRApplicationPayload = {
   city: string;
   location: string;
   position: string;
+  contactMethod: string;
   experience: string;
   startDate: string;
   comment: string;
+  source: string;
+  language: string;
+  timestamp: string;
+  consent: string;
 };
 
 const fallbackMessage = "Заявку не вдалося відправити. Спробуйте ще раз або напишіть нам у Telegram.";
@@ -94,9 +99,14 @@ const getPayload = (formData: FormData): HRApplicationPayload => ({
   city: clean(formData.get("city")),
   location: clean(formData.get("location")),
   position: clean(formData.get("position")),
+  contactMethod: clean(formData.get("contactMethod")),
   experience: clean(formData.get("experience")),
   startDate: clean(formData.get("startDate")),
   comment: clean(formData.get("comment")),
+  source: clean(formData.get("source")),
+  language: clean(formData.get("language")),
+  timestamp: clean(formData.get("timestamp")),
+  consent: clean(formData.get("consent")),
 });
 
 export async function POST(request: Request) {
@@ -164,12 +174,17 @@ export async function POST(request: Request) {
       `🏙 <b>Місто:</b> ${formatValue(payload.city)}`,
       `📍 <b>Заклад:</b> ${formatValue(payload.location)}`,
       `💼 <b>Посада:</b> ${formatValue(payload.position)}`,
+      `📲 <b>Зручний спосіб зв'язку:</b> ${formatValue(payload.contactMethod)}`,
       `📅 <b>Досвід:</b> ${formatValue(payload.experience)}`,
       `⏰ <b>Готовий почати:</b> ${formatValue(payload.startDate)}`,
       `💬 <b>Коментар:</b> ${formatValue(payload.comment)}`,
       "",
+      `🔎 <b>Source:</b> ${formatValue(payload.source)}`,
+      `🌐 <b>Language:</b> ${formatValue(payload.language)}`,
+      `📎 <b>CV:</b> ${cvFile ? formatValue(cvFile.name) : "Не додано"}`,
+      `✅ <b>Згода на обробку даних:</b> ${formatValue(payload.consent)}`,
       "🌐 sevenrestopub",
-      `🕒 ${formatTimestamp()}`,
+      `🕒 ${formatValue(payload.timestamp || formatTimestamp())}`,
     ].join("\n");
 
     const messageResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {

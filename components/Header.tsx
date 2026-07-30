@@ -90,7 +90,7 @@ export function Header() {
                 key={item.key}
                 type="button"
                 className="nav-link whitespace-nowrap text-[13px] font-semibold text-seven-muted transition duration-500 min-[1281px]:text-sm"
-                onClick={openCareersModal}
+                onClick={() => openCareersModal("header")}
               >
                 {t.nav[item.key]}
               </button>
