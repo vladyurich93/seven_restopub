@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, BriefcaseBusiness, Send } from "lucide-react";
+import { BriefcaseBusiness, Send } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
@@ -34,11 +34,6 @@ export function HRSection() {
     return () => observer.disconnect();
   }, [language]);
 
-  const scrollToVacancies = () => {
-    trackEvent("homepage_hr_vacancies_click", { source: "homepage_hr_section", language });
-    document.getElementById("careers-vacancies")?.scrollIntoView({ behavior: "smooth", block: "center" });
-  };
-
   const openApplication = () => {
     trackEvent("homepage_hr_apply_click", { source: "homepage_hr_section", language });
     openCareersModal("homepage_hr_section");
@@ -61,20 +56,9 @@ export function HRSection() {
             </p>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <a
-                href="#careers-vacancies"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-seven-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] premium-lift button-press hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
-                onClick={(event) => {
-                  event.preventDefault();
-                  scrollToVacancies();
-                }}
-              >
-                {t.hr.vacanciesButton}
-                <ArrowRight size={17} />
-              </a>
               <button
                 type="button"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white/5 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white premium-border premium-lift button-press hover:bg-seven-green hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-seven-terracotta px-7 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[var(--shadow-button)] premium-lift button-press hover:bg-seven-cream hover:text-seven-background focus:outline-none focus:ring-2 focus:ring-seven-green/50"
                 onClick={openApplication}
               >
                 <Send size={17} />

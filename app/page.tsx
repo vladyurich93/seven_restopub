@@ -32,7 +32,7 @@ export default function HomePage() {
               {t.common.allLocations} <ArrowRight size={18} />
             </Link>
           </div>
-          <div className="stagger-reveal grid items-stretch gap-7 md:grid-cols-2 min-[1201px]:grid-cols-3">
+          <div className="stagger-reveal grid items-stretch gap-7 md:grid-cols-2">
             {siteConfig.locations.map((location) => (
               <LocationCard key={location.id} location={location} />
             ))}

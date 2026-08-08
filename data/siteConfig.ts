@@ -107,6 +107,7 @@ export const siteConfig = {
       address: "м. Львів, вул. Хімічна, 4",
       googleMaps: "https://maps.google.com/?q=Seven+Restopub+Khimichna+4+Lviv",
       instagram: "https://www.instagram.com/seven.himichna",
+      menuLink: "https://seven-restopub-khimichna.choiceqr.com/menu",
       workingHours: "Щодня з 12:00 до 23:00",
       image: "/images/locations/himichna/himichna-hero.jpg",
       features: ["Новий Seven", "Велика тераса", "Дитяча кімната", "Банкетна зала", "JOSPER", "1200 м²"],

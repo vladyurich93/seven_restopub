@@ -19,7 +19,7 @@ export function LocationsPageContent() {
     <section className="bg-seven-background pb-24 pt-32 md:pb-28 md:pt-40">
       <AnimatedSection className="container-shell">
         <SectionTitle eyebrow={t.pages.locationsEyebrow} title={t.pages.locationsTitle} description={t.pages.locationsDescription} />
-        <div className="stagger-reveal mt-12 grid items-stretch gap-7 md:grid-cols-2 min-[1201px]:grid-cols-3">
+        <div className="stagger-reveal mt-12 grid items-stretch gap-7 md:grid-cols-2">
           {siteConfig.locations.map((location) => (
             <LocationCard key={location.id} location={location} />
           ))}
