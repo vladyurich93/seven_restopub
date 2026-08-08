@@ -81,9 +81,7 @@ export const siteConfig = {
       instagram: "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
       menuLink: "https://seven-restopub-lviv.choiceqr.com/menu",
       workingHours: "Щодня з 12:00 до 23:00",
-      image: "/images/locations/location-vv-01.jpg",
-      // TODO: add verified geo coordinates when available.
-      features: ["Дитяча кімната", "Велика тераса", "Бізнес-ланчі", "Жива музика", "⚽ Snookball"],
+      image: "/images/locations/khimichna/professional/khimichna-location-card.jpg",Дитяча кімната", "Велика тераса", "Бізнес-ланчі", "Жива музика", "⚽ Snookball"],
     },
     {
       id: "lviv-rynok",
@@ -95,8 +93,10 @@ export const siteConfig = {
       instagram: "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
       menuLink: "https://mytsi.choiceqr.com/",
       workingHours: "Щодня з 12:00 до 23:00",
-      image: "/images/locations/location-rynok-01.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
       // TODO: add verified geo coordinates when available.
+      heroImage: "/images/locations/khimichna/professional/khimichna-hero.jpg",
+      bookingImage: "/images/locations/khimichna/professional/khimichna-booking.jpg",
       features: ["Центр Львова", "Димний формат", "Авторські напої", "Дитяча кімната", "Туристична локація"],
     },
     {
@@ -109,9 +109,11 @@ export const siteConfig = {
       instagram: "https://www.instagram.com/seven.himichna",
       menuLink: "https://seven-restopub-khimichna.choiceqr.com/menu",
       workingHours: "Щодня з 12:00 до 23:00",
-      image: "/images/locations/himichna/himichna-hero.jpg",
-      features: ["Новий Seven", "Велика тераса", "Дитяча кімната", "Банкетна зала", "JOSPER", "1200 м²"],
-    },
+      image: \"/images/locations/khimichna/professional/khimichna-location-card.jpg\",Новий Seven", "Велика тераса", "Дитяча кімната", "Банкетна зала", "JOSPER", "1200 м²"],
+      heroImage: "/images/locations/khimichna/professional/khimichna-hero.jpg",
+      bookingImage: "/images/locations/khimichna/professional/khimichna-booking.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-location-card.jpg",
+},
     {
       id: "zaporizhzhia",
       name: "Seven Restopub Запоріжжя",
@@ -122,7 +124,7 @@ export const siteConfig = {
       instagram: "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
       menuLink: "https://seven-restopub.choiceqr.com/",
       workingHours: "Щодня з 12:00 до 23:00",
-      image: "/images/locations/seven-zaporizhzhia-location.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
       // TODO: add verified geo coordinates when available.
       features: ["Перший Seven", "Великий вибір крафту", "Спортивні трансляції", "Класична restopub атмосфера"],
     },
@@ -142,42 +144,42 @@ export const siteConfig = {
     {
       title: "Крафт",
       description: "Український крафт і ротація кранів.",
-      image: "/images/menu/menu-craft-01.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       title: "Закуски",
       description: "Ідеально для великого столу та компанії.",
-      image: "/images/menu/menu-snacks-01.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       title: "Бургери",
       description: "Соковито, щедро, без компромісів.",
-      image: "/images/menu/menu-burger-01.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       title: "Піца",
       description: "Для футболу, друзів і вечора.",
-      image: "/images/menu/menu-pizza-01.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       title: "Основні страви",
       description: "Затишна їжа у стилі Seven.",
-      image: "/images/menu/menu-main-01.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       title: "Авторські напої",
       description: "Класика й авторські мікси.",
-      image: "/images/menu/menu-signature-drinks-01.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       title: "Димний",
       description: "Особлива атмосфера для вечірнього відпочинку.",
-      image: "/images/menu/menu-evening-mood-01.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       title: "Бізнес-ланчі",
       description: "Ситно й швидко у будні.",
-      image: "/images/menu/menu-business-lunch-01.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
   ] satisfies MenuCategory[],
   events: [
@@ -187,7 +189,7 @@ export const siteConfig = {
       category: "Футбол",
       description: "Великі матчі, крафт на столі й зал, який живе грою.",
       date: "Щотижня",
-      image: "/images/events/event-football-01.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       id: "live-music",
@@ -195,7 +197,7 @@ export const siteConfig = {
       category: "Живий звук",
       description: "Живий звук, тепле світло і вечори без поспіху.",
       date: "П'ятниця та субота",
-      image: "/images/events/event-live-music-04.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       id: "dj",
@@ -203,7 +205,7 @@ export const siteConfig = {
       category: "Вихідні",
       description: "Ритм вихідних, авторські напої й міська енергія.",
       date: "За афішею",
-      image: "/images/events/event-dj-02.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       id: "standup",
@@ -211,7 +213,7 @@ export const siteConfig = {
       category: "Комедія",
       description: "Сміх, імпровізація і легкий вечір з друзями.",
       date: "За афішею",
-      image: "/images/events/event-standup-03.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
     {
       id: "special",
@@ -219,7 +221,7 @@ export const siteConfig = {
       category: "Вікенд-події",
       description: "Тематичні вечори та формати для великих компаній.",
       date: "За попереднім бронюванням",
-      image: "/images/events/event-special-03.jpg",
+      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
     },
   ] satisfies EventItem[],
   galleryImages: [
