@@ -67,6 +67,7 @@ export const siteConfig = {
   googleMapsLinks: [
     "https://maps.google.com/?q=Seven+Restopub+Volodymyra+Velykoho+18+Lviv",
     "https://maps.google.com/?q=Seven+Restopub+Rynok+Square+25+Lviv",
+    "https://maps.google.com/?q=Seven+Restopub+Khimichna+4+Lviv",
     "https://maps.google.com/?q=Seven+Restopub+Zaporizhzhia+Stalevariv+30",
   ],
   locations: [
@@ -104,9 +105,10 @@ export const siteConfig = {
       city: "Львів",
       phone: "+380 (67) 777 07 44",
       address: "м. Львів, вул. Хімічна, 4",
-      instagram: "https://www.instagram.com/seven.himichna?igsh=MWh3aHRtejBmcXNyaA==",
+      googleMaps: "https://maps.google.com/?q=Seven+Restopub+Khimichna+4+Lviv",
+      instagram: "https://www.instagram.com/seven.himichna",
       workingHours: "Щодня з 12:00 до 23:00",
-      image: "/images/gallery/gallery-29.jpg",
+      image: "/images/locations/himichna/himichna-hero.jpg",
       features: ["Новий Seven", "Велика тераса", "Дитяча кімната", "Банкетна зала", "JOSPER", "1200 м²"],
     },
     {
@@ -289,6 +291,12 @@ export const siteConfig = {
     { src: "/images/gallery/gallery-67.jpg", alt: "Оформлення спеціальної події Seven Restopub" },
     { src: "/images/gallery/gallery-68.jpg", alt: "Snookball на терасі Seven Restopub Володимира Великого" },
     { src: "/images/gallery/gallery-69.jpg", alt: "Футбольний більярд Snookball у Seven Restopub Львів" },
+    { src: "/images/locations/himichna/himichna-hero.jpg", alt: "Інтер’єр Seven Restopub Хімічна у Львові" },
+    { src: "/images/locations/himichna/himichna-terrace-01.jpg", alt: "Тераса Seven Restopub Хімічна у Львові" },
+    { src: "/images/locations/himichna/himichna-interior-02.jpg", alt: "Зал Seven Restopub Хімічна з зеленими акцентами" },
+    { src: "/images/locations/himichna/himichna-design-02.jpg", alt: "Дизайн-деталі Seven Restopub Хімічна" },
+    { src: "/images/locations/himichna/himichna-kitchen-03.jpg", alt: "Команда кухні Seven Restopub Хімічна" },
+    { src: "/images/locations/himichna/himichna-detail-01.jpg", alt: "Деталі подачі Seven Restopub Хімічна" },
   ] satisfies GalleryImage[],
   eventImages: [
     "/images/events/event-football-01.jpg",
