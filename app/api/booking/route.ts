@@ -11,6 +11,7 @@ type BookingPayload = {
   date: string;
   time: string;
   comment: string;
+  source: string;
 };
 
 type BookingLocationKey = "rynok" | "vv" | "khimichna" | "zp";
@@ -18,7 +19,11 @@ type BookingZoneKey = "non_smoking" | "smoking" | "no_preference";
 
 type BookingRouteConfig = {
   displayName: string;
-  envKey?: "TELEGRAM_BOOKING_CHAT_RYNOK" | "TELEGRAM_BOOKING_CHAT_VV" | "TELEGRAM_BOOKING_CHAT_ZP";
+  envKey:
+    | "TELEGRAM_BOOKING_CHAT_RYNOK"
+    | "TELEGRAM_BOOKING_CHAT_VV"
+    | "TELEGRAM_BOOKING_CHAT_KHIMICHNA"
+    | "TELEGRAM_BOOKING_CHAT_ZP";
 };
 
 const friendlyError = "Бронювання поки не відправилось. Будь ласка, зателефонуйте в заклад.";
@@ -41,6 +46,7 @@ const getBookingRouteConfig = (location: string): BookingRouteConfig | null => {
   if (location === "khimichna") {
     return {
       displayName: "Seven Restopub Хімічна",
+      envKey: "TELEGRAM_BOOKING_CHAT_KHIMICHNA",
     };
   }
 
@@ -108,6 +114,7 @@ const getBookingEnvStatus = () => ({
   TELEGRAM_BOOKING_BOT_TOKEN_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_BOT_TOKEN?.trim()),
   TELEGRAM_BOOKING_CHAT_VV_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_VV?.trim()),
   TELEGRAM_BOOKING_CHAT_RYNOK_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_RYNOK?.trim()),
+  TELEGRAM_BOOKING_CHAT_KHIMICHNA_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_KHIMICHNA?.trim()),
   TELEGRAM_BOOKING_CHAT_ZP_EXISTS: Boolean(process.env.TELEGRAM_BOOKING_CHAT_ZP?.trim()),
 });
 
@@ -159,6 +166,7 @@ export async function POST(request: Request) {
       date: clean(raw.date),
       time: clean(raw.time),
       comment: clean(raw.comment),
+      source: clean(raw.source) || "website",
     };
 
     const missingFields = Object.entries({
@@ -212,25 +220,6 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { ok: false, message: "Оберіть коректний заклад для бронювання.", ...devDetails({ location: payload.location }) },
         { status: 400 },
-      );
-    }
-
-    if (!locationConfig.envKey) {
-      console.error("[Booking] Telegram booking destination is not configured for this location yet", {
-        locationId: payload.locationId || payload.location,
-        locationName: payload.locationName || locationConfig.displayName,
-      });
-      return NextResponse.json(
-        {
-          ok: false,
-          message: friendlyError,
-          ...devDetails({
-            location: payload.location,
-            locationName: locationConfig.displayName,
-            reason: "Telegram booking destination is not configured for this location yet.",
-          }),
-        },
-        { status: 503 },
       );
     }
 
@@ -322,6 +311,9 @@ export async function POST(request: Request) {
       "",
       "💬 <b>Коментар:</b>",
       formatValue(payload.comment || "-"),
+      "",
+      "🌐 <b>Джерело:</b>",
+      formatValue(payload.source),
     ].join("\n");
 
     const telegramResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {

@@ -302,6 +302,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
           date: form.date,
           time: form.time,
           comment: form.comment,
+          source: "website_booking_modal",
         }),
       });
       const result = (await response.json()) as { message?: string };

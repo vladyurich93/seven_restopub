@@ -5,7 +5,11 @@ export type BookingLocation = {
   label: string;
   displayName: string;
   city: string;
-  envKey?: "TELEGRAM_BOOKING_CHAT_RYNOK" | "TELEGRAM_BOOKING_CHAT_VV" | "TELEGRAM_BOOKING_CHAT_ZP";
+  envKey:
+    | "TELEGRAM_BOOKING_CHAT_RYNOK"
+    | "TELEGRAM_BOOKING_CHAT_VV"
+    | "TELEGRAM_BOOKING_CHAT_KHIMICHNA"
+    | "TELEGRAM_BOOKING_CHAT_ZP";
 };
 
 const bookingLocationRynok = {
@@ -37,6 +41,7 @@ const bookingLocationKhimichna = {
   label: "Seven Хімічна",
   displayName: "Seven Restopub Хімічна",
   city: "Львів",
+  envKey: "TELEGRAM_BOOKING_CHAT_KHIMICHNA",
 } as const satisfies BookingLocation;
 
 export const bookingLocationById: Record<BookingLocationId, BookingLocation> = {
