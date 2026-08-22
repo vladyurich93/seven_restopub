@@ -38,10 +38,27 @@ export function Header() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    let frameId = 0;
+
+    const updateScrolledState = () => {
+      frameId = 0;
+      const nextScrolled = window.scrollY > 24;
+      setScrolled((current) => (current === nextScrolled ? current : nextScrolled));
+    };
+
+    const onScroll = () => {
+      if (!frameId) {
+        frameId = window.requestAnimationFrame(updateScrolledState);
+      }
+    };
+
     onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frameId) window.cancelAnimationFrame(frameId);
+    };
   }, []);
 
   useEffect(() => {
@@ -119,7 +136,7 @@ export function Header() {
       </div>
 
       <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition duration-300 ease-premium min-[1201px]:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
-      <aside className={`fixed top-0 z-[80] flex h-[100dvh] max-h-[100dvh] w-[min(380px,calc(100vw-28px))] flex-col overflow-hidden bg-seven-background shadow-2xl shadow-black/60 premium-border transition-[right] duration-300 ease-premium min-[1201px]:hidden ${open ? "right-0" : "-right-[410px]"}`}>
+      <aside className={`fixed right-0 top-0 z-[80] flex h-[100dvh] max-h-[100dvh] w-[min(380px,calc(100vw-28px))] flex-col overflow-hidden bg-seven-background shadow-2xl shadow-black/60 premium-border transition-transform duration-300 ease-premium [backface-visibility:hidden] [contain:layout_paint] min-[1201px]:hidden ${open ? "translate-x-0" : "translate-x-full"}`}>
         <div
           className="flex shrink-0 items-center justify-between border-b border-white/10 px-5 pb-4"
           style={{ paddingTop: "max(20px, calc(16px + env(safe-area-inset-top)))" }}
@@ -134,13 +151,13 @@ export function Header() {
             <X size={20} />
           </button>
         </div>
-        <nav className="grid flex-1 content-start gap-1 overflow-y-auto p-5 [-webkit-overflow-scrolling:touch]">
+        <nav className="grid min-h-0 flex-1 touch-pan-y content-start gap-1 overflow-y-auto overscroll-contain p-5 [scroll-behavior:auto] [-webkit-overflow-scrolling:touch]">
           {navItems.map((item) => (
             item.action === "careers" ? (
               <button
                 key={item.key}
                 type="button"
-                className="min-h-12 rounded-[8px] px-4 py-3 text-left font-display text-2xl font-black uppercase text-white transition hover:bg-seven-terracotta hover:text-white"
+                className="min-h-12 rounded-[8px] px-4 py-3 text-left font-display text-2xl font-black uppercase text-white transition-colors duration-150 hover:bg-seven-terracotta hover:text-white"
                 onClick={() => {
                   setOpen(false);
                   openCareersModal();
@@ -152,7 +169,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href ?? "/"}
-                className="min-h-12 rounded-[8px] px-4 py-3 font-display text-2xl font-black uppercase text-white transition hover:bg-seven-terracotta hover:text-white"
+                className="min-h-12 rounded-[8px] px-4 py-3 font-display text-2xl font-black uppercase text-white transition-colors duration-150 hover:bg-seven-terracotta hover:text-white"
                 onClick={() => setOpen(false)}
               >
                 {t.nav[item.key]}
