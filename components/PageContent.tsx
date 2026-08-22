@@ -117,7 +117,12 @@ export function BanquetsPageContent() {
 export function AboutPageContent() {
   const { t, tv } = useLanguage();
   const about = siteConfig.about;
-  const photos = ["/images/gallery/gallery-11.jpg", "/images/gallery/gallery-01.jpg", "/images/gallery/gallery-10.jpg"];
+  const photos = [
+    "/images/gallery/gallery-11.jpg",
+    "/images/gallery/gallery-01.jpg",
+    "/images/gallery/gallery-10.jpg",
+    "/images/locations/khimichna/professional/khimichna-hero.jpg",
+  ];
 
   return (
     <section className="wood-grain bg-seven-background pb-24 pt-32 md:pb-28 md:pt-40">
