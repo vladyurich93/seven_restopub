@@ -83,7 +83,7 @@ export const siteConfig = {
       workingHours: "Щодня з 12:00 до 23:00",
       image: "/images/locations/location-vv-01.jpg",
       // TODO: add verified geo coordinates when available.
-      features: ["Дитяча кімната", "Велика тераса", "Бізнес-ланчі", "Жива музика", "⚽ Snookball"],
+      features: ["Дитяча кімната", "Велика тераса", "Бізнес-ланчі", "Жива музика"],
     },
     {
       id: "lviv-rynok",
@@ -127,17 +127,6 @@ export const siteConfig = {
       features: ["Перший Seven", "Великий вибір крафту", "Спортивні трансляції", "Класична restopub атмосфера"],
     },
   ] satisfies Location[],
-  snookball: {
-    badge: "Лише у Seven Володимира Великого",
-    bookingBadge: "За попереднім записом",
-    title: "⚽ Snookball у Seven",
-    subtitle: "Футбол чи більярд? Тепер не потрібно обирати.",
-    text: "На терасі Seven Володимира Великого з'явився Snookball — гра, яка поєднує футбол та більярд. Збирайте друзів, бронюйте час та влаштовуйте власний турнір.",
-    seoText: "Snookball у Львові. Футбольний більярд на терасі Seven Restopub на Володимира Великого.",
-    ctaLabel: "Забронювати гру",
-    phone: "+38 (098) 711 77 71",
-    images: ["/images/snookball/snookball-01.jpg", "/images/snookball/snookball-02.jpg"],
-  },
   menuCategories: [
     {
       title: "Крафт",
@@ -290,8 +279,6 @@ export const siteConfig = {
     { src: "/images/gallery/gallery-65.jpg", alt: "Сервірування для спеціальної події Seven Restopub" },
     { src: "/images/gallery/gallery-66.jpg", alt: "Банкетний стіл на терасі Seven Restopub" },
     { src: "/images/gallery/gallery-67.jpg", alt: "Оформлення спеціальної події Seven Restopub" },
-    { src: "/images/gallery/gallery-68.jpg", alt: "Snookball на терасі Seven Restopub Володимира Великого" },
-    { src: "/images/gallery/gallery-69.jpg", alt: "Футбольний більярд Snookball у Seven Restopub Львів" },
     { src: "/images/locations/khimichna/professional/khimichna-hero.jpg", alt: "Інтер’єр Seven Restopub Хімічна" },
     { src: "/images/locations/khimichna/professional/khimichna-booking.jpg", alt: "Зал Seven Restopub Хімічна" },
     { src: "/images/locations/khimichna/professional/khimichna-location-card.jpg", alt: "Інтер’єр Seven Restopub Хімічна з зеленими акцентами" },
