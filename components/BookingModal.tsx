@@ -9,7 +9,7 @@ import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 import { registerModalVisibility } from "@/lib/modalVisibility";
 
-type BookingZone = "non_smoking" | "smoking" | "no_preference";
+type BookingZone = "non_smoking" | "smoking" | "rooftop" | "no_preference";
 
 type BookingForm = {
   locationId: BookingLocationId | "";
@@ -64,6 +64,7 @@ const timeOptions = Array.from({ length: 20 }, (_, index) => {
 const bookingZones = [
   { id: "non_smoking", labelKey: "zoneNonSmoking" },
   { id: "smoking", labelKey: "zoneSmoking" },
+  { id: "rooftop", labelKey: "zoneRooftop" },
   { id: "no_preference", labelKey: "zoneNoPreference" },
 ] as const satisfies readonly { id: BookingZone; labelKey: keyof ReturnType<typeof useLanguage>["t"]["forms"] }[];
 
@@ -145,6 +146,11 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     [form.locationId],
   );
 
+  const availableBookingZones = useMemo(
+    () => bookingZones.filter((zone) => zone.id !== "rooftop" || form.locationId === "khimichna"),
+    [form.locationId],
+  );
+
   const isStepReady = useMemo(() => {
     if (step === 0) {
       return Boolean(form.locationId);
@@ -187,6 +193,15 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   const updateField = (field: keyof BookingForm, value: string) => {
     setErrors((current) => ({ ...current, [field]: "" }));
     setForm((current) => ({ ...current, [field]: value }));
+  };
+
+  const selectLocation = (locationId: BookingLocationId) => {
+    setErrors((current) => ({ ...current, locationId: "", zone: "" }));
+    setForm((current) => ({
+      ...current,
+      locationId,
+      zone: current.zone === "rooftop" && locationId !== "khimichna" ? "" : current.zone,
+    }));
   };
 
   const selectTime = (value: string) => {
@@ -439,7 +454,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                                   ? "border-seven-green bg-seven-green/10 shadow-[0_0_0_1px_rgba(183,225,77,0.34),0_22px_54px_rgba(183,225,77,0.12)]"
                                   : "bg-seven-card/75 hover:border-seven-terracotta/50"
                               }`}
-                              onClick={() => updateField("locationId", location.id)}
+                              onClick={() => selectLocation(location.id)}
                             >
                               <div className="mb-5 flex items-center justify-between gap-3">
                                 <MapPinned className={form.locationId === location.id ? "text-seven-green" : "text-seven-terracotta"} size={24} />
@@ -550,8 +565,8 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                         <legend className="text-sm font-semibold text-white">
                           {t.forms.chooseZone} <span className="text-seven-green">*</span>
                         </legend>
-                        <div className="mt-3 grid gap-3 sm:grid-cols-3" role="radiogroup" aria-label={t.forms.chooseZone}>
-                          {bookingZones.map((zone) => {
+                        <div className={`mt-3 grid gap-3 ${form.locationId === "khimichna" ? "sm:grid-cols-4" : "sm:grid-cols-3"}`} role="radiogroup" aria-label={t.forms.chooseZone}>
+                          {availableBookingZones.map((zone) => {
                             const selected = form.zone === zone.id;
 
                             return (

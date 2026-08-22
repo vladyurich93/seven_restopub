@@ -15,7 +15,7 @@ type BookingPayload = {
 };
 
 type BookingLocationKey = "rynok" | "vv" | "khimichna" | "zp";
-type BookingZoneKey = "non_smoking" | "smoking" | "no_preference";
+type BookingZoneKey = "non_smoking" | "smoking" | "rooftop" | "no_preference";
 
 type BookingRouteConfig = {
   displayName: string;
@@ -98,11 +98,12 @@ const isBookingLocationKey = (value: string): value is BookingLocationKey =>
   value === "rynok" || value === "vv" || value === "khimichna" || value === "zp";
 
 const isBookingZoneKey = (value: string): value is BookingZoneKey =>
-  value === "non_smoking" || value === "smoking" || value === "no_preference";
+  value === "non_smoking" || value === "smoking" || value === "rooftop" || value === "no_preference";
 
 const bookingZoneLabels: Record<BookingZoneKey, string> = {
   non_smoking: "Некуряща зона",
   smoking: "Зона для гостей, які курять",
+  rooftop: "Rooftop",
   no_preference: "Неважливо",
 };
 
@@ -209,6 +210,13 @@ export async function POST(request: Request) {
     if (!isBookingZoneKey(payload.zone)) {
       return NextResponse.json(
         { ok: false, message: "Оберіть коректну зону для бронювання.", ...devDetails({ zone: payload.zone }) },
+        { status: 400 },
+      );
+    }
+
+    if (payload.zone === "rooftop" && payload.location !== "khimichna") {
+      return NextResponse.json(
+        { ok: false, message: "Rooftop доступний лише для локації Хімічна." },
         { status: 400 },
       );
     }
