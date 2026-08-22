@@ -81,7 +81,9 @@ export const siteConfig = {
       instagram: "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
       menuLink: "https://seven-restopub-lviv.choiceqr.com/menu",
       workingHours: "Щодня з 12:00 до 23:00",
-      image: "/images/locations/khimichna/professional/khimichna-location-card.jpg",Дитяча кімната", "Велика тераса", "Бізнес-ланчі", "Жива музика", "⚽ Snookball"],
+      image: "/images/locations/location-vv-01.jpg",
+      // TODO: add verified geo coordinates when available.
+      features: ["Дитяча кімната", "Велика тераса", "Бізнес-ланчі", "Жива музика", "⚽ Snookball"],
     },
     {
       id: "lviv-rynok",
@@ -93,10 +95,8 @@ export const siteConfig = {
       instagram: "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
       menuLink: "https://mytsi.choiceqr.com/",
       workingHours: "Щодня з 12:00 до 23:00",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/locations/location-rynok-01.jpg",
       // TODO: add verified geo coordinates when available.
-      heroImage: "/images/locations/khimichna/professional/khimichna-hero.jpg",
-      bookingImage: "/images/locations/khimichna/professional/khimichna-booking.jpg",
       features: ["Центр Львова", "Димний формат", "Авторські напої", "Дитяча кімната", "Туристична локація"],
     },
     {
@@ -109,11 +109,9 @@ export const siteConfig = {
       instagram: "https://www.instagram.com/seven.himichna",
       menuLink: "https://seven-restopub-khimichna.choiceqr.com/menu",
       workingHours: "Щодня з 12:00 до 23:00",
-      image: \"/images/locations/khimichna/professional/khimichna-location-card.jpg\",Новий Seven", "Велика тераса", "Дитяча кімната", "Банкетна зала", "JOSPER", "1200 м²"],
-      heroImage: "/images/locations/khimichna/professional/khimichna-hero.jpg",
-      bookingImage: "/images/locations/khimichna/professional/khimichna-booking.jpg",
-      image: "/images/locations/khimichna/professional/khimichna-location-card.jpg",
-},
+      image: "/images/locations/khimichna/professional/khimichna-hero.jpg",
+      features: ["Новий Seven", "Велика тераса", "Дитяча кімната", "Банкетна зала", "JOSPER", "1200 м²"],
+    },
     {
       id: "zaporizhzhia",
       name: "Seven Restopub Запоріжжя",
@@ -124,7 +122,7 @@ export const siteConfig = {
       instagram: "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
       menuLink: "https://seven-restopub.choiceqr.com/",
       workingHours: "Щодня з 12:00 до 23:00",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/locations/seven-zaporizhzhia-location.jpg",
       // TODO: add verified geo coordinates when available.
       features: ["Перший Seven", "Великий вибір крафту", "Спортивні трансляції", "Класична restopub атмосфера"],
     },
@@ -144,42 +142,42 @@ export const siteConfig = {
     {
       title: "Крафт",
       description: "Український крафт і ротація кранів.",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/menu/menu-craft-01.jpg",
     },
     {
       title: "Закуски",
       description: "Ідеально для великого столу та компанії.",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/menu/menu-snacks-01.jpg",
     },
     {
       title: "Бургери",
       description: "Соковито, щедро, без компромісів.",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/menu/menu-burger-01.jpg",
     },
     {
       title: "Піца",
       description: "Для футболу, друзів і вечора.",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/menu/menu-pizza-01.jpg",
     },
     {
       title: "Основні страви",
       description: "Затишна їжа у стилі Seven.",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/menu/menu-main-01.jpg",
     },
     {
       title: "Авторські напої",
       description: "Класика й авторські мікси.",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/menu/menu-signature-drinks-01.jpg",
     },
     {
       title: "Димний",
       description: "Особлива атмосфера для вечірнього відпочинку.",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/menu/menu-evening-mood-01.jpg",
     },
     {
       title: "Бізнес-ланчі",
       description: "Ситно й швидко у будні.",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/menu/menu-business-lunch-01.jpg",
     },
   ] satisfies MenuCategory[],
   events: [
@@ -189,7 +187,7 @@ export const siteConfig = {
       category: "Футбол",
       description: "Великі матчі, крафт на столі й зал, який живе грою.",
       date: "Щотижня",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/events/event-football-01.jpg",
     },
     {
       id: "live-music",
@@ -197,7 +195,7 @@ export const siteConfig = {
       category: "Живий звук",
       description: "Живий звук, тепле світло і вечори без поспіху.",
       date: "П'ятниця та субота",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/events/event-live-music-04.jpg",
     },
     {
       id: "dj",
@@ -205,7 +203,7 @@ export const siteConfig = {
       category: "Вихідні",
       description: "Ритм вихідних, авторські напої й міська енергія.",
       date: "За афішею",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/events/event-dj-02.jpg",
     },
     {
       id: "standup",
@@ -213,7 +211,7 @@ export const siteConfig = {
       category: "Комедія",
       description: "Сміх, імпровізація і легкий вечір з друзями.",
       date: "За афішею",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/events/event-standup-03.jpg",
     },
     {
       id: "special",
@@ -221,7 +219,7 @@ export const siteConfig = {
       category: "Вікенд-події",
       description: "Тематичні вечори та формати для великих компаній.",
       date: "За попереднім бронюванням",
-      image: "/images/locations/khimichna/professional/khimichna-booking.jpg,
+      image: "/images/events/event-special-03.jpg",
     },
   ] satisfies EventItem[],
   galleryImages: [
@@ -294,12 +292,10 @@ export const siteConfig = {
     { src: "/images/gallery/gallery-67.jpg", alt: "Оформлення спеціальної події Seven Restopub" },
     { src: "/images/gallery/gallery-68.jpg", alt: "Snookball на терасі Seven Restopub Володимира Великого" },
     { src: "/images/gallery/gallery-69.jpg", alt: "Футбольний більярд Snookball у Seven Restopub Львів" },
-    { src: "/images/locations/himichna/himichna-hero.jpg", alt: "Інтер’єр Seven Restopub Хімічна у Львові" },
-    { src: "/images/locations/himichna/himichna-terrace-01.jpg", alt: "Тераса Seven Restopub Хімічна у Львові" },
-    { src: "/images/locations/himichna/himichna-interior-02.jpg", alt: "Зал Seven Restopub Хімічна з зеленими акцентами" },
-    { src: "/images/locations/himichna/himichna-design-02.jpg", alt: "Дизайн-деталі Seven Restopub Хімічна" },
-    { src: "/images/locations/himichna/himichna-kitchen-03.jpg", alt: "Команда кухні Seven Restopub Хімічна" },
-    { src: "/images/locations/himichna/himichna-detail-01.jpg", alt: "Деталі подачі Seven Restopub Хімічна" },
+    { src: "/images/locations/khimichna/professional/khimichna-hero.jpg", alt: "Інтер’єр Seven Restopub Хімічна" },
+    { src: "/images/locations/khimichna/professional/khimichna-booking.jpg", alt: "Зал Seven Restopub Хімічна" },
+    { src: "/images/locations/khimichna/professional/khimichna-location-card.jpg", alt: "Інтер’єр Seven Restopub Хімічна з зеленими акцентами" },
+    { src: "/images/locations/khimichna/professional/khimichna-gallery-01.jpg", alt: "Атмосфера Seven Restopub Хімічна" },
   ] satisfies GalleryImage[],
   eventImages: [
     "/images/events/event-football-01.jpg",
