@@ -67,27 +67,19 @@ export function Header() {
     }
 
     const unregisterModalVisibility = registerModalVisibility();
-    const scrollY = window.scrollY;
-    const originalBodyPosition = document.body.style.position;
-    const originalBodyTop = document.body.style.top;
-    const originalBodyWidth = document.body.style.width;
     const originalBodyOverflow = document.body.style.overflow;
     const originalHtmlOverflow = document.documentElement.style.overflow;
+    const originalHtmlOverscrollBehavior = document.documentElement.style.overscrollBehavior;
 
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
+    document.documentElement.style.overscrollBehavior = "none";
 
     return () => {
       unregisterModalVisibility();
-      document.body.style.position = originalBodyPosition;
-      document.body.style.top = originalBodyTop;
-      document.body.style.width = originalBodyWidth;
       document.body.style.overflow = originalBodyOverflow;
       document.documentElement.style.overflow = originalHtmlOverflow;
-      window.scrollTo(0, scrollY);
+      document.documentElement.style.overscrollBehavior = originalHtmlOverscrollBehavior;
     };
   }, [open]);
 
@@ -136,9 +128,9 @@ export function Header() {
       </div>
 
       <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition duration-300 ease-premium min-[1201px]:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
-      <aside className={`fixed right-0 top-0 z-[80] flex h-[100dvh] max-h-[100dvh] w-[min(380px,calc(100vw-28px))] flex-col overflow-hidden bg-seven-background shadow-2xl shadow-black/60 premium-border transition-transform duration-300 ease-premium [backface-visibility:hidden] [contain:layout_paint] min-[1201px]:hidden ${open ? "translate-x-0" : "translate-x-full"}`}>
+      <aside className={`fixed right-0 top-0 z-[80] h-[100dvh] max-h-[100dvh] w-[min(380px,calc(100vw-28px))] touch-pan-y overflow-y-auto overscroll-contain bg-seven-background shadow-2xl shadow-black/60 premium-border transition-transform duration-300 ease-premium [backface-visibility:hidden] [scroll-behavior:auto] [-webkit-overflow-scrolling:touch] min-[1201px]:hidden ${open ? "translate-x-0" : "translate-x-full"}`}>
         <div
-          className="flex shrink-0 items-center justify-between border-b border-white/10 px-5 pb-4"
+          className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-seven-background px-5 pb-4"
           style={{ paddingTop: "max(20px, calc(16px + env(safe-area-inset-top)))" }}
         >
           <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={180} height={86} priority className="h-auto w-36" />
@@ -151,7 +143,7 @@ export function Header() {
             <X size={20} />
           </button>
         </div>
-        <nav className="grid min-h-0 flex-1 touch-pan-y content-start gap-1 overflow-y-auto overscroll-contain p-5 [scroll-behavior:auto] [-webkit-overflow-scrolling:touch]">
+        <nav className="grid content-start gap-1 p-5">
           {navItems.map((item) => (
             item.action === "careers" ? (
               <button
@@ -178,7 +170,7 @@ export function Header() {
           ))}
         </nav>
         <div
-          className="shrink-0 border-t border-white/10 px-5 pt-5"
+          className="border-t border-white/10 px-5 pt-5"
           style={{ paddingBottom: "max(20px, calc(16px + env(safe-area-inset-bottom)))" }}
         >
           <div className="grid gap-3">
