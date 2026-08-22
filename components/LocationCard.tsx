@@ -61,7 +61,7 @@ export function LocationCard({ location }: LocationCardProps) {
           </a>
         </div>
         <div
-          className="relative mt-4 flex min-h-[76px] content-start gap-1.5"
+          className="relative mt-4 flex content-start gap-1.5 md:min-h-[76px]"
           onBlur={(event) => {
             if (!event.currentTarget.contains(event.relatedTarget)) {
               setFeaturesOpen(false);
@@ -75,10 +75,15 @@ export function LocationCard({ location }: LocationCardProps) {
                 {tv(feature)}
               </span>
             ))}
+            {hiddenFeatures.map((feature) => (
+              <span key={`mobile-${feature}`} className="rounded-full bg-seven-green/12 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-seven-green premium-border md:hidden">
+                {tv(feature)}
+              </span>
+            ))}
             {hiddenFeaturesCount > 0 ? (
               <button
                 type="button"
-                className="rounded-full bg-white/[0.055] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-seven-cream transition duration-200 hover:border-seven-green/45 hover:bg-seven-green/12 hover:text-seven-green focus:outline-none focus:ring-2 focus:ring-seven-green/45 premium-border"
+                className="hidden rounded-full bg-white/[0.055] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-seven-cream transition duration-200 hover:border-seven-green/45 hover:bg-seven-green/12 hover:text-seven-green focus:outline-none focus:ring-2 focus:ring-seven-green/45 premium-border md:inline-flex"
                 onClick={() => setFeaturesOpen((value) => !value)}
                 onFocus={() => setFeaturesOpen(true)}
                 onMouseEnter={() => setFeaturesOpen(true)}
@@ -92,7 +97,7 @@ export function LocationCard({ location }: LocationCardProps) {
 
           {featuresOpen && hiddenFeaturesCount > 0 ? (
             <div
-              className="absolute left-0 top-[calc(100%+8px)] z-20 grid max-w-[min(280px,100%)] gap-1.5 rounded-[8px] bg-seven-card/98 p-3 shadow-[0_18px_48px_rgba(0,0,0,0.42)] premium-border"
+              className="absolute left-0 top-[calc(100%+8px)] z-20 hidden max-w-[min(280px,100%)] gap-1.5 rounded-[8px] bg-seven-card/98 p-3 shadow-[0_18px_48px_rgba(0,0,0,0.42)] premium-border md:grid"
               onMouseLeave={() => setFeaturesOpen(false)}
             >
               {hiddenFeatures.map((feature) => (
