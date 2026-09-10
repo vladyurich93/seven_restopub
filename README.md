@@ -168,20 +168,3 @@ The owner should only need to:
 2. Edit business information in `data/siteConfig.ts`.
 
 No component code is required for routine content updates.
-
-## Table QR redirects
-
-Printed table QR codes should point to `/q/khimichna/<table>`. The technical route shows a short SEVEN animation, records a `menu_scan` event, and opens the table's existing Mono URL. Mappings are maintained in `data/qrTables.ts`, so a changed Mono URL does not require reprinting the QR.
-
-Supported tables: `701`-`706` and `801`-`807`.
-
-Optional production variables:
-
-```text
-NEXT_PUBLIC_META_PIXEL_ID=<Meta Pixel ID>
-MARKETING_TRACKING_ENABLED=true
-QR_ANALYTICS_WEBHOOK_URL=<durable analytics endpoint>
-QR_ANALYTICS_WEBHOOK_SECRET=<bearer secret>
-```
-
-Meta marketing tracking stays off unless explicitly enabled after the consent approach has been approved. GA4 and structured Vercel logs record the scan location and table but do not collect names, phone numbers, email addresses, or precise location.
