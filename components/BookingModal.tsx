@@ -328,6 +328,10 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
         return;
       }
 
+      trackEvent("booking_success", {
+        location_id: form.locationId,
+        source: "website_booking_modal",
+      });
       setStatus("success");
       setMessage(result.message || t.forms.bookingSuccess);
     } catch {
