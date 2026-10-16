@@ -1,50 +1,38 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-type AnimatedSectionProps = {
-  children: ReactNode;
-  className?: string;
-};
+type AnimatedSectionProps = { children: ReactNode; className?: string };
 
 export function AnimatedSection({ children, className = "" }: AnimatedSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  const [armed, setArmed] = useState(false);
 
   useEffect(() => {
     const node = sectionRef.current;
+    if (!node || !("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    if (!node) {
-      return;
-    }
-
-    if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setVisible(true);
-      return;
-    }
-
-    setArmed(true);
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
+    const targets = Array.from(node.children).flatMap((child) =>
+      child.classList.contains("stagger-reveal") ? Array.from(child.children) : [child],
     );
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.setAttribute("data-reveal", "visible");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -32px 0px", threshold: 0 });
 
-    observer.observe(node);
-
-    return () => observer.disconnect();
+    targets.forEach((target) => {
+      // Never hide content already reached by a deep link or restored scroll position.
+      target.setAttribute("data-reveal", target.getBoundingClientRect().top < window.innerHeight - 32 ? "visible" : "pending");
+      observer.observe(target);
+    });
+    return () => {
+      observer.disconnect();
+      targets.forEach((target) => target.removeAttribute("data-reveal"));
+    };
   }, []);
 
-  return (
-    <div ref={sectionRef} data-motion={armed ? "ready" : undefined} className={`section-reveal ${visible ? "is-visible" : ""} ${className}`}>
-      {children}
-    </div>
-  );
+  return <div ref={sectionRef} className={`motion-group ${className}`}>{children}</div>;
 }

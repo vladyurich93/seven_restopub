@@ -33,9 +33,23 @@ const navItems: NavItem[] = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [brandIntro, setBrandIntro] = useState(false);
   const { openCareersModal } = useCareersModal();
   const { t } = useLanguage();
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (pathname !== "/" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    try {
+      if (sessionStorage.getItem("seven-brand-seen")) return;
+      sessionStorage.setItem("seven-brand-seen", "1");
+      setBrandIntro(true);
+      const timeout = window.setTimeout(() => setBrandIntro(false), 900);
+      return () => window.clearTimeout(timeout);
+    } catch {
+      // Storage restrictions must not affect navigation or logo visibility.
+    }
+  }, [pathname]);
 
   useEffect(() => {
     let frameId = 0;
@@ -87,7 +101,7 @@ export function Header() {
     <header className={`site-header fixed inset-x-0 top-0 z-50 border-b transition duration-700 ease-premium ${scrolled || open ? "is-scrolled border-white/10 bg-seven-background shadow-[0_18px_58px_rgba(0,0,0,0.24)]" : "border-transparent bg-gradient-to-b from-black/50 to-transparent"}`}>
       <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-[84px] lg:h-[88px] min-[1201px]:h-28">
         <Link href="/" className="flex shrink-0 items-center" aria-label={siteConfig.brandName}>
-          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} priority className="seven-header-logo" />
+          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} priority className={`seven-header-logo ${brandIntro ? "seven-logo-intro" : ""}`} />
         </Link>
 
         <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 min-[1201px]:flex min-[1281px]:gap-5 xl:gap-6">

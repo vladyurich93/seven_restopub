@@ -1,21 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { AtmosphereCarousel } from "@/components/AtmosphereCarousel";
 import { Hero } from "@/components/Hero";
-import { ImageFrame } from "@/components/ImageFrame";
-import { BookingButton } from "@/components/BookingModal";
+import { HomeLocations } from "@/components/HomeLocations";
 import { MenuCategoryCard } from "@/components/MenuCategoryCard";
 import { SectionTitle } from "@/components/SectionTitle";
 import { siteConfig } from "@/data/siteConfig";
-import { formatPhone, phoneHref } from "@/data/phone";
-import type { BookingLocationId } from "@/data/bookingConfig";
-import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 
-const bookingIds: Record<string, BookingLocationId> = { "lviv-vv": "vv", "lviv-rynok": "rynok", khimichna: "khimichna", zaporizhzhia: "zp" };
 const gallery = [0, 5, 11, 16, 57, 68].map((index) => siteConfig.galleryImages[index]);
 
 export default function HomePage() {
@@ -42,32 +37,14 @@ export default function HomePage() {
             <SectionTitle eyebrow={t.home.locationsEyebrow} title={t.home.locationsTitle} description={en ? "A family dinner, a table in the city centre or an evening on the terrace. Choose what feels like you." : "Сімейна вечеря, зустріч у центрі чи вечір на терасі. Обирайте те, що ближче вам."} />
             <Link href="/locations" className="seven-text-link">{t.common.allLocations}<ArrowUpRight size={18} /></Link>
           </div>
-          <div className="stagger-reveal grid gap-x-10 gap-y-12 md:grid-cols-2">
-            {siteConfig.locations.map((location, index) => (
-              <article key={location.id} className="seven-venue min-w-0">
-                <ImageFrame src={location.image} alt={tv(location.name)} className="aspect-[16/9] overflow-hidden rounded-lg" sizes="(min-width: 768px) 45vw, 92vw" />
-                <div className="mt-5 flex items-start gap-4"><span className="pt-1 text-xs text-seven-green">0{index + 1}</span><div className="min-w-0 flex-1">
-                  <h3 className="font-display text-3xl font-semibold md:text-4xl">{tv(location.name).replace("Seven Restopub ", "")}</h3>
-                  <p className="mt-2 text-sm leading-6 text-seven-muted">{tv(location.address)}</p>
-                  <p className="mt-3 text-sm leading-6 text-seven-cream">{location.features.slice(0, 3).map(tv).join(" · ")}</p>
-                  <p className="mt-2 text-xs text-seven-muted">{tv(location.workingHours)}</p>
-                  <a className="mt-4 inline-flex items-center gap-2 whitespace-nowrap text-base font-semibold hover:text-seven-green" href={phoneHref(location.phone)} onClick={() => trackEvent("phone_click", { location_id: location.id, phone: location.phone })}><Phone size={15} />{formatPhone(location.phone)}</a>
-                  <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
-                    <BookingButton locationId={bookingIds[location.id]} label={t.common.book} className="seven-primary !px-5 !text-[11px]" />
-                    <a href={location.menuLink} target="_blank" rel="noreferrer" className="seven-text-link" onClick={() => trackEvent("menu_open", { location_id: location.id, link_url: location.menuLink ?? "" })}>{t.common.menu}<ArrowUpRight size={15} /></a>
-                    <a href={location.googleMaps} target="_blank" rel="noreferrer" className="seven-text-link"><MapPin size={15} />{t.common.route}</a>
-                  </div>
-                </div></div>
-              </article>
-            ))}
-          </div>
+          <HomeLocations />
         </AnimatedSection>
       </section>
 
       <section className="seven-section bg-seven-background">
         <AnimatedSection className="container-shell">
           <div className="seven-section-heading"><SectionTitle eyebrow={t.home.menuEyebrow} title={en ? "Made to share." : "Смакує разом."} description={en ? "Burgers, pizza, snacks and Ukrainian craft. Current dishes and prices are in your venue’s menu." : "Бургери, піца, закуски й український крафт. Актуальні страви та ціни — у меню вашого закладу."} /><Link href="/menu" className="seven-text-link">{en ? "Full menu" : "Усе меню"}<ArrowUpRight size={18} /></Link></div>
-          <div className="stagger-reveal grid grid-cols-2 gap-4 lg:grid-cols-4">{siteConfig.menuCategories.slice(0, 4).map((category, index) => <MenuCategoryCard key={category.title} category={category} index={index} />)}</div>
+          <div className="stagger-reveal grid grid-cols-2 gap-4 lg:grid-cols-4">{siteConfig.menuCategories.slice(0, 4).map((category, index) => <MenuCategoryCard key={category.title} category={category} index={index} href="/menu" />)}</div>
         </AnimatedSection>
       </section>
 
