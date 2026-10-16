@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
 import { LanguageSwitcher, useLanguage } from "@/lib/i18n";
 import { registerModalVisibility } from "@/lib/modalVisibility";
@@ -32,6 +32,8 @@ const navItems: NavItem[] = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const drawerRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const [brandIntro, setBrandIntro] = useState(false);
   const { openCareersModal } = useCareersModal();
@@ -80,6 +82,31 @@ export function Header() {
       return;
     }
 
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeButtonRef.current?.focus();
+    const desktop = window.matchMedia("(min-width: 1201px)");
+    const onDesktop = () => { if (desktop.matches) setOpen(false); };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const controls = drawerRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex="0"]');
+      if (!controls?.length) return;
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    desktop.addEventListener("change", onDesktop);
     const unregisterModalVisibility = registerModalVisibility();
     const originalBodyOverflow = document.body.style.overflow;
     const originalHtmlOverflow = document.documentElement.style.overflow;
@@ -90,7 +117,10 @@ export function Header() {
     document.documentElement.style.overscrollBehavior = "none";
 
     return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      desktop.removeEventListener("change", onDesktop);
       unregisterModalVisibility();
+      previousFocus?.focus();
       document.body.style.overflow = originalBodyOverflow;
       document.documentElement.style.overflow = originalHtmlOverflow;
       document.documentElement.style.overscrollBehavior = originalHtmlOverscrollBehavior;
@@ -136,13 +166,14 @@ export function Header() {
           onClick={() => setOpen((value) => !value)}
           aria-label={t.nav.openMenu}
           aria-expanded={open}
+          aria-controls="seven-mobile-menu"
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition duration-300 ease-premium min-[1201px]:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
-      <aside className={`fixed right-0 top-0 z-[80] h-[100dvh] max-h-[100dvh] w-[min(380px,calc(100vw-28px))] touch-pan-y overflow-y-auto overscroll-contain bg-seven-background shadow-2xl shadow-black/60 premium-border transition-transform duration-300 ease-premium [backface-visibility:hidden] [scroll-behavior:auto] [-webkit-overflow-scrolling:touch] min-[1201px]:hidden ${open ? "translate-x-0" : "translate-x-full"}`}>
+      <aside ref={drawerRef} id="seven-mobile-menu" role="dialog" aria-label={t.nav.openMenu} aria-modal={open ? true : undefined} aria-hidden={!open} inert={!open} className={`fixed right-0 top-0 z-[80] h-[100dvh] max-h-[100dvh] w-[min(380px,calc(100vw-28px))] touch-pan-y overflow-y-auto overscroll-contain bg-seven-background shadow-2xl shadow-black/60 premium-border transition-transform duration-300 ease-premium [backface-visibility:hidden] [scroll-behavior:auto] [-webkit-overflow-scrolling:touch] min-[1201px]:hidden ${open ? "translate-x-0" : "translate-x-full"}`}>
         <div
           className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-seven-background px-5 pb-4"
           style={{ paddingTop: "max(20px, calc(16px + env(safe-area-inset-top)))" }}
@@ -151,6 +182,7 @@ export function Header() {
           <button
             type="button"
             className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+            ref={closeButtonRef}
             onClick={() => setOpen(false)}
             aria-label={t.nav.closeMenu}
           >

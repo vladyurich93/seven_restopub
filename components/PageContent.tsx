@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { ImageFrame } from "@/components/ImageFrame";
 import { HomeLocations } from "@/components/HomeLocations";
@@ -135,41 +138,48 @@ export function BanquetsPageContent() {
 }
 
 export function AboutPageContent() {
-  const { t, tv } = useLanguage();
+  const { t, tv, language } = useLanguage();
   const about = siteConfig.about;
-  const photos = [
-    "/images/gallery/gallery-11.jpg",
-    "/images/gallery/gallery-01.jpg",
-    "/images/gallery/gallery-10.jpg",
-    "/images/locations/khimichna/professional/khimichna-hero.jpg",
-  ];
+  const en = language === "en";
+  const dates = ["2024-04-16", "2025-03-29", "2026-02-21", "2026-08-14"];
 
   return (
-    <section className="wood-grain bg-seven-background pb-24 pt-32 md:pb-28 md:pt-40">
-      <AnimatedSection className="container-shell">
-        <SectionTitle as="h1" eyebrow={t.pages.aboutEyebrow} title={t.pages.aboutTitle} description={t.pages.aboutDescription} />
-        <div className="stagger-reveal mt-12 grid gap-7">
-          {about.notes.map((text, index) => (
-            <article key={text} className="grid overflow-hidden rounded-[8px] bg-[linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0)_40%),#1b1b1b] shadow-[0_18px_54px_rgba(0,0,0,0.22)] premium-border premium-lift hover:shadow-glow min-[1201px]:grid-cols-[0.9fr_1.1fr]">
-              <ImageFrame src={photos[index]} alt={tv(text)} className="min-h-[320px]" />
-              <div className="flex flex-col justify-end p-7 md:p-10">
-                <p className="mb-8 font-display text-6xl font-black text-seven-terracotta">0{index + 1}</p>
-                <p className="font-display text-4xl font-black leading-tight text-white md:text-5xl">{tv(text)}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="mt-8 rounded-[8px] bg-black p-7 shadow-[0_18px_54px_rgba(0,0,0,0.22)] premium-border md:p-10">
-          <p className="mb-6 text-sm font-semibold uppercase tracking-[0.24em] text-seven-terracotta">{t.pages.atmosphere}</p>
-          <div className="stagger-reveal grid gap-3 sm:grid-cols-2 min-[1201px]:grid-cols-3">
-            {about.expandedWith.map((item) => (
-              <div key={item} className="rounded-full bg-seven-green/12 px-5 py-3 text-lg font-semibold text-seven-green premium-border">
-                {tv(item)}
-              </div>
-            ))}
+    <section className="seven-inner-page bg-seven-background">
+      <div className="container-shell">
+        <AnimatedSection className="grid gap-8 lg:grid-cols-[1fr_.8fr] lg:items-center lg:gap-14">
+          <div>
+            <SectionTitle as="h1" eyebrow={t.pages.aboutEyebrow} title={t.pages.aboutTitle} description={t.pages.aboutDescription} />
+            <dl className="mt-7 flex flex-wrap gap-x-9 gap-y-5">
+              {[["4", en ? "venues" : "заклади"], ["2", en ? "cities" : "міста"], ["2024", en ? "our first opening" : "перше відкриття"]].map(([value, label]) => <div key={label}><dt className="text-xs text-seven-muted">{label}</dt><dd className="mt-1 font-display text-4xl text-seven-green">{value}</dd></div>)}
+            </dl>
           </div>
-        </div>
-      </AnimatedSection>
+          <ImageFrame src="/images/locations/khimichna/professional/khimichna-hero.jpg" alt={en ? "Interior of Seven on Khimichna, Lviv" : "Інтер’єр Seven на Хімічній у Львові"} className="aspect-[16/10] rounded-xl lg:aspect-[4/3]" sizes="(min-width:1024px) 42vw, 92vw" />
+        </AnimatedSection>
+
+        <AnimatedSection className="mt-12 grid gap-8 border-t border-white/10 pt-8 md:grid-cols-[.65fr_1fr] md:gap-14">
+          <h2 className="font-display text-3xl text-white md:text-4xl">{en ? "How Seven grew" : "Як зростав Seven"}</h2>
+          <ol className="stagger-reveal space-y-7">
+            {about.notes.map((note, index) => {
+              const [date, ...description] = tv(note).split(" — ");
+              return (
+                <li key={note} className="relative border-l border-seven-green/40 pl-6 before:absolute before:-left-[4px] before:top-1.5 before:h-[7px] before:w-[7px] before:rounded-full before:bg-seven-green">
+                  <time dateTime={dates[index]} className="text-xs font-semibold uppercase tracking-wider text-seven-green">{date}</time>
+                  <p className="mt-3 text-base leading-7 text-seven-cream">{description.join(" — ")}</p>
+                </li>
+              );
+            })}
+          </ol>
+        </AnimatedSection>
+
+        <AnimatedSection className="mt-12 border-t border-white/10 pt-8">
+          <h2 className="font-display text-3xl text-white md:text-4xl">{en ? "What brings us together" : "Що нас об’єднує"}</h2>
+          <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-3 text-sm text-seven-muted">{about.expandedWith.map((item) => <li key={item}>{tv(item)}</li>)}</ul>
+          <div className="mt-8 flex flex-wrap items-center gap-6">
+            <Link href="/locations" className="seven-primary inline-flex min-h-12 items-center gap-3 rounded-full px-6 py-3 text-sm font-semibold">{t.common.chooseVenue}<ArrowUpRight size={16} /></Link>
+            <Link href="/menu" className="seven-text-link">{t.common.menu}<ArrowUpRight size={16} /></Link>
+          </div>
+        </AnimatedSection>
+      </div>
     </section>
   );
 }
