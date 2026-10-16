@@ -3,7 +3,7 @@
 import { Clock, Instagram, MapPinned, Phone } from "lucide-react";
 import { useState } from "react";
 import type { BookingLocationId } from "@/data/bookingConfig";
-import { phoneHref } from "@/data/phone";
+import { formatPhone, phoneHref } from "@/data/phone";
 import type { Location } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
@@ -47,7 +47,7 @@ export function LocationCard({ location }: LocationCardProps) {
             onClick={() => trackEvent("phone_click", { location_id: location.id, phone: location.phone })}
           >
             <Phone className="shrink-0 text-seven-oak" size={20} />
-            {location.phone}
+            <span className="whitespace-nowrap">{formatPhone(location.phone)}</span>
           </a>
           <a
             href={location.instagram}

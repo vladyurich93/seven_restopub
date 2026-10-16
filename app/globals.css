@@ -583,3 +583,49 @@ a {
     animation: none !important;
   }
 }
+
+/* Seven: restrained motion and a clearer guest journey. */
+.seven-header-logo { width: 128px; height: 64px; object-fit: cover; }
+.seven-footer-logo { width: 160px; height: 90px; object-fit: cover; }
+.seven-hero { min-height: min(900px, 100svh); }
+.seven-headline { font-size: clamp(4rem, 8vw, 8rem); line-height: .98; letter-spacing: -.045em; }
+.seven-hero-logo { width: 160px; height: 76px; object-fit: cover; }
+.seven-brand-intro { animation: seven-brand 850ms cubic-bezier(.16,1,.3,1) both; }
+.seven-enter { animation: seven-enter 900ms cubic-bezier(.16,1,.3,1) both; }
+.seven-enter:nth-child(3) { animation-delay: 100ms; }
+.seven-enter:nth-child(4) { animation-delay: 180ms; }
+.seven-enter:nth-child(5) { animation-delay: 250ms; }
+.seven-section { padding-block: clamp(64px, 8vw, 112px); }
+.seven-section-heading { display:flex; flex-direction:column; gap:24px; margin-bottom:40px; }
+.seven-text-link { display:inline-flex; align-items:center; gap:8px; width:fit-content; font-size:14px; font-weight:600; color: #b7e14d; transition:color 200ms; }
+.seven-text-link:hover { color:white; }
+.seven-primary { background:#b7e14d !important; color:#10110e !important; box-shadow:none !important; letter-spacing:.1em !important; }
+.seven-primary:hover { background:#d0f181 !important; }
+.seven-statement { font-size:clamp(3.5rem,6vw,6rem); line-height:1.05; letter-spacing:-.035em; }
+.seven-faq summary::-webkit-details-marker { display:none; }
+@keyframes seven-brand { from { opacity:0; clip-path:inset(0 100% 0 0); transform:translateY(8px); } to { opacity:1; clip-path:inset(0); transform:translateY(0); } }
+@keyframes seven-enter { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@media (min-width:768px) {
+  .seven-section-heading { flex-direction:row; align-items:flex-end; justify-content:space-between; gap:40px; }
+  .seven-section-heading > :first-child { max-width:720px; }
+  .seven-section-heading > a { flex-shrink:0; }
+  .seven-header-logo { width:160px; height:76px; }
+}
+@media (max-width:767px) {
+  .seven-hero { min-height:780px; min-height:max(740px, 100svh); }
+  .seven-hero > .container-shell { padding-bottom:124px; }
+  .seven-headline { font-size:clamp(3.75rem,16vw,5.5rem); }
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion:no-preference) {
+    .seven-hero-photo { animation:seven-hero-scroll linear both; animation-timeline:scroll(root); animation-range:0px 850px; }
+    @keyframes seven-hero-scroll { from { transform:scale(1); } to { transform:scale(1.10); } }
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  .seven-brand-intro, .seven-enter, .seven-hero-photo { animation:none !important; transform:none !important; clip-path:none !important; }
+}
+
+/* Keep server-rendered content readable before JavaScript is ready. */
+.section-reveal:not([data-motion="ready"]),
+.section-reveal:not([data-motion="ready"]) .stagger-reveal > * { opacity:1; transform:none; }

@@ -11,6 +11,7 @@ type AnimatedSectionProps = {
 export function AnimatedSection({ children, className = "" }: AnimatedSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [armed, setArmed] = useState(false);
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -19,10 +20,12 @@ export function AnimatedSection({ children, className = "" }: AnimatedSectionPro
       return;
     }
 
-    if (!("IntersectionObserver" in window)) {
+    if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setVisible(true);
       return;
     }
+
+    setArmed(true);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -40,7 +43,7 @@ export function AnimatedSection({ children, className = "" }: AnimatedSectionPro
   }, []);
 
   return (
-    <div ref={sectionRef} className={`section-reveal ${visible ? "is-visible" : ""} ${className}`}>
+    <div ref={sectionRef} data-motion={armed ? "ready" : undefined} className={`section-reveal ${visible ? "is-visible" : ""} ${className}`}>
       {children}
     </div>
   );

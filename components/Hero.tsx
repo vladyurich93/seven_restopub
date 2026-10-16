@@ -1,66 +1,34 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { siteConfig } from "@/data/siteConfig";
 import { useLanguage } from "@/lib/i18n";
 import { BookingButton } from "./BookingModal";
-import { LocationPickerButton } from "./LocationPicker";
 
 export function Hero() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const en = language === "en";
 
   return (
-    <section className="hero-section relative min-h-[100svh] overflow-hidden bg-seven-background md:min-h-[760px] min-[1201px]:min-h-[100svh]">
-      <Image
-        src="/images/gallery/gallery-20.jpg"
-        alt={siteConfig.slogan}
-        fill
-        sizes="100vw"
-        priority
-        fetchPriority="high"
-        quality={86}
-        className="hero-bg-image absolute inset-0 block h-full w-full object-cover object-[54%_44%] opacity-95 sm:object-[52%_45%] md:object-[58%_45%] min-[1201px]:object-[72%_45%]"
-      />
-      <div className="hero-side-overlay absolute inset-0 bg-[linear-gradient(90deg,rgba(15,15,15,0.82)_0%,rgba(15,15,15,0.54)_44%,rgba(15,15,15,0.12)_100%)] min-[1201px]:bg-[linear-gradient(90deg,rgba(15,15,15,0.86)_0%,rgba(15,15,15,0.58)_32%,rgba(15,15,15,0.16)_58%,rgba(15,15,15,0.02)_100%)]" />
-      <div className="hero-depth-overlay absolute inset-0 bg-[linear-gradient(180deg,rgba(15,15,15,0.46)_0%,rgba(15,15,15,0.04)_34%,rgba(15,15,15,0.72)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_28%,rgba(183,225,77,0.075),transparent_30%),radial-gradient(circle_at_78%_74%,rgba(201,113,74,0.11),transparent_38%)]" />
-      <div className="cinematic-vignette absolute inset-0" />
-      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-seven-background via-seven-background/70 to-transparent md:h-44" />
-      <div className="container-shell relative z-10 grid min-h-[100svh] items-center gap-8 pb-14 pt-24 md:min-h-[760px] md:items-end md:pb-16 md:pt-28 min-[1201px]:min-h-[100svh] min-[1201px]:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.72fr)] min-[1201px]:items-center min-[1201px]:gap-10 min-[1201px]:pb-14 min-[1201px]:pt-28 xl:grid-cols-[minmax(0,0.9fr)_minmax(420px,0.76fr)] xl:gap-14 [@media_(min-width:1024px)_and_(max-height:780px)]:gap-7 [@media_(min-width:1024px)_and_(max-height:780px)]:pb-8 [@media_(min-width:1024px)_and_(max-height:780px)]:pt-24">
-        <div className="hero-copy min-w-0">
-          <p className="hero-eyebrow mb-5 inline-flex rounded-full bg-black/28 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-seven-green premium-border md:text-sm md:tracking-[0.28em] [@media_(min-width:1024px)_and_(max-height:780px)]:mb-3 [@media_(min-width:1024px)_and_(max-height:780px)]:py-1.5 [@media_(min-width:1024px)_and_(max-height:780px)]:text-xs">{t.hero.eyebrow}</p>
-          <h1 className="hero-title hero-title-responsive luxury-hero-title font-display font-black text-white">
-            {t.hero.title}
-          </h1>
-          <p className="hero-subtitle mt-6 max-w-2xl text-lg leading-8 text-seven-cream/78 md:text-xl [@media_(min-width:1024px)_and_(max-height:780px)]:mt-4 [@media_(min-width:1024px)_and_(max-height:780px)]:max-w-xl [@media_(min-width:1024px)_and_(max-height:780px)]:text-base [@media_(min-width:1024px)_and_(max-height:780px)]:leading-7">
-            {t.hero.description}
-          </p>
-          <div className="hero-tags mt-7 flex flex-wrap gap-2 [@media_(min-width:1024px)_and_(max-height:780px)]:mt-5">
-            {t.hero.tags.map((item, index) => (
-              <span
-                key={item}
-                className="hero-chip rounded-full bg-black/28 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-white premium-border [@media_(min-width:1024px)_and_(max-height:780px)]:px-3 [@media_(min-width:1024px)_and_(max-height:780px)]:py-1.5"
-                style={{ animationDelay: `${360 + index * 70}ms` }}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-          <div className="hero-actions mt-9 flex flex-col gap-4 sm:flex-row [@media_(min-width:1024px)_and_(max-height:780px)]:mt-6">
-            <BookingButton className="min-h-14 px-8 text-base [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-12 [@media_(min-width:1024px)_and_(max-height:780px)]:px-7 [@media_(min-width:1024px)_and_(max-height:780px)]:text-sm" label={t.common.bookTable} />
-            <LocationPickerButton className="min-h-14 bg-black/30 px-8 text-base premium-border hover:bg-seven-green hover:text-seven-background [@media_(min-width:1024px)_and_(max-height:780px)]:min-h-12 [@media_(min-width:1024px)_and_(max-height:780px)]:px-7 [@media_(min-width:1024px)_and_(max-height:780px)]:text-sm" label={t.common.chooseVenue} />
-          </div>
+    <section className="seven-hero relative isolate overflow-hidden bg-black">
+      <div className="seven-hero-photo absolute inset-0 -z-20">
+        <Image src="/images/hero/hero-02.jpg" alt={t.hero.terraceAlt} fill sizes="100vw" priority fetchPriority="high" quality={85} className="object-cover object-[60%_45%]" />
+      </div>
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(0,0,0,.85),rgba(0,0,0,.25)),linear-gradient(0deg,#080a07,transparent_60%)]" />
+      <div className="container-shell relative flex min-h-[inherit] flex-col justify-end pb-12 pt-28 md:pb-16">
+        <div className="seven-brand-intro mb-6" aria-hidden="true">
+          <Image src={siteConfig.logo} alt="" width={375} height={375} className="seven-hero-logo" />
         </div>
-        <div className="hero-card group relative hidden min-h-[460px] overflow-hidden rounded-[8px] premium-border shadow-[0_28px_80px_rgba(0,0,0,0.38)] min-[1201px]:block xl:min-h-[580px] [@media_(min-width:1201px)_and_(max-height:780px)]:min-h-[430px] [@media_(min-width:1201px)_and_(max-height:680px)]:min-h-[360px]">
-          <Image
-            src="/images/hero/hero-02.jpg"
-            alt={t.hero.terraceAlt}
-            fill
-            sizes="38vw"
-            priority
-            quality={82}
-            className="absolute inset-0 block h-full w-full object-cover object-[52%_38%]"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,17,17,0),rgba(17,17,17,0.04)_64%,rgba(17,17,17,0.16))]" />
+        <p className="seven-enter mb-5 text-[11px] font-semibold uppercase tracking-[.22em] text-seven-green md:text-sm">{en ? "Lviv · Zaporizhzhia / Four places to meet" : "Львів · Запоріжжя / Чотири місця для зустрічей"}</p>
+        <h1 className="seven-enter seven-headline font-display font-black text-white">{en ? <>Your people.<br />Your Seven.</> : <>Свої люди.<br />Твій Seven.</>}</h1>
+        <p className="seven-enter mt-6 max-w-lg text-base leading-7 text-white/80 md:text-lg md:leading-8">{en ? "Ukrainian craft, food to share and evenings together. Choose your place — we’ll take care of the table." : "Український крафт, їжа для компанії та вечори разом. Обирай свій заклад — подбаємо про твій стіл."}</p>
+        <div className="seven-enter mt-8 flex flex-wrap items-center gap-5">
+          <BookingButton label={t.common.bookTable} className="seven-primary min-h-14" />
+          <Link href="/menu" className="inline-flex min-h-12 items-center gap-3 text-sm font-semibold text-white transition hover:text-seven-green">{en ? "Explore the menu" : "Переглянути меню"}<ArrowUpRight size={18} /></Link>
         </div>
+        <a href="#venues" className="seven-enter mt-12 inline-flex w-fit items-center gap-3 text-xs uppercase tracking-[.18em] text-white/65 md:mt-16"><ArrowDown size={16} />{en ? "Find your Seven" : "Знайди свій Seven"}</a>
       </div>
     </section>
   );

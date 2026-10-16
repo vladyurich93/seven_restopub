@@ -84,10 +84,10 @@ export function Header() {
   }, [open]);
 
   return (
-    <header className={`site-header fixed inset-x-0 top-0 z-50 border-b transition duration-700 ease-premium ${scrolled || open ? "is-scrolled border-white/10 bg-seven-background/88 shadow-[0_18px_58px_rgba(0,0,0,0.24)]" : "border-transparent bg-gradient-to-b from-black/50 to-transparent"}`}>
+    <header className={`site-header fixed inset-x-0 top-0 z-50 border-b transition duration-700 ease-premium ${scrolled || open ? "is-scrolled border-white/10 bg-seven-background shadow-[0_18px_58px_rgba(0,0,0,0.24)]" : "border-transparent bg-gradient-to-b from-black/50 to-transparent"}`}>
       <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-[84px] lg:h-[88px] min-[1201px]:h-28">
         <Link href="/" className="flex shrink-0 items-center" aria-label={siteConfig.brandName}>
-          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} priority className="h-auto w-36 md:w-36 lg:w-40 min-[1201px]:w-52 xl:w-60" />
+          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} priority className="seven-header-logo" />
         </Link>
 
         <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 min-[1201px]:flex min-[1281px]:gap-5 xl:gap-6">
@@ -133,7 +133,7 @@ export function Header() {
           className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-seven-background px-5 pb-4"
           style={{ paddingTop: "max(20px, calc(16px + env(safe-area-inset-top)))" }}
         >
-          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={180} height={86} priority className="h-auto w-36" />
+          <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={180} height={86} priority className="seven-header-logo" />
           <button
             type="button"
             className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
