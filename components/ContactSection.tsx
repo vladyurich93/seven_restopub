@@ -1,7 +1,7 @@
 "use client";
 
 import { Instagram, MapPinned, Phone } from "lucide-react";
-import { phoneHref } from "@/data/phone";
+import { formatPhone, phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
@@ -32,7 +32,7 @@ export function ContactSection() {
                   href={phoneHref(location.phone)}
                   onClick={() => trackEvent("phone_click", { location_id: location.id, phone: location.phone })}
                 >
-                  <Phone className="mt-1 shrink-0 text-seven-oak" size={18} />{location.phone}
+                  <Phone className="mt-1 shrink-0 text-seven-oak" size={18} /><span className="whitespace-nowrap">{formatPhone(location.phone)}</span>
                 </a>
                 <a
                   href={location.instagram}

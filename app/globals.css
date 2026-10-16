@@ -652,3 +652,7 @@ a {
   .seven-logo-intro { animation:none !important; }
   .motion-group [data-reveal] { opacity:1 !important; transform:none !important; transition:none !important; }
 }
+
+.seven-inner-page { padding-top:128px; padding-bottom:64px; }
+.venue-action-card h2 { overflow-wrap:anywhere; }
+@media (min-width:768px) { .seven-inner-page { padding-top:152px; padding-bottom:88px; } }

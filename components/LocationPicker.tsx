@@ -3,7 +3,7 @@
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { MapPinned, Navigation, Phone, X } from "lucide-react";
-import { phoneHref } from "@/data/phone";
+import { formatPhone, phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
@@ -192,7 +192,7 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
                 onClick={() => trackEvent("phone_click", { location_id: location.id, phone: location.phone })}
               >
                 <Phone size={24} className="text-seven-oak" />
-                {location.phone}
+                <span className="whitespace-nowrap">{formatPhone(location.phone)}</span>
               </a>
               <div className="mt-auto grid gap-3 pt-6">
                 <a
