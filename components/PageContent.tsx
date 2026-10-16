@@ -1,26 +1,37 @@
 "use client";
 
-import { CheckCircle2 } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { ImageFrame } from "@/components/ImageFrame";
-import { LocationCard } from "@/components/LocationCard";
-import { LocationPickerButton } from "@/components/LocationPicker";
+import { HomeLocations } from "@/components/HomeLocations";
 import { VenueActionCards } from "@/components/VenueActionCards";
 import { SectionTitle } from "@/components/SectionTitle";
 import { siteConfig } from "@/data/siteConfig";
 import { useLanguage } from "@/lib/i18n";
 
 export function LocationsPageContent() {
-  const { t } = useLanguage();
+  const { t, tv, language } = useLanguage();
+  const en = language === "en";
+  const guides = [
+    { feature: "Дитяча кімната", title: en ? "With children" : "З дітьми" },
+    { feature: "Велика тераса", title: en ? "On the terrace" : "На терасу" },
+    { feature: "Банкетна зала", title: en ? "A banquet hall" : "Банкетна зала" },
+  ];
 
   return (
     <section className="seven-inner-page bg-seven-background">
       <AnimatedSection className="container-shell">
-        <SectionTitle as="h1" eyebrow={t.pages.locationsEyebrow} title={t.pages.locationsTitle} description={t.pages.locationsDescription} />
-        <div className="stagger-reveal mt-12 grid items-stretch gap-7 md:grid-cols-2">
-          {siteConfig.locations.map((location) => (
-            <LocationCard key={location.id} location={location} />
-          ))}
+        <SectionTitle as="h1" eyebrow={t.pages.locationsEyebrow} title={en ? "Find your Seven." : "Знайди свій Seven."} description={en ? "Four venues in Lviv and Zaporizhzhia. Choose a place to see its features, hours, menu and directions." : "Чотири заклади у Львові та Запоріжжі. Оберіть локацію, щоб переглянути її особливості, графік, меню та маршрут."} />
+        <div className="mt-8 md:mt-10"><HomeLocations headingLevel="h2" /></div>
+        <div className="mt-10 border-t border-white/10 pt-8">
+          <h2 className="font-display text-3xl text-white md:text-4xl">{en ? "A place for your plans" : "Заклад під ваші плани"}</h2>
+          <div className="mt-6 grid gap-5 md:grid-cols-3">
+            {guides.map((guide) => (
+              <div key={guide.feature} className="border-l border-seven-green/50 pl-4">
+                <h3 className="font-semibold text-seven-green">{guide.title}</h3>
+                <p className="mt-2 text-sm leading-7 text-seven-muted">{siteConfig.locations.filter((location) => (location.features as readonly string[]).includes(guide.feature)).map((location) => tv(location.name).replace("Seven Restopub ", "")).join(" · ")}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </AnimatedSection>
     </section>
@@ -77,36 +88,46 @@ export function EventsPageContent() {
 }
 
 export function BanquetsPageContent() {
-  const { t, tv } = useLanguage();
+  const { t, tv, language } = useLanguage();
+  const en = language === "en";
   const rules = siteConfig.banquetRules;
+  const steps = en ? [
+    ["Choose a venue", "Tell the administrator your preferred date and number of guests."],
+    ["Agree the details", "Discuss the menu, seating, deposit, service fee and any drinks you plan to bring."],
+    ["Confirm the arrangements", "Confirm availability and the agreed terms directly with the venue."],
+  ] : [
+    ["Оберіть заклад", "Повідомте адміністратору бажану дату та кількість гостей."],
+    ["Узгодьте деталі", "Обговоріть меню, розміщення гостей, депозит, сервісний збір і напої, які плануєте принести."],
+    ["Підтвердьте домовленості", "Погодьте наявність місць та остаточні умови безпосередньо із закладом."],
+  ];
 
   return (
     <section className="seven-inner-page bg-seven-background">
-      <AnimatedSection className="container-shell grid gap-10 min-[1201px]:grid-cols-[0.9fr_1.1fr] min-[1201px]:items-start">
+      <AnimatedSection className="container-shell">
         <SectionTitle as="h1" eyebrow={t.pages.banquetsEyebrow} title={tv(rules.title)} description={t.pages.banquetsDescription} />
-        <div className="rounded-[8px] bg-[linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0)_40%),#1b1b1b] p-7 shadow-[0_18px_54px_rgba(0,0,0,0.22)] premium-border premium-lift hover:shadow-glow md:p-10">
-          <div className="stagger-reveal grid gap-5 sm:grid-cols-2">
-            <div className="rounded-[8px] bg-black/35 p-6 premium-border premium-lift">
-              <p className="text-sm uppercase tracking-[0.24em] text-seven-muted">{t.banquets.deposit}</p>
-              <p className="mt-3 font-display text-4xl font-black text-seven-accent">{tv(rules.deposit)}</p>
-            </div>
-            <div className="rounded-[8px] bg-black/35 p-6 premium-border premium-lift">
-              <p className="text-sm uppercase tracking-[0.24em] text-seven-muted">{t.banquets.serviceFee}</p>
-              <p className="mt-3 font-display text-4xl font-black text-seven-accent">{rules.serviceFee}</p>
-            </div>
+        <div className="stagger-reveal mt-8 grid gap-4 md:mt-10 lg:grid-cols-3">
+          <div className="rounded-xl border border-white/10 bg-white/[.025] p-5 md:p-6">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-seven-muted">{t.banquets.deposit}</h2>
+            <p className="mt-4 font-display text-3xl leading-tight text-seven-green">{tv(rules.deposit)}</p>
           </div>
-          <div className="mt-8">
-            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.24em] text-seven-accent">{t.banquets.corkFee}</p>
-            <div className="space-y-3 text-lg text-white">
-              {rules.corkFee.map((item) => (
-                <p key={item} className="flex items-center gap-3">
-                  <CheckCircle2 size={20} className="text-seven-accent" />
-                  {tv(item)}
-                </p>
-              ))}
-            </div>
+          <div className="rounded-xl border border-white/10 bg-white/[.025] p-5 md:p-6">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-seven-muted">{t.banquets.serviceFee}</h2>
+            <p className="mt-4 font-display text-3xl leading-tight text-seven-green">{rules.serviceFee}</p>
           </div>
-          <LocationPickerButton label={t.banquets.discuss} className="mt-8 min-h-14 w-full text-base" />
+          <div className="rounded-xl border border-white/10 bg-white/[.025] p-5 md:p-6">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-seven-muted">{t.banquets.corkFee}</h2>
+            <ul className="mt-4 space-y-2 text-sm leading-6 text-white">{rules.corkFee.map((item) => <li key={item}>{tv(item)}</li>)}</ul>
+          </div>
+        </div>
+        <p className="mt-4 max-w-2xl text-xs leading-6 text-seven-muted">{en ? "Ask the administrator which drinks fall under categories A and B and how the deposit and fees apply to your celebration." : "Уточніть в адміністратора, які напої належать до категорій А та Б і як депозит та збори застосовуються до вашого святкування."}</p>
+        <div className="mt-12 grid gap-8 border-t border-white/10 pt-8 md:grid-cols-[.65fr_1fr] md:gap-14">
+          <h2 className="font-display text-3xl text-white md:text-4xl">{en ? "Three steps to your celebration" : "Три кроки до святкування"}</h2>
+          <ol className="space-y-6">{steps.map(([title, description], index) => <li key={title} className="flex gap-4"><span className="pt-1 text-xs text-seven-green">0{index + 1}</span><div><h3 className="font-semibold text-white">{title}</h3><p className="mt-2 text-sm leading-7 text-seven-muted">{description}</p></div></li>)}</ol>
+        </div>
+        <div className="mt-12 border-t border-white/10 pt-8">
+          <h2 className="font-display text-3xl text-white md:text-4xl">{en ? "Discuss your celebration" : "Обговоріть ваше свято"}</h2>
+          <p className="mt-3 max-w-xl text-sm leading-7 text-seven-muted">{en ? "Choose a venue below to call its team directly. Banquet arrangements are agreed with the administrator." : "Оберіть заклад нижче, щоб зателефонувати його команді. Умови банкету погоджуються з адміністратором."}</p>
+          <div className="mt-6"><VenueActionCards kind="banquet" /></div>
         </div>
       </AnimatedSection>
     </section>

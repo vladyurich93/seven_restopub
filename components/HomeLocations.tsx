@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Instagram, MapPin, Phone } from "lucide-react";
 import type { BookingLocationId } from "@/data/bookingConfig";
 import { siteConfig } from "@/data/siteConfig";
 import { formatPhone, phoneHref } from "@/data/phone";
@@ -14,7 +14,7 @@ const bookingIds: Record<string, BookingLocationId> = {
   "lviv-vv": "vv", "lviv-rynok": "rynok", khimichna: "khimichna", zaporizhzhia: "zp",
 };
 
-export function HomeLocations() {
+export function HomeLocations({ headingLevel: Heading = "h3" }: { headingLevel?: "h2" | "h3" }) {
   const [selected, setSelected] = useState(0);
   const { t, tv, language } = useLanguage();
   const location = siteConfig.locations[selected];
@@ -40,7 +40,7 @@ export function HomeLocations() {
         <ImageFrame key={location.image} src={location.image} alt={tv(location.name)} className="aspect-[2/1] md:aspect-auto md:min-h-[360px]" sizes="(min-width:768px) 45vw, 92vw" />
         <div className="p-5 md:p-8">
           <p className="text-xs uppercase tracking-widest text-seven-green">{tv(location.city)}</p>
-          <h3 className="mt-2 font-display text-3xl leading-tight md:text-4xl">{tv(location.name).replace("Seven Restopub ", "")}</h3>
+          <Heading className="mt-2 font-display text-3xl leading-tight md:text-4xl">{tv(location.name).replace("Seven Restopub ", "")}</Heading>
           <p className="mt-2 text-sm leading-6 text-seven-muted">{tv(location.address)}</p>
           <p className="mt-3 text-sm leading-6 text-seven-cream">{location.features.map(tv).join(" · ")}</p>
           <p className="mt-3 text-xs text-seven-muted">{tv(location.workingHours)}</p>
@@ -49,6 +49,7 @@ export function HomeLocations() {
             <BookingButton locationId={bookingIds[location.id]} label={t.common.book} className="!px-5 !text-xs" />
             <a href={location.menuLink} target="_blank" rel="noreferrer" className="seven-text-link" onClick={() => trackEvent("menu_open", { location_id: location.id, link_url: location.menuLink ?? "" })}>{t.common.menu}<ArrowUpRight size={16} /></a>
             <a href={location.googleMaps} target="_blank" rel="noreferrer" className="seven-text-link" aria-label={`${t.common.route}: ${tv(location.name)}`}><MapPin size={16} />{t.common.route}</a>
+            <a href={location.instagram} target="_blank" rel="noreferrer" className="seven-text-link" aria-label={`Instagram: ${tv(location.name)}`} onClick={() => trackEvent("instagram_click", { location_id: location.id, link_url: location.instagram })}><Instagram size={16} />Instagram</a>
           </div>
           <p className="sr-only" aria-live="polite">{language === "en" ? "Selected venue:" : "Обраний заклад:"} {tv(location.name)}</p>
         </div>
