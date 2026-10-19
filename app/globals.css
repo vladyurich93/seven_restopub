@@ -592,6 +592,9 @@ a {
 .seven-hero-logo { width: 160px; height: 76px; object-fit: cover; }
 .seven-brand-intro { animation: seven-brand 850ms cubic-bezier(.16,1,.3,1) both; }
 .seven-enter { animation: seven-enter 900ms cubic-bezier(.16,1,.3,1) both; }
+/* Keep the headline and actions painted while their entrance moves into place. */
+.seven-hero .seven-enter { animation-name:seven-enter-readable; }
+@keyframes seven-enter-readable { from { transform:translateY(18px); } to { transform:translateY(0); } }
 .seven-enter:nth-child(3) { animation-delay: 100ms; }
 .seven-enter:nth-child(4) { animation-delay: 180ms; }
 .seven-enter:nth-child(5) { animation-delay: 250ms; }
