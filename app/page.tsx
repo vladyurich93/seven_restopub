@@ -44,6 +44,13 @@ export default function HomePage() {
       <section className="seven-section bg-seven-background">
         <AnimatedSection className="container-shell">
           <div className="seven-section-heading"><SectionTitle eyebrow={t.home.menuEyebrow} title={en ? "Made to share." : "Смакує разом."} description={en ? "Burgers, pizza, snacks and Ukrainian craft. Current dishes and prices are in your venue’s menu." : "Бургери, піца, закуски й український крафт. Актуальні страви та ціни — у меню вашого закладу."} /><Link href="/menu" className="seven-text-link">{en ? "Full menu" : "Усе меню"}<ArrowUpRight size={18} /></Link></div>
+          <aside aria-labelledby="kitchen-update-title" className="mb-8 grid gap-5 rounded-xl border border-seven-green/30 bg-seven-green/[.06] p-6 md:grid-cols-[1fr_auto] md:items-end md:gap-10 md:p-9">
+            <div>
+              <p className="mb-4 text-xs font-semibold uppercase tracking-[.2em] text-seven-green">{en ? "Coming very soon" : "Вже зовсім скоро"}</p>
+              <h2 id="kitchen-update-title" className="max-w-2xl font-display text-3xl leading-tight text-white md:text-5xl">{en ? "A big kitchen menu update is on the way." : "Готуємо велике оновлення меню кухні."}</h2>
+            </div>
+            <p className="max-w-xs text-sm leading-6 text-seven-muted">{en ? "We’ll share all the details soon. Stay tuned." : "Незабаром розповімо всі подробиці. Стежте за новинами."}</p>
+          </aside>
           <div className="stagger-reveal grid grid-cols-2 gap-4 lg:grid-cols-4">{siteConfig.menuCategories.slice(0, 4).map((category, index) => <MenuCategoryCard key={category.title} category={category} index={index} href="/menu" />)}</div>
         </AnimatedSection>
       </section>
