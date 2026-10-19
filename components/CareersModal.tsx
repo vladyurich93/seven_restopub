@@ -41,23 +41,23 @@ const cityOptions = ["Запоріжжя", "Львів"];
 const anyLocationOption = "Неважливо / готовий працювати в будь-якій локації";
 const locationOptionsByCity: Record<string, string[]> = {
   Львів: ["Seven Restopub Володимира Великого", "Seven Restopub Площа Ринок", "Seven Restopub Хімічна", anyLocationOption],
-  Запоріжжя: ["Seven Restopub Запоріжжя", anyLocationOption],
+  Запоріжжя: ["Seven Restopub Сталеварів", anyLocationOption],
 };
 const allLocationOptions = [
   "Seven Restopub Володимира Великого",
   "Seven Restopub Площа Ринок",
   "Seven Restopub Хімічна",
-  "Seven Restopub Запоріжжя",
+  "Seven Restopub Сталеварів",
   anyLocationOption,
 ];
 export const careerPositionOptions = ["Офіціант", "Майстер напоїв", "Кухар", "Майстер димного формату", "Адміністратор", "Інше"];
 const contactMethodOptions = ["Телефон", "Telegram", "Будь-який зручний спосіб"];
 const locationInstagramLinks: Record<string, string> = {
-  "Seven Restopub Запоріжжя": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
+  "Seven Restopub Сталеварів": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
   "Seven Restopub Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
   "Seven Restopub Площа Ринок": "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
   "Seven Restopub Хімічна": "https://www.instagram.com/seven.himichna?igsh=MWh3aHRtejBmcXNyaA==",
-  "Seven Запоріжжя": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
+  "Seven Сталеварів": "https://www.instagram.com/seven.restopub.zp?igsh=Z2RlbGQ2bWFscG02",
   "Seven Володимира Великого": "https://www.instagram.com/seven.vv18?igsh=MW1kdjFoaDZ1NXNvdg==",
   "Seven Площа Ринок": "https://www.instagram.com/seven.square25?igsh=MXF5cGthdXdsd3Vvbg==",
   "Seven Хімічна": "https://www.instagram.com/seven.himichna?igsh=MWh3aHRtejBmcXNyaA==",
