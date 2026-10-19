@@ -36,7 +36,7 @@ export function HomeLocations({ headingLevel: Heading = "h3" }: { headingLevel?:
           </button>
         ))}
       </div>
-      <article id="home-venue-details" className="grid overflow-hidden rounded-xl border border-white/10 bg-white/[.025] md:grid-cols-2" aria-label={tv(location.name)}>
+      <article key={location.id} id="home-venue-details" className="seven-venue-panel grid overflow-hidden rounded-xl border border-white/10 bg-white/[.025] md:grid-cols-2" aria-label={tv(location.name)}>
         <ImageFrame key={location.image} src={location.image} alt={tv(location.name)} className="aspect-[2/1] md:aspect-auto md:min-h-[360px]" sizes="(min-width:768px) 45vw, 92vw" />
         <div className="p-5 md:p-8">
           <p className="text-xs uppercase tracking-widest text-seven-green">{tv(location.city)}</p>

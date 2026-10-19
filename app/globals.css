@@ -617,7 +617,7 @@ a {
   .seven-headline { font-size:clamp(3.75rem,16vw,5.5rem); }
 }
 @supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion:no-preference) {
+  @media (prefers-reduced-motion:no-preference) and (min-width:900px) {
     .seven-hero-photo { animation:seven-hero-scroll linear both; animation-timeline:scroll(root); animation-range:0px 850px; }
     @keyframes seven-hero-scroll { from { transform:scale(1); } to { transform:scale(1.10); } }
   }
@@ -656,3 +656,47 @@ a {
 .seven-inner-page { padding-top:128px; padding-bottom:64px; }
 .venue-action-card h2 { overflow-wrap:anywhere; }
 @media (min-width:768px) { .seven-inner-page { padding-top:152px; padding-bottom:88px; } }
+
+/* Motion follows reading order and keeps controls available throughout. */
+.motion-group [data-reveal] {
+  transition-duration:720ms;
+  transition-timing-function:cubic-bezier(.16,1,.3,1);
+  transition-delay:var(--reveal-delay,0ms);
+}
+.motion-group [data-reveal="pending"] { transform:translateY(24px); }
+.seven-venue-panel { animation:seven-venue-in 420ms cubic-bezier(.16,1,.3,1) both; }
+@keyframes seven-venue-in {
+  from { opacity:.65; transform:translateY(10px); }
+  to { opacity:1; transform:none; }
+}
+.seven-hero .seven-enter:nth-child(2) { animation-delay:80ms; }
+.seven-hero .seven-enter:nth-child(3) { animation-delay:160ms; }
+.seven-hero .seven-enter:nth-child(4) { animation-delay:240ms; }
+.seven-hero .seven-enter:nth-child(5) { animation-delay:320ms; }
+.seven-gallery-progress { transition:transform 160ms linear; }
+.seven-gallery-control:disabled { opacity:.3; cursor:default; transform:none; box-shadow:none; }
+.seven-text-link svg { transition:transform 300ms cubic-bezier(.16,1,.3,1); }
+@media (hover:hover) and (pointer:fine) {
+  .seven-text-link:hover svg { transform:translate(2px,-2px); }
+  .menu-category-card { transition:border-color 300ms, background-color 300ms; }
+  .group:hover > .menu-category-card { border-color:rgba(183,225,77,.45); background:rgba(183,225,77,.035); }
+}
+@supports (animation-timeline:scroll()) {
+  @media (prefers-reduced-motion:no-preference) and (min-width:900px) {
+    .seven-hero > .container-shell { animation:seven-hero-copy-scroll linear both; animation-timeline:scroll(root); animation-range:0px 750px; }
+    @keyframes seven-hero-copy-scroll { from { transform:translateY(0); opacity:1; } to { transform:translateY(-36px); opacity:.78; } }
+  }
+}
+@supports (interpolate-size:allow-keywords) {
+  .seven-faq { interpolate-size:allow-keywords; }
+  .seven-faq::details-content { block-size:0; overflow:clip; transition:block-size 320ms cubic-bezier(.16,1,.3,1), content-visibility 320ms allow-discrete; }
+  .seven-faq[open]::details-content { block-size:auto; }
+}
+@media (max-width:767px) {
+  .motion-group [data-reveal] { transition-duration:540ms; }
+  .motion-group [data-reveal="pending"] { transform:translateY(16px); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .seven-venue-panel { animation:none !important; }
+  .seven-gallery-progress, .seven-text-link svg, .seven-faq::details-content { transition:none !important; }
+}

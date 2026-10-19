@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { GalleryImage } from "@/data/siteConfig";
 import { useLanguage } from "@/lib/i18n";
 import { ImageFrame } from "./ImageFrame";
@@ -12,7 +12,36 @@ type AtmosphereCarouselProps = {
 
 export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const [edges, setEdges] = useState({ start: true, end: false });
   const { t } = useLanguage();
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const maximum = Math.max(0, track.scrollWidth - track.clientWidth);
+      const position = Math.max(0, Math.min(maximum, track.scrollLeft));
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${maximum ? position / maximum : 1})`;
+      const start = position < 2;
+      const end = maximum - position < 2;
+      setEdges((current) => current.start === start && current.end === end ? current : { start, end });
+    };
+    const schedule = () => { if (!frame) frame = window.requestAnimationFrame(update); };
+    update();
+    track.addEventListener("scroll", schedule, { passive: true });
+    const resize = typeof ResizeObserver !== "undefined" ? new ResizeObserver(schedule) : null;
+    resize?.observe(track);
+    window.addEventListener("resize", schedule);
+    return () => {
+      track.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      resize?.disconnect();
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [images.length]);
 
   const scroll = (direction: "prev" | "next") => {
     const track = trackRef.current;
@@ -23,7 +52,7 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
 
     track.scrollBy({
       left: direction === "next" ? step : -step,
-      behavior: "smooth",
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
     });
   };
 
@@ -31,6 +60,8 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
     <div className="relative">
       <div
         ref={trackRef}
+        tabIndex={0}
+        role="region"
         className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label={t.home.galleryTitle}
       >
@@ -50,10 +81,12 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
         ))}
       </div>
 
-      <div className="mt-6 flex justify-end gap-3">
+      <div className="mt-6 flex items-center gap-5">
+        <div className="mr-auto h-px flex-1 overflow-hidden bg-white/15" aria-hidden="true"><div ref={progressRef} className="seven-gallery-progress h-full origin-left bg-seven-green" style={{ transform: "scaleX(0)" }} /></div>
         <button
           type="button"
-          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white premium-border premium-lift hover:bg-seven-terracotta"
+          className="seven-gallery-control inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white premium-border premium-lift hover:bg-seven-terracotta"
+          disabled={edges.start}
           onClick={() => scroll("prev")}
           aria-label={t.common.previousPhotos}
         >
@@ -61,7 +94,8 @@ export function AtmosphereCarousel({ images }: AtmosphereCarouselProps) {
         </button>
         <button
           type="button"
-          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-seven-terracotta text-white premium-lift hover:bg-seven-cream hover:text-seven-background"
+          className="seven-gallery-control inline-flex h-12 w-12 items-center justify-center rounded-full bg-seven-terracotta text-white premium-lift hover:bg-seven-cream hover:text-seven-background"
+          disabled={edges.end}
           onClick={() => scroll("next")}
           aria-label={t.common.nextPhotos}
         >
