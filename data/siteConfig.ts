@@ -114,7 +114,7 @@ export const siteConfig = {
     },
     {
       id: "zaporizhzhia",
-      name: "Seven Restopub Запоріжжя",
+      name: "Seven Restopub Сталеварів",
       city: "Запоріжжя",
       phone: "0 (68) 711 77 71",
       address: "м. Запоріжжя, вул. Сталеварів, 30",
