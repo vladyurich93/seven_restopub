@@ -703,3 +703,8 @@ a {
   .seven-venue-panel { animation:none !important; }
   .seven-gallery-progress, .seven-text-link svg, .seven-faq::details-content { transition:none !important; }
 }
+
+/* Small warm accents keep the primary actions distinct. */
+.seven-text-link svg,
+.seven-faq summary > span,
+.seven-venue-panel > div > p:first-child { color:#c9714a; }
