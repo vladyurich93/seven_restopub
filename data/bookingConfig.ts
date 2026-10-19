@@ -30,8 +30,8 @@ const bookingLocationVv = {
 
 const bookingLocationZp = {
   id: "zp",
-  label: "Seven Запоріжжя",
-  displayName: "Seven Restopub Запоріжжя",
+  label: "Seven Сталеварів",
+  displayName: "Seven Restopub Сталеварів",
   city: "Запоріжжя",
   envKey: "TELEGRAM_BOOKING_CHAT_ZP",
 } as const satisfies BookingLocation;
