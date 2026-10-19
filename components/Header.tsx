@@ -195,7 +195,7 @@ export function Header() {
               <button
                 key={item.key}
                 type="button"
-                className="min-h-12 rounded-[8px] px-4 py-3 text-left font-display text-2xl font-black uppercase text-white transition-colors duration-150 hover:bg-seven-terracotta hover:text-white"
+                className="min-h-12 rounded-[8px] px-4 py-3 text-left font-sans text-lg font-semibold text-white transition-colors duration-150 hover:bg-seven-terracotta hover:text-white"
                 onClick={() => {
                   setOpen(false);
                   openCareersModal();
@@ -207,7 +207,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href ?? "/"}
-                className="min-h-12 rounded-[8px] px-4 py-3 font-display text-2xl font-black uppercase text-white transition-colors duration-150 hover:bg-seven-terracotta hover:text-white"
+                className="min-h-12 rounded-[8px] px-4 py-3 font-sans text-lg font-semibold text-white transition-colors duration-150 hover:bg-seven-terracotta hover:text-white"
                 onClick={() => setOpen(false)}
               >
                 {t.nav[item.key]}
