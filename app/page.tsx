@@ -7,6 +7,7 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { AtmosphereCarousel } from "@/components/AtmosphereCarousel";
 import { Hero } from "@/components/Hero";
 import { HomeLocations } from "@/components/HomeLocations";
+import { BookingButton } from "@/components/BookingModal";
 import { MenuCategoryCard } from "@/components/MenuCategoryCard";
 import { SectionTitle } from "@/components/SectionTitle";
 import { siteConfig } from "@/data/siteConfig";
@@ -39,6 +40,29 @@ export default function HomePage() {
             <Link href="/locations" className="seven-text-link">{t.common.allLocations}<ArrowUpRight size={18} /></Link>
           </div>
           <HomeLocations />
+        </AnimatedSection>
+      </section>
+
+      <section aria-labelledby="kids-rooms-title" className="seven-section border-y border-white/10 bg-seven-background">
+        <AnimatedSection className="container-shell grid gap-8 md:grid-cols-2 md:items-center md:gap-12">
+          <figure>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-xl md:aspect-[4/5] md:max-h-[520px]">
+              <Image src="/images/gallery/gallery-12.jpg" alt={en ? "Play area in the kids room at Seven on Volodymyra Velykoho" : "Ігровий простір дитячої кімнати Seven на Володимира Великого"} fill sizes="(min-width:1440px) 630px, (min-width:768px) 45vw, 92vw" quality={75} className="object-cover" />
+            </div>
+            <figcaption className="mt-3 text-xs leading-5 text-seven-muted">{en ? "Kids room at Seven on Volodymyra Velykoho" : "Дитяча кімната Seven на Володимира Великого"}</figcaption>
+          </figure>
+          <div>
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[.2em] text-seven-green">{en ? "For family visits" : "Для сімейних зустрічей"}</p>
+            <h2 id="kids-rooms-title" className="font-display text-4xl leading-tight md:text-5xl">{en ? "Kids rooms at Seven." : "Дитячі кімнати у Seven."}</h2>
+            <p className="mt-5 text-base leading-7 text-seven-muted">{en ? "Coming with children? Our Lviv venues on Volodymyra Velykoho, Rynok Square and Khimichna have kids rooms." : "Плануєте візит із дітьми? У наших львівських закладах на Володимира Великого, площі Ринок та Хімічній є дитячі кімнати."}</p>
+            <p className="mt-4 text-sm leading-6 text-seven-muted">{en ? "Mention that you’re bringing children when booking. Ask your venue about the kids room’s visiting arrangements." : "Під час бронювання вкажіть, що будете з дітьми. Умови відвідування дитячої кімнати уточнюйте у вибраному закладі."}</p>
+            <p className="mb-3 mt-7 text-sm font-semibold">{en ? "Book at your venue:" : "Забронювати у закладі:"}</p>
+            <div className="flex flex-wrap gap-3">
+              <BookingButton locationId="vv" label={en ? "Volodymyra Velykoho" : "Володимира Великого"} className="seven-primary !px-4 !py-3 !text-xs !tracking-normal" />
+              <BookingButton locationId="rynok" label={en ? "Rynok Square" : "Площа Ринок"} className="seven-primary !px-4 !py-3 !text-xs !tracking-normal" />
+              <BookingButton locationId="khimichna" label={en ? "Khimichna" : "Хімічна"} className="seven-primary !px-4 !py-3 !text-xs !tracking-normal" />
+            </div>
+          </div>
         </AnimatedSection>
       </section>
 
