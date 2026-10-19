@@ -13,7 +13,7 @@ export function Hero() {
   return (
     <section className="seven-hero relative isolate overflow-hidden bg-black">
       <div className="seven-hero-photo absolute inset-0 -z-20">
-        <Image src="/images/hero/hero-02.jpg" alt={t.hero.terraceAlt} fill sizes="100vw" priority fetchPriority="high" quality={85} className="object-cover object-[60%_45%]" />
+        <Image src="/images/hero/hero-02.jpg" alt={t.hero.terraceAlt} fill sizes="100vw" priority fetchPriority="high" quality={75} className="object-cover object-[60%_45%]" />
       </div>
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(0,0,0,.85),rgba(0,0,0,.25)),linear-gradient(0deg,#080a07,transparent_60%)]" />
       <div className="container-shell relative flex min-h-[inherit] flex-col justify-end pb-12 pt-28 md:pb-16">
