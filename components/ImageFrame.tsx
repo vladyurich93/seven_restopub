@@ -31,7 +31,7 @@ export function ImageFrame({ src, alt, className = "", sizes = "(min-width: 1024
           sizes={sizes}
           loading={priority ? "eager" : "lazy"}
           priority={priority}
-          quality={82}
+          quality={75}
           onError={() => setFailed(true)}
           className="image-frame-img absolute inset-0 block h-full w-full object-cover"
         />
