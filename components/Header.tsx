@@ -3,10 +3,12 @@
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
 import { LanguageSwitcher, useLanguage } from "@/lib/i18n";
+import { beginMenuTouch, moveMenuTouch, suppressMenuTouchClick, type MenuTouchGesture } from "@/lib/mobileMenuTouch";
 import { registerModalVisibility } from "@/lib/modalVisibility";
 import { BookingButton } from "./BookingModal";
 import { useCareersModal } from "./CareersModal";
@@ -32,6 +34,26 @@ const navItems: NavItem[] = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const touchGesture = useRef<MenuTouchGesture | null>(null);
+  const [touchHighlight, setTouchHighlight] = useState<NavKey | null>(null);
+  const [touchTracking, setTouchTracking] = useState(false);
+  const touchPoint = useRef<{ x: number; y: number } | null>(null);
+
+  const navKeyAtPoint = (x: number, y: number) => {
+    const element = document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-mobile-nav-key]");
+    return element && drawerRef.current?.contains(element) ? element.dataset.mobileNavKey as NavKey : null;
+  };
+  const highlightAtPoint = (x: number, y: number) => {
+    const key = navKeyAtPoint(x, y);
+    setTouchHighlight((previous) => previous === key ? previous : key);
+  };
+  const clearTouchHighlight = () => {
+    touchPoint.current = null;
+    setTouchHighlight(null);
+    setTouchTracking(false);
+  };
+  useEffect(() => setMounted(true), []);
   const drawerRef = useRef<HTMLElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -79,6 +101,8 @@ export function Header() {
 
   useEffect(() => {
     if (!open) {
+      touchGesture.current = null;
+      clearTouchHighlight();
       return;
     }
 
@@ -172,10 +196,51 @@ export function Header() {
         </button>
       </div>
 
+      {mounted ? createPortal(<>
       <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition duration-300 ease-premium min-[1201px]:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
-      <aside ref={drawerRef} id="seven-mobile-menu" role="dialog" aria-label={t.nav.openMenu} aria-modal={open ? true : undefined} aria-hidden={!open} inert={!open} className={`fixed right-0 top-0 z-[80] h-[100dvh] max-h-[100dvh] w-[min(380px,calc(100vw-28px))] touch-pan-y overflow-y-auto overscroll-contain bg-seven-background shadow-2xl shadow-black/60 premium-border transition-transform duration-300 ease-premium [backface-visibility:hidden] [scroll-behavior:auto] [-webkit-overflow-scrolling:touch] min-[1201px]:hidden ${open ? "translate-x-0" : "translate-x-full"}`}>
+      <aside
+        onTouchStartCapture={(event) => {
+          const touch = event.touches[0];
+          const single = event.touches.length === 1;
+          touchGesture.current = touch ? beginMenuTouch(touch, event.touches.length, navKeyAtPoint(touch.clientX, touch.clientY)) : null;
+          if (touch && single) {
+            touchPoint.current = { x: touch.clientX, y: touch.clientY };
+            setTouchTracking(true);
+            highlightAtPoint(touch.clientX, touch.clientY);
+          } else clearTouchHighlight();
+        }}
+        onTouchMoveCapture={(event) => {
+          const start = touchGesture.current;
+          if (!start) return;
+          const points = Array.from(event.touches);
+          const current = points.find(point => point.identifier === start.id);
+          const touch = moveMenuTouch(start, points, current ? navKeyAtPoint(current.clientX, current.clientY) : null);
+          if (!touch) { clearTouchHighlight(); return; }
+          touchPoint.current = { x: touch.clientX, y: touch.clientY };
+          highlightAtPoint(touch.clientX, touch.clientY);
+        }}
+        onTouchEndCapture={(event) => {
+          const gesture = touchGesture.current;
+          const point = Array.from(event.changedTouches).find(touch => touch.identifier === gesture?.id);
+          if (gesture?.tracking && point) moveMenuTouch(gesture, [point], navKeyAtPoint(point.clientX, point.clientY));
+          if (gesture) gesture.tracking = false;
+          clearTouchHighlight();
+        }}
+        onTouchCancelCapture={() => {
+          if (touchGesture.current) { touchGesture.current.moved = true; touchGesture.current.tracking = false; }
+          clearTouchHighlight();
+        }}
+        onClickCapture={(event) => {
+          // Let native scrolling run; suppress only a click synthesized after a drag.
+          if (suppressMenuTouchClick(touchGesture.current, event.detail)) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          touchGesture.current = null;
+        }}
+        ref={drawerRef} id="seven-mobile-menu" role="dialog" aria-label={t.nav.openMenu} aria-modal={open ? true : undefined} aria-hidden={!open} inert={!open} className={`fixed right-0 top-0 z-[80] h-[100dvh] max-h-[100dvh] w-[min(380px,calc(100vw-28px))] flex flex-col overflow-hidden bg-seven-background shadow-2xl shadow-black/60 premium-border transition-transform duration-300 ease-premium [backface-visibility:hidden] [scroll-behavior:auto] [-webkit-overflow-scrolling:touch] min-[1201px]:hidden ${open ? "translate-x-0" : "translate-x-full"}`}>
         <div
-          className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-seven-background px-5 pb-4"
+          className="relative z-10 flex shrink-0 items-center justify-between border-b border-white/10 bg-seven-background px-5 pb-4"
           style={{ paddingTop: "max(20px, calc(16px + env(safe-area-inset-top)))" }}
         >
           <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={180} height={86} priority className="seven-header-logo" />
@@ -189,13 +254,23 @@ export function Header() {
             <X size={20} />
           </button>
         </div>
+        <div onScroll={() => {
+          // Scrolling can move the list underneath a stationary finger.
+          const point = touchPoint.current;
+          if (point && touchGesture.current?.tracking) {
+            touchGesture.current.moved = true;
+            highlightAtPoint(point.x, point.y);
+          }
+        }} className="seven-mobile-menu-scroll min-h-0 flex-1 touch-pan-y overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
         <nav className="grid content-start gap-1 p-5">
           {navItems.map((item) => (
             item.action === "careers" ? (
               <button
                 key={item.key}
+                data-mobile-nav-key={item.key}
+                data-touch-highlight={touchHighlight === item.key || undefined}
                 type="button"
-                className="min-h-12 rounded-[8px] px-4 py-3 text-left font-sans text-lg font-semibold text-white transition-colors duration-150 hover:bg-seven-terracotta hover:text-white"
+                className="seven-mobile-menu-item min-h-12 rounded-[8px] px-4 py-3 text-left font-sans text-lg font-semibold text-white transition-colors duration-150"
                 onClick={() => {
                   setOpen(false);
                   openCareersModal();
@@ -207,7 +282,11 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href ?? "/"}
-                className="min-h-12 rounded-[8px] px-4 py-3 font-sans text-lg font-semibold text-white transition-colors duration-150 hover:bg-seven-terracotta hover:text-white"
+                data-mobile-nav-key={item.key}
+                data-touch-highlight={touchHighlight === item.key || undefined}
+                data-page-highlight={!touchTracking && (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href ?? "!")) || undefined}
+                aria-current={(item.href === "/" ? pathname === "/" : pathname.startsWith(item.href ?? "!")) ? "page" : undefined}
+                className="seven-mobile-menu-item min-h-12 rounded-[8px] px-4 py-3 font-sans text-lg font-semibold text-white transition-colors duration-150"
                 onClick={() => setOpen(false)}
               >
                 {t.nav[item.key]}
@@ -225,7 +304,9 @@ export function Header() {
             <LocationPickerButton className="w-full" onOpen={() => setOpen(false)} />
           </div>
         </div>
+        </div>
       </aside>
+      </>, document.body) : null}
     </header>
   );
 }
