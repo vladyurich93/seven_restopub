@@ -708,3 +708,13 @@ a {
 .seven-text-link svg,
 .seven-faq summary > span,
 .seven-venue-panel > div > p:first-child { color:#c9714a; }
+
+/* Keep touch scrolling native; hover feedback belongs to mouse/trackpad input. */
+.seven-mobile-menu-scroll { -webkit-user-select: none; user-select: none; }
+@media (hover: hover) and (pointer: fine) {
+  .seven-mobile-menu-item:hover { background: #a94f2e; color: white; }
+}
+
+.seven-mobile-menu-item[data-touch-highlight="true"],
+.seven-mobile-menu-item[data-page-highlight="true"] { background-color: #a94f2e; color: white; }
+@media (prefers-reduced-motion: reduce) { .seven-mobile-menu-item { transition: none; } }
