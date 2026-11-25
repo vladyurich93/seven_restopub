@@ -1,3 +1,4 @@
+import { PageStructuredData } from "@/components/StructuredData";
 import type { Metadata } from "next";
 import { MenuPageContent } from "@/components/PageContent";
 import { siteConfig } from "@/data/siteConfig";
@@ -12,6 +13,9 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function MenuPage() {
   return (
+    <>
+      <PageStructuredData path="/menu" />
     <MenuPageContent />
+    </>
   );
 }
