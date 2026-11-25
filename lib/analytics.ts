@@ -10,7 +10,7 @@ declare global {
 export const trackEvent = (event: string, params?: Record<string, unknown>) => {
   if (typeof window === "undefined") return;
 
-  if (["phone_click", "menu_open", "booking_success"].includes(event)) {
+  if (["phone_click", "menu_open", "booking_success", "delivery_click"].includes(event)) {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event,
