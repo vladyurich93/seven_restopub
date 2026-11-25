@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   generateEtags: false,
   async headers() {
     return [
+      ...(process.env.VERCEL_ENV === "preview" || process.env.SEVEN_PREVIEW_MODE === "1" ? [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }] : []),
+      { source: "/:path*", headers: [{ key: "X-Content-Type-Options", value: "nosniff" }, { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" }] },
       {
         source: "/sitemap.xml",
         headers: [

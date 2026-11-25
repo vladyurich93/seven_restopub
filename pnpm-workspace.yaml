@@ -8,3 +8,7 @@ allowBuilds:
 onlyBuiltDependencies:
   - sharp
   - unrs-resolver
+
+# Same-major patched transitive dependencies, verified by the preview build/tests.
+overrides:
+  "next>postcss": "8.5.31"
