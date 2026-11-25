@@ -1,3 +1,4 @@
+import { PageStructuredData } from "@/components/StructuredData";
 import type { Metadata } from "next";
 import { ContactSection } from "@/components/ContactSection";
 import { ContactsPageContent } from "@/components/PageContent";
@@ -12,8 +13,11 @@ export const metadata: Metadata = createPageMetadata({
 export default function ContactsPage() {
   return (
     <>
+      <PageStructuredData path="/contacts" />
+    <>
       <ContactsPageContent />
       <ContactSection />
+    </>
     </>
   );
 }
