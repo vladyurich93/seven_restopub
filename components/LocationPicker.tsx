@@ -1,13 +1,13 @@
 "use client";
 
-import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { MapPinned, Navigation, Phone, X } from "lucide-react";
 import { formatPhone, phoneHref } from "@/data/phone";
 import { siteConfig } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
-import { registerModalVisibility } from "@/lib/modalVisibility";
+import { useModalDialog } from "@/lib/useModalDialog";
 
 const LOCATION_PICKER_ROOT = "seven-location-picker-root";
 
@@ -74,44 +74,7 @@ export function LocationPickerProvider({ children }: LocationPickerProviderProps
     }
   }, [open, removeStaleLocationPickerRoots]);
 
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
 
-    const scrollY = window.scrollY;
-    const originalBodyPosition = document.body.style.position;
-    const originalBodyTop = document.body.style.top;
-    const originalBodyWidth = document.body.style.width;
-    const originalBodyOverflow = document.body.style.overflow;
-    const originalHtmlOverflow = document.documentElement.style.overflow;
-
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-    const unregisterModalVisibility = registerModalVisibility();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closePicker();
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      unregisterModalVisibility();
-      document.body.style.position = originalBodyPosition;
-      document.body.style.top = originalBodyTop;
-      document.body.style.width = originalBodyWidth;
-      document.body.style.overflow = originalBodyOverflow;
-      document.documentElement.style.overflow = originalHtmlOverflow;
-      window.scrollTo(0, scrollY);
-    };
-  }, [closePicker, open]);
 
   return (
     <LocationPickerContext.Provider value={contextValue}>
@@ -132,6 +95,8 @@ export function useLocationPicker() {
 }
 
 function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useModalDialog(open, dialogRef, onClose);
   const { t, tv } = useLanguage();
 
   useEffect(() => {
@@ -152,6 +117,8 @@ function LocationPicker({ open, onClose }: { open: boolean; onClose: () => void 
 
   return createPortal(
     <div
+      ref={dialogRef}
+      tabIndex={-1}
       data-modal-root={LOCATION_PICKER_ROOT}
       className="fixed inset-0 z-[140] flex items-end justify-center bg-black/78 p-3 sm:items-center sm:p-4"
       style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}

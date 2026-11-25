@@ -11,14 +11,14 @@ type ButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 };
 
 const variants = {
-  primary: "bg-seven-terracotta text-white shadow-[var(--shadow-button)] hover:bg-seven-cream hover:text-seven-background hover:shadow-[0_22px_58px_rgba(246,236,221,0.16)]",
+  primary: "bg-seven-green text-seven-background hover:bg-seven-cream",
   secondary: "bg-seven-cream text-seven-background premium-border shadow-[0_14px_38px_rgba(246,236,221,0.09)] hover:bg-white hover:shadow-[0_22px_54px_rgba(246,236,221,0.14)]",
   ghost: "bg-white/[0.04] text-white premium-border hover:border-seven-terracotta/45 hover:bg-white/[0.085] hover:text-seven-cream",
 };
 
 export function Button({ href, children, variant = "primary", className = "", ...props }: ButtonProps) {
   const external = href.startsWith("http") || href.startsWith("tel:");
-  const classes = `inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 text-sm font-black uppercase tracking-[0.16em] premium-lift button-press focus:outline-none focus:ring-2 focus:ring-seven-green/45 ${variants[variant]} ${className}`;
+  const classes = `inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 text-sm font-semibold tracking-[0.02em] button-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-seven-green ${variants[variant]} ${className}`;
   const analyticsEvent = getAnalyticsEventForHref(href);
   const handleClick: AnchorHTMLAttributes<HTMLAnchorElement>["onClick"] = (event) => {
     if (analyticsEvent) {

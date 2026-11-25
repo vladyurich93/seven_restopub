@@ -10,11 +10,13 @@ import { siteConfig } from "@/data/siteConfig";
 import { LanguageSwitcher, useLanguage } from "@/lib/i18n";
 import { beginMenuTouch, moveMenuTouch, suppressMenuTouchClick, type MenuTouchGesture } from "@/lib/mobileMenuTouch";
 import { registerModalVisibility } from "@/lib/modalVisibility";
+import { DeliveryAnnouncement } from "./DeliveryAnnouncement";
+import { trackEvent } from "@/lib/analytics";
 import { BookingButton } from "./BookingModal";
 import { useCareersModal } from "./CareersModal";
 import { LocationPickerButton } from "./LocationPicker";
 
-type NavKey = "home" | "locations" | "menu" | "careers" | "events" | "banquets" | "about";
+type NavKey = "home" | "locations" | "menu" | "delivery" | "careers" | "events" | "banquets" | "about";
 
 type NavItem = {
   href?: string;
@@ -26,6 +28,7 @@ const navItems: NavItem[] = [
   { href: "/", key: "home" },
   { href: "/locations", key: "locations" },
   { href: "/menu", key: "menu" },
+  { href: siteConfig.delivery.url, key: "delivery" },
   { key: "careers", action: "careers" },
   { href: "/events", key: "events" },
   { href: "/banquets", key: "banquets" },
@@ -108,7 +111,7 @@ export function Header() {
 
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     closeButtonRef.current?.focus();
-    const desktop = window.matchMedia("(min-width: 1201px)");
+    const desktop = window.matchMedia("(min-width: 1441px)");
     const onDesktop = () => { if (desktop.matches) setOpen(false); };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -153,12 +156,13 @@ export function Header() {
 
   return (
     <header className={`site-header fixed inset-x-0 top-0 z-50 border-b transition duration-700 ease-premium ${scrolled || open ? "is-scrolled border-white/10 bg-seven-background shadow-[0_18px_58px_rgba(0,0,0,0.24)]" : "border-transparent bg-gradient-to-b from-black/50 to-transparent"}`}>
-      <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-[84px] lg:h-[88px] min-[1201px]:h-28">
+      <DeliveryAnnouncement />
+      <div className="container-shell flex h-20 items-center justify-between gap-4 md:h-[84px] lg:h-[88px] min-[1441px]:h-28">
         <Link href="/" className="flex shrink-0 items-center" aria-label={siteConfig.brandName}>
           <Image src={siteConfig.logo} alt={`${siteConfig.brandName} logo`} width={260} height={124} priority className={`seven-header-logo ${brandIntro ? "seven-logo-intro" : ""}`} />
         </Link>
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 min-[1201px]:flex min-[1281px]:gap-5 xl:gap-6">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 min-[1441px]:flex min-[1281px]:gap-5 xl:gap-6">
           {navItems.map((item) => {
             const active = item.href ? (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)) : false;
 
@@ -172,7 +176,7 @@ export function Header() {
                 {t.nav[item.key]}
               </button>
             ) : (
-              <Link key={item.href} href={item.href ?? "/"} aria-current={active ? "page" : undefined} className={`nav-link whitespace-nowrap text-[13px] font-semibold transition duration-500 min-[1281px]:text-sm ${active ? "is-active text-seven-cream" : "text-seven-muted"}`}>
+              <Link key={item.href} href={item.href ?? "/"} onClick={() => { if (item.key === "delivery") trackEvent("delivery_click", { source: "header_nav", link_url: siteConfig.delivery.url }); }} aria-current={active ? "page" : undefined} className={`nav-link whitespace-nowrap text-[13px] font-semibold transition duration-500 min-[1281px]:text-sm ${active ? "is-active text-seven-cream" : "text-seven-muted"}`}>
                 {t.nav[item.key]}
               </Link>
             );
@@ -181,12 +185,12 @@ export function Header() {
 
         <div className="hidden items-center gap-3 md:flex">
           <LanguageSwitcher className="hidden min-[960px]:inline-flex" />
-          <BookingButton className="px-5 text-xs min-[900px]:px-6 min-[1201px]:text-sm" label={t.common.book} />
+          <BookingButton className="px-5 text-xs min-[900px]:px-6 min-[1441px]:text-sm" label={t.common.book} />
         </div>
 
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 min-[1201px]:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 min-[1441px]:hidden"
           onClick={() => setOpen((value) => !value)}
           aria-label={t.nav.openMenu}
           aria-expanded={open}
@@ -197,7 +201,7 @@ export function Header() {
       </div>
 
       {mounted ? createPortal(<>
-      <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition duration-300 ease-premium min-[1201px]:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
+      <div className={`fixed inset-0 top-0 z-[70] bg-black/55 transition duration-300 ease-premium min-[1441px]:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} onClick={() => setOpen(false)} />
       <aside
         onTouchStartCapture={(event) => {
           const touch = event.touches[0];
@@ -238,7 +242,7 @@ export function Header() {
           }
           touchGesture.current = null;
         }}
-        ref={drawerRef} id="seven-mobile-menu" role="dialog" aria-label={t.nav.openMenu} aria-modal={open ? true : undefined} aria-hidden={!open} inert={!open} className={`fixed right-0 top-0 z-[80] h-[100dvh] max-h-[100dvh] w-[min(380px,calc(100vw-28px))] flex flex-col overflow-hidden bg-seven-background shadow-2xl shadow-black/60 premium-border transition-transform duration-300 ease-premium [backface-visibility:hidden] [scroll-behavior:auto] [-webkit-overflow-scrolling:touch] min-[1201px]:hidden ${open ? "translate-x-0" : "translate-x-full"}`}>
+        ref={drawerRef} id="seven-mobile-menu" role="dialog" aria-label={t.nav.openMenu} aria-modal={open ? true : undefined} aria-hidden={!open} inert={!open} className={`fixed right-0 top-0 z-[80] h-[100dvh] max-h-[100dvh] w-[min(380px,calc(100vw-28px))] flex flex-col overflow-hidden bg-seven-background shadow-2xl shadow-black/60 premium-border transition-transform duration-300 ease-premium [backface-visibility:hidden] [scroll-behavior:auto] [-webkit-overflow-scrolling:touch] min-[1441px]:hidden ${open ? "translate-x-0" : "translate-x-full"}`}>
         <div
           className="relative z-10 flex shrink-0 items-center justify-between border-b border-white/10 bg-seven-background px-5 pb-4"
           style={{ paddingTop: "max(20px, calc(16px + env(safe-area-inset-top)))" }}
@@ -287,7 +291,7 @@ export function Header() {
                 data-page-highlight={!touchTracking && (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href ?? "!")) || undefined}
                 aria-current={(item.href === "/" ? pathname === "/" : pathname.startsWith(item.href ?? "!")) ? "page" : undefined}
                 className="seven-mobile-menu-item min-h-12 rounded-[8px] px-4 py-3 font-sans text-lg font-semibold text-white transition-colors duration-150"
-                onClick={() => setOpen(false)}
+                onClick={() => { setOpen(false); if (item.key === "delivery") trackEvent("delivery_click", { source: "mobile_nav", link_url: siteConfig.delivery.url }); }}
               >
                 {t.nav[item.key]}
               </Link>

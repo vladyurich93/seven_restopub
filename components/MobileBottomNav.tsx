@@ -9,6 +9,8 @@ import { useLanguage } from "@/lib/i18n";
 import { useBookingModal } from "./BookingModal";
 import { useLocationPicker } from "./LocationPicker";
 
+import { useSelectedVenue, toBookingLocationId } from "./SelectedVenueProvider";
+
 const bookingLocationIds = ["rynok", "vv", "khimichna", "zp"] as const;
 
 function isBookingLocationId(value: string | null): value is BookingLocationId {
@@ -43,6 +45,7 @@ function inferLocationId(pathname: string, searchLocation: string | null): Booki
 
 export function MobileBottomNav() {
   const pathname = usePathname();
+  const { selectedVenueId } = useSelectedVenue();
   const { openBookingModal } = useBookingModal();
   const { openPicker } = useLocationPicker();
   const { t } = useLanguage();
@@ -52,8 +55,8 @@ export function MobileBottomNav() {
   const lastScrollY = useRef(0);
 
   const locationId = useMemo(
-    () => inferLocationId(pathname, searchLocation),
-    [pathname, searchLocation],
+    () => inferLocationId(pathname, searchLocation) ?? toBookingLocationId(selectedVenueId),
+    [pathname, searchLocation, selectedVenueId],
   );
 
   useEffect(() => {
@@ -113,12 +116,12 @@ export function MobileBottomNav() {
         visible && !modalOpen ? "translate-y-0" : "translate-y-[calc(100%+12px)]"
       }`}
       style={{ paddingBottom: "max(10px, env(safe-area-inset-bottom))" }}
-      aria-label="Mobile primary actions"
+      aria-label={t.nav.locations + " / " + t.common.reserveTable}
     >
       <div className="mx-auto flex max-w-md items-center gap-2 rounded-t-[24px] border border-white/10 border-b-0 bg-black/78 p-2 shadow-[0_-18px_60px_rgba(0,0,0,0.48)] backdrop-blur-xl">
         <button
           type="button"
-          className="inline-flex h-[60px] w-[35%] items-center justify-center gap-1.5 rounded-[18px] bg-white/[0.07] px-3 text-center text-xs font-black uppercase tracking-[0.12em] text-white transition duration-300 active:scale-[0.98]"
+          className="inline-flex h-[52px] w-[35%] items-center justify-center gap-1.5 rounded-[18px] bg-white/[0.07] px-3 text-center text-xs font-semibold tracking-[0.02em] text-white transition duration-300 active:scale-[0.98]"
           onClick={handleLocations}
         >
           <MapPin size={17} className="text-seven-green" />
@@ -126,7 +129,7 @@ export function MobileBottomNav() {
         </button>
         <button
           type="button"
-          className="inline-flex h-[60px] w-[65%] items-center justify-center gap-2 rounded-[18px] bg-seven-green px-4 text-center text-sm font-black uppercase tracking-[0.13em] text-seven-background shadow-[0_14px_34px_rgba(181,255,77,0.22)] transition duration-300 active:scale-[0.98]"
+          className="inline-flex h-[52px] w-[65%] items-center justify-center gap-2 rounded-[18px] bg-seven-green px-4 text-center text-sm font-semibold tracking-[0.02em] text-seven-background shadow-[0_14px_34px_rgba(181,255,77,0.22)] transition duration-300 active:scale-[0.98]"
           onClick={handleReserve}
         >
           <CalendarCheck size={18} />

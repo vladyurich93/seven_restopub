@@ -1,11 +1,11 @@
 "use client";
 
 import { Instagram, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { siteConfig } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
-import { registerModalVisibility } from "@/lib/modalVisibility";
+import { useModalDialog } from "@/lib/useModalDialog";
 
 type InstagramPickerProps = {
   className?: string;
@@ -14,46 +14,11 @@ type InstagramPickerProps = {
 
 export function InstagramPicker({ className = "", label = "Instagram" }: InstagramPickerProps) {
   const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useModalDialog(open, dialogRef, () => setOpen(false));
   const { t, tv } = useLanguage();
 
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
 
-    const scrollY = window.scrollY;
-    const originalBodyPosition = document.body.style.position;
-    const originalBodyTop = document.body.style.top;
-    const originalBodyWidth = document.body.style.width;
-    const originalBodyOverflow = document.body.style.overflow;
-    const originalHtmlOverflow = document.documentElement.style.overflow;
-
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-    const unregisterModalVisibility = registerModalVisibility();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      unregisterModalVisibility();
-      document.body.style.position = originalBodyPosition;
-      document.body.style.top = originalBodyTop;
-      document.body.style.width = originalBodyWidth;
-      document.body.style.overflow = originalBodyOverflow;
-      document.documentElement.style.overflow = originalHtmlOverflow;
-      window.scrollTo(0, scrollY);
-    };
-  }, [open]);
 
   return (
     <>
@@ -68,6 +33,8 @@ export function InstagramPicker({ className = "", label = "Instagram" }: Instagr
 
       {open ? (
         <div
+          ref={dialogRef}
+          tabIndex={-1}
           className="fixed inset-0 z-[120] flex items-end justify-center bg-black/78 p-3 sm:items-center sm:p-4"
           role="dialog"
           aria-modal="true"
