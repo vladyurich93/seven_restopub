@@ -6,10 +6,13 @@ import { siteConfig } from "@/data/siteConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 
+import { useSelectedVenue } from "./SelectedVenueProvider";
+
 type VenueActionCardsProps = { kind: "menu" | "events" | "banquet" };
 
 export function VenueActionCards({ kind }: VenueActionCardsProps) {
   const { language, tv } = useLanguage();
+  const { selectedVenueId, selectVenue } = useSelectedVenue();
   const menu = kind === "menu";
   const banquet = kind === "banquet";
   const label = language === "en"
@@ -29,8 +32,9 @@ export function VenueActionCards({ kind }: VenueActionCardsProps) {
             target={banquet ? undefined : "_blank"}
             rel="noopener noreferrer"
             aria-label={`${tv(location.name)} — ${label}`}
+            data-selected={selectedVenueId === location.id ? "true" : undefined}
             className="venue-action-card group flex min-w-0 gap-4 rounded-xl border border-white/15 bg-white/[.025] p-5 transition-colors duration-200 hover:border-seven-green/60 hover:bg-seven-green/5 sm:p-6"
-            onClick={() => trackEvent(banquet ? "phone_click" : menu ? "menu_open" : "instagram_click", { location_id: location.id, link_url: href, ...(banquet ? { phone: location.phone } : {}) })}
+            onClick={() => { selectVenue(location.id); trackEvent(banquet ? "phone_click" : menu ? "menu_open" : "instagram_click", { location_id: location.id, link_url: href, ...(banquet ? { phone: location.phone } : {}) }); }}
           >
             <Icon size={21} className="mt-1 shrink-0 text-seven-green" />
             <div className="min-w-0 flex-1">

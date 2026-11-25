@@ -7,7 +7,10 @@ import { CalendarDays, CheckCircle2, ChevronDown, ChevronLeft, Clock3, MapPinned
 import { bookingLocations, type BookingLocationId } from "@/data/bookingConfig";
 import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
-import { registerModalVisibility } from "@/lib/modalVisibility";
+import { bookingTimes, kyivDateTime, validBookingDate, validPhone } from "@/lib/formValidation";
+import { fetchForm, submissionIdentity } from "@/lib/clientSubmission";
+import { useSelectedVenue, toBookingLocationId, toSiteLocationId } from "./SelectedVenueProvider";
+import { useModalDialog } from "@/lib/useModalDialog";
 
 type BookingZone = "non_smoking" | "smoking" | "rooftop" | "no_preference";
 
@@ -53,13 +56,7 @@ const fieldClass =
 
 const activeFieldClass = "border-seven-terracotta bg-seven-terracotta/12 shadow-[0_0_0_1px_rgba(201,113,74,0.32),0_14px_34px_rgba(201,113,74,0.14)]";
 
-const timeOptions = Array.from({ length: 20 }, (_, index) => {
-  const totalMinutes = 12 * 60 + index * 30;
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
-});
+const timeOptions = bookingTimes;
 
 const bookingZones = [
   { id: "non_smoking", labelKey: "zoneNonSmoking" },
@@ -68,12 +65,9 @@ const bookingZones = [
   { id: "no_preference", labelKey: "zoneNoPreference" },
 ] as const satisfies readonly { id: BookingZone; labelKey: keyof ReturnType<typeof useLanguage>["t"]["forms"] }[];
 
-const isValidUkrainianPhone = (phone: string) => {
-  const digits = phone.replace(/\D/g, "");
-  return (digits.length === 10 && digits.startsWith("0")) || (digits.length === 12 && digits.startsWith("380"));
-};
+const isValidUkrainianPhone = validPhone;
 
-const today = () => new Date().toISOString().split("T")[0] ?? "";
+const today = () => kyivDateTime().date;
 
 export function useBookingModal() {
   const context = useContext(BookingModalContext);
@@ -96,50 +90,18 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   const [timePickerOpen, setTimePickerOpen] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const locationCardRefs = useRef<Partial<Record<BookingLocationId, HTMLDivElement | null>>>({});
-  const { t, tv } = useLanguage();
+  const { t, tv, language } = useLanguage();
+  const { selectedVenueId, selectVenue } = useSelectedVenue();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const submissionRef = useRef<{ key: string; id: string } | null>(null);
+  const submittingRef = useRef(false);
+  useModalDialog(open, dialogRef, () => setOpen(false));
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
 
-    const scrollY = window.scrollY;
-    const originalBodyPosition = document.body.style.position;
-    const originalBodyTop = document.body.style.top;
-    const originalBodyWidth = document.body.style.width;
-    const originalBodyOverflow = document.body.style.overflow;
-    const originalHtmlOverflow = document.documentElement.style.overflow;
-
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-    const unregisterModalVisibility = registerModalVisibility();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      unregisterModalVisibility();
-      document.body.style.position = originalBodyPosition;
-      document.body.style.top = originalBodyTop;
-      document.body.style.width = originalBodyWidth;
-      document.body.style.overflow = originalBodyOverflow;
-      document.documentElement.style.overflow = originalHtmlOverflow;
-      window.scrollTo(0, scrollY);
-    };
-  }, [open]);
 
   const selectedLocation = useMemo(
     () => bookingLocations.find((location) => location.id === form.locationId),
@@ -157,7 +119,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     }
 
     if (step === 1) {
-      return Boolean(form.date && form.time && form.guests && Number(form.guests) >= 1 && form.zone);
+      return Boolean(form.date && form.time && form.guests && Number.isInteger(Number(form.guests)) && Number(form.guests) >= 1 && Number(form.guests) <= 40 && validBookingDate(form.date, form.time) && form.zone);
     }
 
     return Boolean(form.name && isValidUkrainianPhone(form.phone));
@@ -196,6 +158,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   };
 
   const selectLocation = (locationId: BookingLocationId) => {
+    selectVenue(toSiteLocationId(locationId));
     setErrors((current) => ({ ...current, locationId: "", zone: "" }));
     setForm((current) => ({
       ...current,
@@ -209,7 +172,10 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     setTimePickerOpen(false);
   };
 
-  const openBookingModal = (locationId?: BookingLocationId) => {
+  const openBookingModal = (explicitLocationId?: BookingLocationId) => {
+    const locationId = explicitLocationId ?? toBookingLocationId(selectedVenueId);
+    if (locationId) selectVenue(toSiteLocationId(locationId));
+    submissionRef.current = null;
     setStep(locationId ? 1 : 0);
     setStatus("idle");
     setMessage("");
@@ -227,9 +193,9 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     }
 
     if (targetStep === 1) {
-      if (!form.date) nextErrors.date = t.forms.chooseDateError;
+      if (!form.date || (form.time && !validBookingDate(form.date, form.time))) nextErrors.date = t.forms.chooseDateError;
       if (!form.time) nextErrors.time = t.forms.chooseTimeError;
-      if (!form.guests || Number(form.guests) < 1) nextErrors.guests = t.forms.guestsError;
+      if (!/^\d+$/.test(form.guests) || Number(form.guests) < 1 || Number(form.guests) > 40) nextErrors.guests = t.forms.guestsError;
       if (!form.zone) nextErrors.zone = t.forms.chooseZoneError;
     }
 
@@ -250,9 +216,9 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
     const nextErrors: Partial<Record<keyof BookingForm, string>> = {};
 
     if (!form.locationId) nextErrors.locationId = t.forms.chooseVenueError;
-    if (!form.date) nextErrors.date = t.forms.chooseDateError;
+    if (!form.date || (form.time && !validBookingDate(form.date, form.time))) nextErrors.date = t.forms.chooseDateError;
     if (!form.time) nextErrors.time = t.forms.chooseTimeError;
-    if (!form.guests || Number(form.guests) < 1) nextErrors.guests = t.forms.guestsError;
+    if (!/^\d+$/.test(form.guests) || Number(form.guests) < 1 || Number(form.guests) > 40) nextErrors.guests = t.forms.guestsError;
     if (!form.zone) nextErrors.zone = t.forms.chooseZoneError;
     if (!form.name) nextErrors.name = t.forms.nameError;
     if (!form.phone) {
@@ -295,18 +261,22 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   const submitBooking = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (submittingRef.current) return;
     if (!validateSubmit()) {
       return;
     }
 
+    submittingRef.current = true;
+    submissionRef.current = submissionIdentity(submissionRef.current, JSON.stringify({ form, language }));
     setStatus("loading");
     setMessage("");
 
     try {
-      const response = await fetch("/api/booking", {
+      const response = await fetchForm("/api/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          requestId: submissionRef.current.id,
           location: form.locationId,
           locationId: form.locationId,
           locationName: selectedLocation ? tv(selectedLocation.displayName) : "",
@@ -336,12 +306,14 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
       setMessage(result.message || t.forms.bookingSuccess);
     } catch {
       setStatus("error");
-      setMessage(t.forms.bookingFailed);
-    }
+      setMessage(language === "en" ? "We could not confirm delivery. Your request may have arrived — contact the venue before submitting again." : "Не вдалося підтвердити доставку заявки. Вона могла надійти — уточніть у закладі перед повторним надсиланням.");
+    } finally { submittingRef.current = false; }
   };
 
   const modal = open ? (
     <div
+      ref={dialogRef}
+      tabIndex={-1}
       className="fixed inset-0 z-[135] flex bg-black/82 p-0 sm:p-3"
       role="dialog"
       aria-modal="true"
@@ -430,6 +402,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                 </div>
               ) : (
                 <form id="booking-form" onSubmit={submitBooking}>
+                  <p className="mb-5 text-xs leading-5 text-seven-muted">{language === "en" ? "Your contact details are sent to the Seven administrator via Telegram to handle this request. The administrator will confirm your table." : "Контактні дані отримує адміністратор Seven через Telegram для опрацювання заявки. Столик підтвердить адміністратор."}</p>
                   <div className="mb-7 grid gap-2 sm:grid-cols-3">
                     {[t.forms.location, t.forms.details, t.forms.contacts].map((label, index) => (
                       <div key={label} className={`rounded-full px-4 py-2 text-center text-xs font-black uppercase tracking-[0.16em] premium-border ${step === index ? "bg-seven-green/12 text-seven-green" : "bg-white/5 text-seven-muted"}`}>
@@ -544,15 +517,17 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                         </div>
                         {errors.time ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.time}</span> : null}
                       </label>
-                      <label className="text-sm font-semibold text-white">
-                        {t.forms.guestsCount} <span className="text-seven-green">*</span>
+                      <div className="text-sm font-semibold text-white">
+                        <label htmlFor="booking-guests">{t.forms.guestsCount} <span className="text-seven-green">*</span></label>
                         <div className={`mt-2 flex min-h-12 items-center rounded-[8px] border border-white/10 bg-black/30 transition ${form.guests ? activeFieldClass : ""}`}>
                           <button type="button" className="grid h-12 w-12 place-items-center text-seven-green" onClick={() => changeGuests(-1)} aria-label={t.forms.decreaseGuests}>
                             <Minus size={18} />
                           </button>
                           <input
+                            id="booking-guests"
                             type="number"
                             min="1"
+                            step="1"
                             max="40"
                             className="h-12 min-w-0 flex-1 bg-transparent text-center text-lg font-black text-white outline-none"
                             value={form.guests}
@@ -564,7 +539,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                           </button>
                         </div>
                         {errors.guests ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.guests}</span> : null}
-                      </label>
+                      </div>
                       <fieldset className="md:col-span-3">
                         <legend className="text-sm font-semibold text-white">
                           {t.forms.chooseZone} <span className="text-seven-green">*</span>
@@ -603,7 +578,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                     <div className="grid gap-5 md:grid-cols-2">
                       <label className="text-sm font-semibold text-white">
                         {t.forms.name} <span className="text-seven-green">*</span>
-                        <input className={fieldClass} value={form.name} onChange={(event) => updateField("name", event.target.value)} autoComplete="name" required />
+                        <input className={fieldClass} value={form.name} onChange={(event) => updateField("name", event.target.value)} autoComplete="name" maxLength={100} required />
                         {errors.name ? <span className="mt-2 block text-xs text-seven-terracotta">{errors.name}</span> : null}
                       </label>
                       <label className="text-sm font-semibold text-white">
@@ -615,7 +590,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                         {t.forms.comment}
                         <textarea
                           className={`${fieldClass} min-h-28 resize-y`}
-                          value={form.comment}
+                          maxLength={1500} value={form.comment}
                           onChange={(event) => updateField("comment", event.target.value)}
                           placeholder={t.forms.tableWishes}
                         />

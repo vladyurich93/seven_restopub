@@ -1,7 +1,8 @@
 import { siteConfig, type Location } from "@/data/siteConfig";
+import { canonicalSiteUrl, absoluteSiteUrl, publicPages, type PublicPagePath } from "@/lib/seo";
 
-const absoluteUrl = (path: string) => new URL(path, siteConfig.siteUrl).toString();
-const iconUrl = `${siteConfig.siteUrl}/android-chrome-512x512.png`;
+const absoluteUrl = (path: string) => absoluteSiteUrl(path);
+const iconUrl = `${canonicalSiteUrl}/android-chrome-512x512.png`;
 const socialLinks = Array.from(
   new Set([
     siteConfig.tiktok,
@@ -35,9 +36,9 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": `${siteConfig.siteUrl}/#organization`,
+      "@id": `${canonicalSiteUrl}/#organization`,
       name: siteConfig.brandName,
-      url: siteConfig.siteUrl,
+      url: canonicalSiteUrl,
       logo: iconUrl,
       image: absoluteUrl(siteConfig.ogImage),
       sameAs: socialLinks,
@@ -45,32 +46,20 @@ const jsonLd = {
     },
     {
       "@type": "WebSite",
-      "@id": `${siteConfig.siteUrl}/#website`,
-      url: siteConfig.siteUrl,
+      "@id": `${canonicalSiteUrl}/#website`,
+      url: canonicalSiteUrl,
       name: siteConfig.brandName,
       description: siteConfig.description,
       inLanguage: "uk-UA",
       publisher: {
-        "@id": `${siteConfig.siteUrl}/#organization`,
+        "@id": `${canonicalSiteUrl}/#organization`,
       },
     },
     {
-      "@type": "BreadcrumbList",
-      "@id": `${siteConfig.siteUrl}/#breadcrumbs`,
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Головна", item: `${siteConfig.siteUrl}/` },
-        { "@type": "ListItem", position: 2, name: "Меню", item: `${siteConfig.siteUrl}/menu` },
-        { "@type": "ListItem", position: 3, name: "Локації", item: `${siteConfig.siteUrl}/locations` },
-        { "@type": "ListItem", position: 4, name: "Події", item: `${siteConfig.siteUrl}/events` },
-        { "@type": "ListItem", position: 5, name: "Банкети", item: `${siteConfig.siteUrl}/banquets` },
-        { "@type": "ListItem", position: 6, name: "Контакти", item: `${siteConfig.siteUrl}/contacts` },
-      ],
-    },
-    {
       "@type": "Restaurant",
-      "@id": `${siteConfig.siteUrl}/#restaurant`,
+      "@id": `${canonicalSiteUrl}/#restaurant`,
       name: siteConfig.brandName,
-      url: siteConfig.siteUrl,
+      url: canonicalSiteUrl,
       logo: iconUrl,
       image: absoluteUrl(siteConfig.ogImage),
       description: siteConfig.description,
@@ -79,91 +68,17 @@ const jsonLd = {
       sameAs: socialLinks,
       hasMenu: siteConfig.locations.map((location) => location.menuLink).filter(Boolean),
       branchOf: {
-        "@id": `${siteConfig.siteUrl}/#organization`,
+        "@id": `${canonicalSiteUrl}/#organization`,
       },
       department: siteConfig.locations.map((location) => ({
-        "@id": `${siteConfig.siteUrl}/#${location.id}`,
-      })),
-    },
-    {
-      "@type": "Menu",
-      "@id": `${siteConfig.siteUrl}/menu#menu`,
-      name: "Меню Seven Restopub",
-      url: `${siteConfig.siteUrl}/menu`,
-      hasMenuSection: siteConfig.menuCategories.map((category) => ({
-        "@type": "MenuSection",
-        name: category.title,
-        description: category.description,
-        image: absoluteUrl(category.image),
-      })),
-    },
-    {
-      "@type": "FAQPage",
-      "@id": `${siteConfig.siteUrl}/#faq`,
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "Який графік роботи Seven Restopub?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Усі діючі заклади Seven Restopub працюють щодня з 12:00 до 23:00.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Чи можна забронювати столик?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Так, столик можна забронювати через форму на сайті або телефоном обраного закладу.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Чи можна провести банкет?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Так, банкети доступні від 10 гостей. Депозит 1500 грн з людини, сервісний збір 10%, додаткові умови для напоїв категорії А та категорії Б.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Де є дитяча кімната?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Дитяча кімната є у Seven Restopub Володимира Великого, Seven Restopub Площа Ринок та Seven Restopub Хімічна у Львові.",
-          },
-        },
-      ],
-    },
-    {
-      "@type": "ItemList",
-      "@id": `${siteConfig.siteUrl}/events#event-formats`,
-      name: "Формати подій Seven Restopub",
-      itemListElement: siteConfig.events.map((event, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        item: {
-          "@type": "Event",
-          "@id": `${siteConfig.siteUrl}/events#${event.id}`,
-          name: event.title,
-          description: event.description,
-          image: absoluteUrl(event.image),
-          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-          eventStatus: "https://schema.org/EventScheduled",
-          location: {
-            "@id": `${siteConfig.siteUrl}/#restaurant`,
-          },
-          organizer: {
-            "@id": `${siteConfig.siteUrl}/#organization`,
-          },
-        },
+        "@id": `${canonicalSiteUrl}/#${location.id}`,
       })),
     },
     ...locations.map((location) => ({
       "@type": ["Restaurant", "LocalBusiness"],
-      "@id": `${siteConfig.siteUrl}/#${location.id}`,
+      "@id": `${canonicalSiteUrl}/#${location.id}`,
       name: location.name,
-      url: `${siteConfig.siteUrl}/locations`,
+      url: `${canonicalSiteUrl}/locations`,
       image: absoluteUrl(location.image),
       logo: iconUrl,
       description: `${location.name} — частина мережі Seven Restopub. ${location.features.join(", ")}.`,
@@ -190,7 +105,7 @@ const jsonLd = {
       ...(location.googleMaps ? { hasMap: location.googleMaps } : {}),
       ...(location.menuLink ? { hasMenu: location.menuLink } : {}),
       parentOrganization: {
-        "@id": `${siteConfig.siteUrl}/#organization`,
+        "@id": `${canonicalSiteUrl}/#organization`,
       },
     })),
   ],
@@ -205,4 +120,38 @@ export function StructuredData() {
       }}
     />
   );
+}
+
+
+/** Breadcrumbs describe this document's ancestry, never the global navigation. */
+export function PageStructuredData({ path }: { path: PublicPagePath }) {
+  const page = publicPages.find((entry) => entry.path === path)!;
+  const graph: object[] = [{
+    "@type": "WebPage", "@id": `${absoluteUrl(path)}#webpage`,
+    url: absoluteUrl(path), name: `${page.name} | ${siteConfig.brandName}`,
+    isPartOf: { "@id": `${canonicalSiteUrl}/#website` }, inLanguage: "uk-UA",
+    ...(path === "/" ? {} : { breadcrumb: { "@id": `${absoluteUrl(path)}#breadcrumbs` } }),
+  }];
+  if (path !== "/") graph.push({
+    "@type": "BreadcrumbList", "@id": `${absoluteUrl(path)}#breadcrumbs`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Головна", item: absoluteUrl("/") },
+      { "@type": "ListItem", position: 2, name: page.name, item: absoluteUrl(path) },
+    ],
+  });
+  if (path === "/menu") graph.push({
+    "@type": "Menu", "@id": `${absoluteUrl(path)}#menu`, name: "Меню Seven Restopub", url: absoluteUrl(path),
+    hasMenuSection: siteConfig.menuCategories.map((category) => ({
+      "@type": "MenuSection", name: category.title, description: category.description, image: absoluteUrl(category.image),
+    })),
+  });
+  // Formats have no confirmed dates: they are editorial content, not scheduled Events.
+  if (path === "/events") graph.push({
+    "@type": "ItemList", name: "Формати подій Seven Restopub",
+    itemListElement: siteConfig.events.map((event, index) => ({
+      "@type": "ListItem", position: index + 1,
+      item: { "@type": "CreativeWork", name: event.title, description: event.description, image: absoluteUrl(event.image) },
+    })),
+  });
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c") }} />;
 }

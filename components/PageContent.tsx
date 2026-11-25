@@ -49,6 +49,7 @@ export function MenuPageContent() {
     <section className="seven-inner-page bg-seven-background">
       <AnimatedSection className="container-shell">
         <SectionTitle as="h1" eyebrow={t.pages.menuEyebrow} title={en ? "Choose your Seven.\nExplore the menu." : "Обери свій Seven.\nВідкрий меню."} description={en ? "Each venue has its own menu. Choose a location to see current dishes, drinks and prices on ChoiceQR." : "Кожен заклад має своє меню. Оберіть локацію, щоб переглянути актуальні страви, напої та ціни на ChoiceQR."} />
+        <p className="mt-6 text-base font-semibold text-seven-green">{en ? "The new menu is available at every Seven venue." : "Нове меню вже діє в усіх закладах Seven."}</p>
         <div className="mt-8 md:mt-10"><VenueActionCards kind="menu" /></div>
         <div className="mt-10 border-t border-white/10 pt-7">
           <h2 className="text-sm font-semibold text-seven-cream">{en ? "Explore our food and drinks" : "Що є в меню Seven"}</h2>

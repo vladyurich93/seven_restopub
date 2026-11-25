@@ -29,6 +29,7 @@ export const dictionary = {
       home: "Головна",
       locations: "Локації",
       menu: "Меню",
+      delivery: "Замовити доставку",
       careers: "Кар'єра",
       events: "Події",
       banquets: "Банкети",
@@ -217,6 +218,7 @@ export const dictionary = {
       home: "Home",
       locations: "Locations",
       menu: "Menu",
+      delivery: "Order delivery",
       careers: "Careers",
       events: "Events",
       banquets: "Banquets",
@@ -493,7 +495,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>("ua");
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(storageKey);
+    let stored: string | null = null;
+    try { stored = window.localStorage.getItem(storageKey); } catch { /* Storage is optional. */ }
     if (stored === "ua" || stored === "en") {
       setLanguageState(stored);
       document.documentElement.lang = stored === "ua" ? "uk" : "en";
@@ -502,7 +505,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLanguage = (nextLanguage: Language) => {
     setLanguageState(nextLanguage);
-    window.localStorage.setItem(storageKey, nextLanguage);
+    try { window.localStorage.setItem(storageKey, nextLanguage); } catch { /* Keep the language for this visit. */ }
     document.documentElement.lang = nextLanguage === "ua" ? "uk" : "en";
   };
 

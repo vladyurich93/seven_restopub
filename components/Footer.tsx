@@ -34,6 +34,7 @@ export function Footer() {
               ))}
             </div>
             <div className="mt-6 flex flex-wrap gap-6 text-sm">
+              <a href={siteConfig.delivery.url} className="flex min-h-11 items-center font-semibold text-seven-green hover:text-white" onClick={() => trackEvent("delivery_click", { source: "footer", link_url: siteConfig.delivery.url })}>{t.nav.delivery}</a>
               <div className="pt-2">
                 <InstagramPicker className="flex items-center gap-2 text-seven-muted hover:text-white [&>svg]:text-seven-oak" />
               </div>

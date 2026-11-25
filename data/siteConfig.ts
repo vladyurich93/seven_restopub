@@ -38,6 +38,7 @@ export type MenuCategory = {
 
 export const siteConfig = {
   brandName: "Seven Restopub",
+  delivery: { name: "LEVEN Delivery", url: "https://levendelivery.com/", logo: "/images/delivery/leven-logo.png" },
   siteUrl: "https://sevenrestopub.com.ua",
   slogan: "Місце для зустрічей, смаку та живих емоцій",
   description: "Seven Restopub — мережа сучасних рестопабів. Крафт, піца, бургери, авторські напої, спортивні трансляції, дитячі кімнати, літні тераси та бронювання столиків.",

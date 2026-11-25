@@ -1,13 +1,6 @@
 import type { MetadataRoute } from "next";
-
-const siteUrl = "https://sevenrestopub.com.ua";
+import { absoluteSiteUrl, shouldIndexSite } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
-  return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
-    sitemap: `${siteUrl}/sitemap.xml`,
-  };
+  return { rules: shouldIndexSite ? { userAgent: "*", allow: "/" } : { userAgent: "*", disallow: "/" }, sitemap: absoluteSiteUrl("/sitemap.xml") };
 }

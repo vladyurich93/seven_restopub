@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import { siteConfig } from "@/data/siteConfig";
+import { validPhone } from "@/lib/formValidation";
+import { oncePerRequest, telegramSend } from "@/lib/formDelivery";
 
 type HRApplicationPayload = {
   name: string;
@@ -37,10 +40,7 @@ const escapeHtml = (value: string) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
-const isValidUkrainianPhone = (phone: string) => {
-  const digits = phone.replace(/\D/g, "");
-  return (digits.length === 10 && digits.startsWith("0")) || (digits.length === 12 && digits.startsWith("380"));
-};
+const isValidUkrainianPhone = validPhone;
 
 const formatValue = (value?: string) => escapeHtml(value?.trim() || "Не вказано");
 
@@ -54,44 +54,6 @@ const formatTimestamp = () =>
     minute: "2-digit",
     second: "2-digit",
   }).format(new Date());
-
-const getErrorMessage = (error: unknown) => {
-  if (error instanceof Error) {
-    return error.message;
-  }
-
-  return String(error);
-};
-
-const getEnvValue = (...names: string[]) => {
-  for (const name of names) {
-    const value = process.env[name]?.trim();
-
-    if (value) {
-      return { name, value };
-    }
-  }
-
-  return { name: names[0], value: "" };
-};
-
-const parseTelegramResponse = async (response: Response) => {
-  const text = await response.text();
-  let body: unknown = text;
-
-  try {
-    body = JSON.parse(text) as unknown;
-  } catch (error) {
-    console.error("[HR application] Failed to parse Telegram API response as JSON", error);
-  }
-
-  return { text, body };
-};
-
-const getTelegramDescription = (body: unknown, fallback: string) =>
-  typeof body === "object" && body !== null && "description" in body && typeof body.description === "string"
-    ? body.description
-    : fallback;
 
 const getPayload = (formData: FormData): HRApplicationPayload => ({
   name: clean(formData.get("name")),
@@ -109,63 +71,25 @@ const getPayload = (formData: FormData): HRApplicationPayload => ({
   consent: clean(formData.get("consent")),
 });
 
+
 export async function POST(request: Request) {
-  try {
-    const botTokenEnv = getEnvValue("TELEGRAM_BOT_TOKEN");
-    const hrChatIdEnv = getEnvValue("TELEGRAM_HR_CHAT_ID", "TELEGRAM_CHAT_ID");
-    const botToken = botTokenEnv.value;
-    const hrChatId = hrChatIdEnv.value;
-    const envStatus = {
-      TELEGRAM_BOT_TOKEN_EXISTS: Boolean(botToken),
-      TELEGRAM_HR_CHAT_ID_EXISTS: Boolean(process.env.TELEGRAM_HR_CHAT_ID?.trim()),
-      TELEGRAM_CHAT_ID_EXISTS: Boolean(process.env.TELEGRAM_CHAT_ID?.trim()),
-      TELEGRAM_BOT_TOKEN_SOURCE: botToken ? botTokenEnv.name : null,
-      TELEGRAM_HR_CHAT_ID_SOURCE: hrChatId ? hrChatIdEnv.name : null,
-    };
-
-    console.log("[HR application] Environment status", envStatus);
-
-    if (!botToken || !hrChatId) {
-      const missingVariables = [
-        !botToken ? "TELEGRAM_BOT_TOKEN" : null,
-        !hrChatId ? "TELEGRAM_HR_CHAT_ID" : null,
-      ].filter(Boolean);
-      const message = `Telegram не налаштований. Відсутні env variables: ${missingVariables.join(", ")}.`;
-
-      console.error("[HR application] Missing Telegram environment variables", {
-        ...envStatus,
-        missingVariables,
-        message,
-      });
-
-      return NextResponse.json({ message }, { status: 503 });
-    }
-
-    let formData: FormData;
-
-    try {
-      formData = await request.formData();
-    } catch (error) {
-      console.error("[HR application] Invalid multipart form data", error);
-      return NextResponse.json({ message: `Некоректні дані анкети: ${getErrorMessage(error)}` }, { status: 400 });
-    }
-
-    const payload = getPayload(formData);
-    const cvEntry = formData.get("cv");
-    const cvFile = cvEntry instanceof File && cvEntry.size > 0 ? cvEntry : null;
-
-    if (!payload.name || !payload.phone) {
-      return NextResponse.json({ message: "Заповніть імʼя та телефон." }, { status: 400 });
-    }
-
-    if (!isValidUkrainianPhone(payload.phone)) {
-      return NextResponse.json({ message: "Вкажіть коректний український номер телефону." }, { status: 400 });
-    }
-
-    if (cvFile && (!allowedCvTypes.includes(cvFile.type) || cvFile.size > maxCvSizeBytes)) {
-      return NextResponse.json({ message: "CV має бути PDF, DOC, DOCX, JPG або PNG до 10 MB." }, { status: 400 });
-    }
-
+  if (process.env.VERCEL_ENV === "preview" || process.env.SEVEN_PREVIEW_MODE === "1") return NextResponse.json({ ok: false, preview: true, message: "Це попередній перегляд. Реальну заявку не надіслано." }, { status: 409 });
+  let formData: FormData;
+  try { formData = await request.formData(); } catch { return NextResponse.json({ ok: false, message: "Некоректні дані анкети." }, { status: 400 }); }
+  const payload = getPayload(formData);
+  const cvEntry = formData.get("cv");
+  const cvFile = cvEntry instanceof File && cvEntry.size > 0 ? cvEntry : null;
+  if (!payload.name || payload.name.length > 100 || !isValidUkrainianPhone(payload.phone)) return NextResponse.json({ ok: false, message: "Вкажіть імʼя та коректний український номер телефону." }, { status: 400 });
+  if (payload.consent !== "accepted") return NextResponse.json({ ok: false, message: "Потрібна згода на обробку персональних даних." }, { status: 400 });
+  if (Object.values(payload).some(value => value.length > 1500)) return NextResponse.json({ ok: false, message: "Скоротіть текст анкети до 1500 символів у кожному полі." }, { status: 400 });
+  const locations: Record<string, string> = Object.fromEntries(siteConfig.locations.map(venue => [venue.name, venue.city]));
+  if ((payload.city && !["Львів", "Запоріжжя"].includes(payload.city)) || (payload.location && payload.location !== "Неважливо / готовий працювати в будь-якій локації" && (!locations[payload.location] || (payload.city && locations[payload.location] !== payload.city)))) return NextResponse.json({ ok: false, message: "Перевірте місто та заклад." }, { status: 400 });
+  if (cvFile && (!allowedCvTypes.includes(cvFile.type) || cvFile.size > maxCvSizeBytes)) return NextResponse.json({ ok: false, message: "CV має бути PDF, DOC, DOCX, JPG або PNG до 10 MB." }, { status: 400 });
+  const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim();
+  const hrChatId = process.env.TELEGRAM_HR_CHAT_ID?.trim() || process.env.TELEGRAM_CHAT_ID?.trim();
+  if (!botToken || !hrChatId) return NextResponse.json({ ok: false, message: fallbackMessage }, { status: 503 });
+  const cvHash = cvFile ? await crypto.subtle.digest("SHA-256", await cvFile.arrayBuffer()).then(buffer => Array.from(new Uint8Array(buffer), value => value.toString(16).padStart(2, "0")).join("")) : "";
+  const result = await oncePerRequest("hr", clean(formData.get("requestId")), JSON.stringify({ ...payload, timestamp: "", cvHash }), async () => {
     const text = [
       "🟢 <b>Нова HR заявка</b>",
       "",
@@ -184,73 +108,22 @@ export async function POST(request: Request) {
       `📎 <b>CV:</b> ${cvFile ? formatValue(cvFile.name) : "Не додано"}`,
       `✅ <b>Згода на обробку даних:</b> ${formatValue(payload.consent)}`,
       "🌐 sevenrestopub",
-      `🕒 ${formatValue(payload.timestamp || formatTimestamp())}`,
+      `🕒 ${formatValue(formatTimestamp())}`,
     ].join("\n");
 
-    const messageResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: hrChatId,
-        text,
-        parse_mode: "HTML",
-        disable_web_page_preview: true,
-      }),
-    });
-    const messageTelegramResponse = await parseTelegramResponse(messageResponse);
-    const messageLogPayload = {
-      ...envStatus,
-      ok: messageResponse.ok,
-      status: messageResponse.status,
-      statusText: messageResponse.statusText,
-      body: messageTelegramResponse.body,
-    };
 
-    if (!messageResponse.ok) {
-      console.error("[HR application] Telegram sendMessage response", messageLogPayload);
-      return NextResponse.json(
-        { message: `Telegram API error: ${getTelegramDescription(messageTelegramResponse.body, messageTelegramResponse.text || fallbackMessage)}` },
-        { status: messageResponse.status },
-      );
-    }
-
-    console.log("[HR application] Telegram sendMessage response", messageLogPayload);
-
+    const sent = await telegramSend(botToken, "sendMessage", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ chat_id: hrChatId, text, parse_mode: "HTML", disable_web_page_preview: true }) });
+    if (!sent) return { body: { ok: false, message: fallbackMessage }, status: 502 };
     if (cvFile) {
-      const documentFormData = new FormData();
-      documentFormData.append("chat_id", hrChatId);
-      documentFormData.append("caption", `📎 CV / Резюме кандидата: ${payload.name}`);
-      documentFormData.append("document", cvFile, cvFile.name);
-
+      const documentData = new FormData();
+      documentData.append("chat_id", hrChatId);
+      documentData.append("caption", `📎 CV / Резюме кандидата: ${payload.name}`);
+      documentData.append("document", cvFile, cvFile.name);
       try {
-        const documentResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
-          method: "POST",
-          body: documentFormData,
-        });
-        const documentTelegramResponse = await parseTelegramResponse(documentResponse);
-        const documentLogPayload = {
-          ...envStatus,
-          ok: documentResponse.ok,
-          status: documentResponse.status,
-          statusText: documentResponse.statusText,
-          body: documentTelegramResponse.body,
-        };
-
-        if (!documentResponse.ok) {
-          console.error("[HR application] Telegram sendDocument response", documentLogPayload);
-          return NextResponse.json({ ok: true, cvWarning: true, message: cvWarningMessage }, { status: 200 });
-        }
-
-        console.log("[HR application] Telegram sendDocument response", documentLogPayload);
-      } catch (error) {
-        console.error("[HR application] Telegram sendDocument failed", error);
-        return NextResponse.json({ ok: true, cvWarning: true, message: cvWarningMessage }, { status: 200 });
-      }
+        if (!await telegramSend(botToken, "sendDocument", { method: "POST", body: documentData })) return { body: { ok: true, cvWarning: true, message: cvWarningMessage }, status: 200 };
+      } catch { return { body: { ok: true, cvWarning: true, message: cvWarningMessage }, status: 200 }; }
     }
-
-    return NextResponse.json({ ok: true, message: successMessage });
-  } catch (error) {
-    console.error("[HR application] Unhandled route error", error);
-    return NextResponse.json({ message: `HR application route failed: ${getErrorMessage(error)}` }, { status: 500 });
-  }
+    return { body: { ok: true, message: successMessage }, status: 200 };
+  });
+  return NextResponse.json(result.body, { status: result.status });
 }
