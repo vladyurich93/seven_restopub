@@ -709,6 +709,76 @@ a {
 .seven-faq summary > span,
 .seven-venue-panel > div > p:first-child { color:#c9714a; }
 
+/* Modernization preview: editorial rhythm, fewer competing accents. */
+:root { --seven-surface:#151711; --seven-line:rgba(255,255,255,.14); }
+body { background:#0d0f0b; }
+.container-shell { width:min(1280px,calc(100% - 40px)); }
+.seven-section { padding-block:clamp(64px,7.5vw,112px); }
+.seven-section-heading { margin-bottom:36px; }
+.seven-section-heading h2 { letter-spacing:-.04em; line-height:1.02; font-size:clamp(2.3rem,5vw,4.6rem); }
+.seven-section-heading p { max-width:38rem; }
+.seven-hero-editorial { min-height:min(920px,100svh); background:#10130d; }
+.seven-hero-editorial .seven-hero-photo { inset:0 0 0 28%; }
+.seven-hero-shade { background:linear-gradient(90deg,#0d0f0b 1%,rgba(13,15,11,.94) 23%,rgba(13,15,11,.40) 62%,rgba(13,15,11,.12)),linear-gradient(0deg,#0d0f0b 0%,transparent 35%); }
+.seven-hero-editorial > .container-shell { min-height:inherit; padding-top:148px; padding-bottom:112px; }
+.seven-hero-editorial .seven-headline { font-size:clamp(4.25rem,7.8vw,8.2rem); letter-spacing:-.055em; line-height:.99; }
+.seven-hero-emphasis { color:#b7e14d; }
+.seven-hero-editorial .seven-enter:first-child { max-width:30rem; font-size:11px; letter-spacing:.16em; line-height:1.8; }
+.seven-hero-editorial .seven-enter:nth-child(3) { max-width:29rem; }
+.seven-hero-caption { position:absolute; right:max(20px,calc((100vw - 1280px)/2)); bottom:36px; display:flex; flex-direction:column; align-items:flex-end; gap:8px; font-size:10px; letter-spacing:.18em; color:rgba(255,255,255,.65); }
+.seven-hero-caption span:last-child { font-size:12px; letter-spacing:.02em; }
+.seven-hero-discover { width:fit-content; padding-block:12px; }
+.seven-venues-section { border-top:1px solid var(--seven-line); }
+.seven-venue-tab { border-radius:14px; min-height:88px; padding:16px 20px; }
+.seven-venue-tab[aria-pressed="true"] { background:#b7e14d; color:#11150b; border-color:#b7e14d; }
+.seven-venue-tab > span:first-child { letter-spacing:.13em; opacity:.75; }
+.seven-venue-tab > span:last-child { font-size:16px; font-weight:600; }
+.seven-venue-panel { border-radius:22px; background:var(--seven-surface); }
+.seven-venue-copy { display:flex; flex-direction:column; justify-content:center; padding:clamp(24px,3.5vw,56px); }
+.seven-venue-copy > h2,.seven-venue-copy > h3 { letter-spacing:-.035em; }
+.seven-venue-copy > div { margin-top:28px; }
+.seven-family-section figure > div { border-radius:22px; }
+.seven-family-section h2 { letter-spacing:-.035em; }
+.seven-menu-teaser { border-radius:22px; }
+.seven-menu-teaser h2 { letter-spacing:-.035em; }
+.seven-events-list > div { gap:24px; padding-block:24px; }
+.seven-events-list h3 { letter-spacing:-.025em; }
+.venue-action-card { border-radius:18px; }
+.venue-action-card[data-selected="true"] { border-color:rgba(183,225,77,.65); background:rgba(183,225,77,.045); }
+.venue-action-card h2 { letter-spacing:-.025em; }
+.seven-primary { border-radius:999px; font-weight:600; letter-spacing:.025em !important; text-transform:none; }
+:where(a,button,input,select,textarea,summary):focus-visible { outline:2px solid #b7e14d; outline-offset:4px; }
+.site-header .nav-link { font-weight:500; }
+@media (min-width:1201px) { .site-header > .container-shell { height:96px; } .seven-header-logo { width:144px; height:72px; } }
+@media (max-width:767px) {
+  .container-shell { width:calc(100% - 36px); }
+  .seven-hero-editorial { min-height:max(700px,96svh); }
+  .seven-hero-editorial .seven-hero-photo { inset:0; }
+  .seven-hero-shade { background:linear-gradient(0deg,#0d0f0b 1%,rgba(13,15,11,.83) 35%,rgba(13,15,11,.30) 100%); }
+  .seven-hero-editorial > .container-shell { justify-content:flex-end; padding-top:140px; padding-bottom:112px; }
+  .seven-hero-editorial .seven-headline { font-size:clamp(3.2rem,13.8vw,6rem); }
+  .seven-hero-editorial .seven-enter:nth-child(3) { font-size:15px; line-height:1.75; margin-top:22px; }
+  .seven-hero-editorial .seven-enter:nth-child(4) { gap:12px 24px; margin-top:24px; }
+  .seven-hero-caption { display:none; }
+  .seven-hero-discover { margin-top:18px; }
+  .seven-venue-tab { min-height:80px; padding:12px; }
+  .seven-venue-tab > span:last-child { font-size:13px; }
+  .seven-venue-panel { border-radius:18px; }
+  .seven-venue-panel .seven-venue-copy { padding:24px 20px; }
+  .seven-section-heading { gap:20px; }
+  .seven-section-heading p { font-size:16px; line-height:1.75; }
+  .seven-menu-teaser > div:last-child { min-height:340px; padding:24px; }
+}
+@media (prefers-reduced-motion:reduce) { .seven-hero-editorial > .container-shell { animation:none; transform:none; opacity:1; } }
+/* Accessible action contrast: the original warm brand token remains for text/icons. */
+.bg-seven-terracotta { background-color:#a94f2e; }
+.hover\:bg-seven-terracotta:hover { background-color:#a94f2e; }
+.seven-preview-badge { position:fixed; z-index:200; right:12px; bottom:12px; max-width:240px; border:1px solid #59604d; border-radius:8px; background:#151711; color:#d5d5d5; padding:6px 10px; font:11px/1.4 system-ui,sans-serif; pointer-events:none; }
+.seven-skip-link { position:fixed; z-index:250; top:8px; left:8px; padding:12px 18px; background:#b7e14d; color:#111; border-radius:8px; transform:translateY(-180%); }
+.seven-skip-link:focus { transform:none; }
+
+@media (max-width: 767px) { .seven-preview-badge { bottom: 104px; right: 12px; } }
+
 /* Keep touch scrolling native; hover feedback belongs to mouse/trackpad input. */
 .seven-mobile-menu-scroll { -webkit-user-select: none; user-select: none; }
 @media (hover: hover) and (pointer: fine) {
@@ -718,3 +788,6 @@ a {
 .seven-mobile-menu-item[data-touch-highlight="true"],
 .seven-mobile-menu-item[data-page-highlight="true"] { background-color: #a94f2e; color: white; }
 @media (prefers-reduced-motion: reduce) { .seven-mobile-menu-item { transition: none; } }
+
+/* Keep anchor targets below the navigation and the LEVEN launch strip. */
+html { scroll-padding-top: 168px; }

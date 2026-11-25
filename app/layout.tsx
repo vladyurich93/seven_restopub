@@ -10,8 +10,13 @@ import { LocationPickerProvider } from "@/components/LocationPicker";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { StructuredData } from "@/components/StructuredData";
 import { siteConfig } from "@/data/siteConfig";
+import { SelectedVenueProvider } from "@/components/SelectedVenueProvider";
+import { canonicalSiteUrl, shouldIndexSite } from "@/lib/seo";
 import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
+
+const previewMode = process.env.VERCEL_ENV === "preview" || process.env.SEVEN_PREVIEW_MODE === "1";
+const enableProductionTracking = process.env.NODE_ENV === "production" && !previewMode;
 
 const googleAnalyticsId = "G-B89HZRMLGS";
 const googleTagManagerId = "GTM-TWQ9XMR6";
@@ -29,14 +34,14 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.siteUrl),
+  metadataBase: new URL(canonicalSiteUrl),
   title: {
     default: "Seven Restopub — мережа сучасних рестопабів | Крафт, піца, бургери",
     template: `%s | ${siteConfig.brandName}`,
   },
   description: siteConfig.description,
   alternates: {
-    canonical: `${siteConfig.siteUrl}/`,
+    canonical: `${canonicalSiteUrl}/`,
     languages: {
       "uk-UA": "/",
       "x-default": "/",
@@ -57,7 +62,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Seven Restopub — мережа сучасних рестопабів | Крафт, піца, бургери",
     description: siteConfig.description,
-    url: siteConfig.siteUrl,
+    url: canonicalSiteUrl,
     siteName: siteConfig.brandName,
     type: "website",
     locale: "uk_UA",
@@ -70,8 +75,8 @@ export const metadata: Metadata = {
     images: [siteConfig.ogImage],
   },
   robots: {
-    index: true,
-    follow: true,
+    index: shouldIndexSite,
+    follow: shouldIndexSite,
   },
 };
 
@@ -83,7 +88,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html lang="uk" className={`${montserrat.variable} ${oswald.variable}`}>
       <head>
-        {process.env.NODE_ENV === "production" ? (
+        {enableProductionTracking ? (
           <Script id="google-tag-manager" strategy="beforeInteractive">
             {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
               new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -94,7 +99,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         ) : null}
       </head>
       <body className="font-sans antialiased">
-        {process.env.NODE_ENV === "production" ? (
+        {enableProductionTracking ? (
           <noscript>
             <iframe
               src={`https://www.googletagmanager.com/ns.html?id=${googleTagManagerId}`}
@@ -106,15 +111,18 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           </noscript>
         ) : null}
         <LanguageProvider>
+          <SelectedVenueProvider>
           <CareersModalProvider>
             <BookingModalProvider>
               <LocationPickerProvider>
+                {previewMode ? <div className="seven-preview-badge" role="note">Preview · заявки не надсилаються</div> : null}
+                <a className="seven-skip-link" href="#main-content">Перейти до вмісту</a>
                 <Header />
-                <main className="pb-[calc(96px+env(safe-area-inset-bottom))] md:pb-0">{children}</main>
+                <main id="main-content" tabIndex={-1} className="pt-14 pb-[calc(96px+env(safe-area-inset-bottom))] md:pb-0">{children}</main>
                 <Footer />
                 <MobileBottomNav />
                 <StructuredData />
-                {process.env.NODE_ENV === "production" ? (
+                {enableProductionTracking ? (
                   <>
                     <Script src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} strategy="afterInteractive" />
                     <Script id="google-analytics-4" strategy="afterInteractive">
@@ -130,6 +138,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
               </LocationPickerProvider>
             </BookingModalProvider>
           </CareersModalProvider>
+        </SelectedVenueProvider>
         </LanguageProvider>
       </body>
     </html>
