@@ -1,3 +1,4 @@
+import { PageStructuredData } from "@/components/StructuredData";
 import type { Metadata } from "next";
 import { BanquetsPageContent } from "@/components/PageContent";
 import { createPageMetadata } from "@/lib/seo";
@@ -11,6 +12,9 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function BanquetsPage() {
   return (
+    <>
+      <PageStructuredData path="/banquets" />
     <BanquetsPageContent />
+    </>
   );
 }
